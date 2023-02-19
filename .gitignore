@@ -1,0 +1,5 @@
+# Project exclude paths
+/taxi_service_data/target/
+/taxi_service_domain/target/
+/taxi_service_utils/target/
+/taxi_service_web/target/
