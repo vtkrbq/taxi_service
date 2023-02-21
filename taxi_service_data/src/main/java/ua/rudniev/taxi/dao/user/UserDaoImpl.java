@@ -72,7 +72,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findUser(String login, String password) {
-        User user = new User();
+        User user = null;
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
                 HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.FIND_USER))) {
             String encryptedPassword = new String(Base64.getEncoder().encode(PasswordEncryptionService.getEncryptedPassword(password)));
@@ -80,6 +80,7 @@ public class UserDaoImpl implements UserDao {
             stmt.setString(2, encryptedPassword);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
+                user = new User();
                 user.setLogin(rs.getString(Fields.LOGIN));
                 user.setFirstname(rs.getString(Fields.FIRSTNAME));
                 user.setLastname(rs.getString(Fields.LASTNAME));
@@ -93,7 +94,7 @@ public class UserDaoImpl implements UserDao {
         } catch (Exception e) {
             throw new DbException(e);
         }
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 
     @Override
