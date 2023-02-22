@@ -14,8 +14,8 @@
 <h2>Registration</h2>
 <div class="sidenav">
     <div class="login-main-text">
-        <h2>Taxi service</h2>
-        <p>Registration</p>
+        <p>Login or register from here to access.</p>
+        <img src="img/main.png" style="width: 600px; height: 600px;" alt="Taxi service">
     </div>
 </div>
 <div class="main">

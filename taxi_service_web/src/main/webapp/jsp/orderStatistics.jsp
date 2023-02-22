@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/header.css" />
     <link rel="stylesheet" type="text/css" href="css/ordering.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" type="text/css" href="css/table.css" />
+    <link rel="stylesheet" type="text/css" href="css/pagination.css" />
     <link href="https://fonts.googleapis.com/css2?family=Exo+2&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
@@ -22,7 +22,7 @@
       	$('.mobile-menu-btn').click(function(){
       		$('.mobile-menu').stop().slideToggle();
       	});
-  </script>
+</script>
 <header class="top-line">
 		<a href="${pageContext.request.contextPath}/ordering" class="logo"><img src="img/logo.png" alt="logo alt"></a>
 		<div class="login">
@@ -50,7 +50,7 @@
                 </c:if>
             </c:forEach>
             <c:if test="${admin}">
-                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order statistics</a></li>
             </c:if>
             <c:if test="${driver}">
                 <li class="active"><a href="${pageContext.request.contextPath}/ordering">DRIVER</a></li>
@@ -58,38 +58,54 @@
         </ul>
 		</nav>
 </header>
-<div class="page-wrapper">
-    <div class="left-panel-wrapper">
-        <div class="left-panel">
-            <table style="font-size: 24px; font-family: Sans;">
-                <caption>
-                    <div style="padding-left: 0px; display: inline-block;">
-                        <b style="font-size: 32px; color: black;">${currentUser.login}</b>
-                        <a href="${pageContext.request.contextPath}/editUser" class="btn btn-secondary" style="background-color: black; width: 100px; margin-left: 40px;">Edit</a>
-                    </div>
-                </caption>
-                <tr>
-                    <td style="width: 150px;">Name:</td>
-                    <td>${currentUser.firstname}</td>
-                </tr>
-                <tr>
-                    <td>Lastname:</td>
-                    <td>${currentUser.lastname}</td>
-                </tr>
-                <tr>
-                    <td>Phone:</td>
-                    <td>${currentUser.phone}</td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td>${currentUser.email}</td>
-                </tr>
-            </table>
-        </div>
-</div>
-
-<div class="content-wrapper">
-    <div class="content">
+<div class="container">
+    <table class="table table-striped table-class">
+        <thead>
+        <tr>
+            <th>Departure address</th>
+            <th>Destination address</th>
+            <th>Category</th>
+            <th>Capacity</th>
+            <th>Client name</th>
+            <th>Car</th>
+            <th>Price</th>
+            <th>Created</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="tripOrder" items="${tripOrders}">
+            <tr>
+                <td>${tripOrder.departure.address}</td>
+                <td>${tripOrder.destination.address}</td>
+                <td>${tripOrder.category}</td>
+                <td>${tripOrder.capacity}</td>
+                <td>${tripOrder.user.firstname} ${tripOrder.user.lastname}</td>
+                <td>${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</td>
+                <td>${tripOrder.price}</td>
+                <td>${tripOrder.timestamp}</td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    <div style="width: 100%; text-align: center;">
+        <ul class="complex_list">
+            <c:if test="${currentPage != 1}">
+                <li><a href="${pageContext.request.contextPath}/orderStatistics?currentPage=${currentPage - 1}"> < </a></li>
+            </c:if>
+                <c:forEach begin="1" end="${pagesQuantity}" var="i">
+                    <c:choose>
+                        <c:when test="${currentPage eq i}">
+                            ${i}
+                        </c:when>
+                        <c:otherwise>
+                            <li><a href="${pageContext.request.contextPath}/orderStatistics?currentPage=${i}">${i}</a></li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            <c:if test="${currentPage lt pagesQuantity}">
+                <li><a href="${pageContext.request.contextPath}/orderStatistics?currentPage=${currentPage + 1}"> > </a></li>
+            </c:if>
+        </ul>
     </div>
 </div>
 </body>

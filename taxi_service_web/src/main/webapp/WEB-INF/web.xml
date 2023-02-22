@@ -69,6 +69,10 @@
     <servlet-name>ChangePasswordServlet</servlet-name>
     <servlet-class>ua.rudniev.taxi.servlet.ChangePasswordServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>OrderStatisticsServlet</servlet-name>
+    <servlet-class>ua.rudniev.taxi.servlet.OrderStatisticsServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/login</url-pattern>
@@ -100,5 +104,9 @@
   <servlet-mapping>
     <servlet-name>ChangePasswordServlet</servlet-name>
     <url-pattern>/changePassword</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OrderStatisticsServlet</servlet-name>
+    <url-pattern>/orderStatistics</url-pattern>
   </servlet-mapping>
 </web-app>

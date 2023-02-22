@@ -50,7 +50,7 @@
                 </c:if>
             </c:forEach>
             <c:if test="${admin}">
-                <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order statistics</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
             </c:if>
             <c:if test="${driver}">
                 <li class="active"><a href="${pageContext.request.contextPath}/ordering">DRIVER</a></li>
@@ -147,6 +147,8 @@
         zoom: 12
     };
 
+
+
     // Creating a map object
     const map = new L.map('map', mapOptions);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
@@ -154,55 +156,15 @@
     // Creating a Layer object
     // const layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-    // Adding layer to the map
-    // map.addLayer(layer);
-    // const markers = new L.marker()
-    // map.addLayer(markers);
+    map.doubleClickZoom.disable();
 
-     map.on('click', function(e) {
-             onMapClick(e);
-         });
-     function onMapClick(e) {
-             if (loc1 == null) {
-                 loc1 = new L.marker(e.latlng, {draggable: 'true'});
-                 loc1.on('dragend', function(event) {
-                     //отправляем запрос маршрута
-                 });
-                 map.addLayer(loc1);
-             }
-             else if (loc2 == null) {
-                 loc2 = new L.marker(e.latlng, {draggable: 'true'});
-                 loc2.on('dragend', function(event) {
-                     //отправляем запрос марурута
-                 });
-                 map.addLayer(loc2);
-                 //отправляем запрос маршрута
-             }
-         };
-     var polyline;
-
-         function sendPost() {
-             if (loc2 != null && loc1 != null) {
-                 var p1 = loc1.getLatLng(),
-                         p2 = loc2.getLatLng();
-                 $.post(
-                         //куда шлем запрос,
-                         {l1: p1.lat + ',' + p1.lng, l2: p2.lat + ',' + p2.lng},
-                 function(data) {
-                     if (data) {
-                         if (polyline) {
-                             map.removeLayer(polyline);
-                         }
-                         var points = data;
-                         polyline = new L.polyline(points, {color: 'red'});
-                         map.addLayer(polyline);
-                         map.fitBounds(polyline.getBounds());
-                     }
-                 },
-                         "json"
-                         );
-             }
-         }
+    map.on('click', function(e) {
+        var popLocation= e.latlng;
+        var popup = L.popup()
+        .setLatLng(popLocation)
+        .setContent('<p>Hello world!<br />This is a nice popup.</p>')
+        .openOn(map);
+    });
 </script>
 
 </body>

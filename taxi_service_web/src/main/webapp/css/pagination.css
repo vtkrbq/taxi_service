@@ -1,0 +1,25 @@
+.complex_list {
+  padding: 4px;
+  font-size: 20px;
+}
+
+ul.complex_list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.complex_list li {
+  list-style-type: none;
+  margin: 5px;
+}
+
+.complex_list li a {
+  text-decoration: none;
+  margin: 2px;
+  color: black;
+}
+
+.complex_list li a:hover {
+  text-decoration: underline;
+}

@@ -57,4 +57,13 @@ public class OrderingService {
             return newTripInfoOptional;
         }, false);
     }
+
+    public List<TripOrder> findAllTripOrders (int pageIndex, int pageSize) {
+        return transactionManager.doInTransaction(() ->
+                tripOrderDao.findAllTripOrders(pageIndex, pageSize), true);
+    }
+
+    public int getCountOfRecords() {
+        return transactionManager.doInTransaction(tripOrderDao::getCountOfRecords, true);
+    }
 }

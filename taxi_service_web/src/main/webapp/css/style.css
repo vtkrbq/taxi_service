@@ -2,6 +2,13 @@ html {
   font-family: 'Exo 2';
 }
 
+p {
+  /* Center horizontally*/
+  text-align: center;
+}
+
+
+
 *,
 *::before,
 *::after {
