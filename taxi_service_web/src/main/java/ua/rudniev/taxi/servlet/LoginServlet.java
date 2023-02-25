@@ -7,6 +7,7 @@ import ua.rudniev.taxi.servlet.validation.ValidationUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
 
@@ -29,7 +31,7 @@ public class LoginServlet extends HttpServlet {
         ValidationUtils.validateMandatory(errors, password, "Password");
         Optional<User> userOptional = Optional.empty();
         if (errors.isEmpty()) {
-            userOptional = userService.findUser(login, password);
+            userOptional = userService.authUser(login, password);
             if (userOptional.isEmpty()) {
                 errors.add("Login or password is incorrect");
             }

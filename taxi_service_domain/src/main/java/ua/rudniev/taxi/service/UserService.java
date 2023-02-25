@@ -1,11 +1,8 @@
 package ua.rudniev.taxi.service;
 
-import ua.rudniev.taxi.dao.car.CarDao;
-import ua.rudniev.taxi.dao.trip.TripOrderDao;
 import ua.rudniev.taxi.model.user.Role;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.dao.user.UserDao;
-import ua.rudniev.taxi.service.price.PriceStrategy;
 import ua.rudniev.taxi.transaction.TransactionManager;
 
 import java.util.Optional;
@@ -26,9 +23,14 @@ public class UserService {
         this.transactionManager = transactionManager;
     }
 
-    public Optional<User> findUser(String login, String password) {
+    public Optional<User> findUser(String login) {
         return transactionManager.doInTransaction(() ->
-            userDao.findUser(login, password), true);
+            userDao.findUser(login), true);
+    }
+
+    public Optional<User> authUser(String login, String password) {
+        return transactionManager.doInTransaction(() ->
+            userDao.authUser(login, password), true);
     }
 
     public void createUser(User user, String password) {

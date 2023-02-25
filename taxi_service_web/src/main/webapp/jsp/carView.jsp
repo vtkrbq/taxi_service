@@ -58,47 +58,54 @@
 </header>
 <div class="page-wrapper">
     <div class="left-panel-wrapper">
-        <div class="left-panel">
-            <form action="changePassword" method="post">
-                <table style="font-size: 24px; font-family: Sans;">
-                    <caption>
-                        <div style="padding-left: 0px; display: inline-block;">
-                            <button type="submit" class="btn btn-secondary" style="background-color: black; width: 100px; margin-left: 40px;">Change</button>
-                            <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary" style="width: 100px; margin-left: 40px;">Cancel</a>
-                        </div>
-                    </caption>
-                    <tr>
-                        <td>Old password:</td>
-                        <td>
-                            <input type="password" name="oldPassword" class="form-control">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>New password:</td>
-                        <td>
-                            <input type="password" name="newPassword" class="form-control">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Confirm new password:</td>
-                        <td>
-                            <input type="password" name="newConfirmPassword" class="form-control">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="font-size: 12px;">
-                            <c:if test="${errors != null && not empty errors}">
-                                <div style="color: red">
-                                    <c:forEach items="${errors}" var="error" >
-                                        <div><c:out value="${error}"/></div>
-                                    </c:forEach>
-                                </div>
-                            </c:if>
-                        </td>
-                    </tr>
-                </table>
-            </form>
+        <div class="left-panel" style="display: flex;">
+            <table style="font-size: 24px; font-family: Exo 2;">
+                <caption>
+                    <div style="padding-left: 0px; display: inline-block;">
+                        <b style="font-size: 32px; color: black;">Car ID: ${carView.id}</b>
+                        <a href="${pageContext.request.contextPath}/orderStatistics" class="btn btn-secondary" style="background-color: black; width: 100px; margin-left: 40px;">Back</a>
+                    </div>
+                </caption>
+                <tr>
+                    <td style="width: 150px;">Car:</td>
+                    <td>${carView.carName}</td>
+                </tr>
+                <tr>
+                    <td>License Plate:</td>
+                    <td>${carView.licensePlate}</td>
+                </tr>
+                <tr>
+                    <td>Category:</td>
+                    <td>${carView.carCategory}</td>
+                </tr>
+                <tr>
+                    <td>Capacity:</td>
+                    <td>${carView.carCapacity}</td>
+                </tr>
+            </table>
+            <table style="font-size: 24px; font-family: Exo 2;">
+                <caption>
+                    <div style="padding-left: 0px; display: inline-block;">
+                        <b style="font-size: 32px; color: black;">Driver: ${carView.driver.login}</b>
+                    </div>
+                </caption>
+                <tr>
+                    <td style="width: 150px;">Name:</td>
+                    <td>${carView.driver.firstname}</td>
+                </tr>
+                <tr>
+                    <td>Lastname:</td>
+                    <td>${carView.driver.lastname}</td>
+                </tr>
+                <tr>
+                    <td>Phone:</td>
+                    <td>${carView.driver.phone}</td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>${carView.driver.email}</td>
+                </tr>
+            </table>
         </div>
 </div>
 

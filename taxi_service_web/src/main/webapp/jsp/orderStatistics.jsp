@@ -1,5 +1,6 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
@@ -8,12 +9,10 @@
     <link rel="stylesheet" type="text/css" href="css/ordering.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link rel="stylesheet" type="text/css" href="css/pagination.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
 <script>
@@ -59,6 +58,45 @@
 		</nav>
 </header>
 <div class="container">
+    <form action="orderStatistics">
+        <div style="display: flex; justify-content: right;">
+            <div style="display: flex; align-items: center;">
+                <label style="margin: 5px; width: 200px; text-align: right;">Sort:</label>
+                <select name="sortType" class="custom-select">
+                  <option value="asc" selected>Ascending</option>
+                  <option value="desc">Descending</option>
+                </select>
+            </div>
+            <div style="display: flex; margin: 5px; align-items: center;">
+                <label style="margin: 5px; width: 200px; text-align: right;">Sort by:</label>
+                <select name="sortBy" class="custom-select">
+                  <option value="departure_address" selected>Departure address</option>
+                  <option value="destination_address">Destination address</option>
+                  <option value="trip_category">Category</option>
+                  <option value="trip_capacity">Capacity</option>
+                  <option value="trip_order.lastname">Client name</option>
+                  <option value="car.car_name">Car</option>
+                  <option value="trip_order.price">Price</option>
+                  <option value="trip_order.created">Created</option>
+                </select>
+            </div>
+            <div style="display: flex; margin: 5px; align-items: center;">
+                <label style="margin: 5px; width: 250px; text-align: right;">Filter by:</label>
+                <select name="filterBy" class="custom-select" style="margin: 5px;">
+                    <option value="departure_address" selected>Departure address</option>
+                    <option value="destination_address">Destination address</option>
+                    <option value="trip_category">Category</option>
+                    <option value="trip_capacity">Capacity</option>
+                    <option value="trip_order.lastname">Client name</option>
+                    <option value="car.car_name">Car</option>
+                    <option value="trip_order.price">Price</option>
+                    <option value="trip_order.created">Created</option>
+                </select>
+                <input type="text" name="filterKey" class="form-control" placeholder="Filter key" style="margin: 5px;">
+                <button type="submit" class="btn btn-black" style="width: 300px; margin: 5px;">Filter</button>
+            </div>
+        </div>
+    <form>
     <table class="table table-striped table-class">
         <thead>
         <tr>
@@ -79,10 +117,17 @@
                 <td>${tripOrder.destination.address}</td>
                 <td>${tripOrder.category}</td>
                 <td>${tripOrder.capacity}</td>
-                <td>${tripOrder.user.firstname} ${tripOrder.user.lastname}</td>
-                <td>${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</td>
+                <td>
+                    <a style="color: black;" href="${pageContext.request.contextPath}/profileView?login=${tripOrder.user.login}">${tripOrder.user.lastname} ${tripOrder.user.firstname}</p>
+                </td>
+                <td>
+                    <a style="color: black;" href="${pageContext.request.contextPath}/carView?id=${tripOrder.car.id}">${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</p>
+                </td>
                 <td>${tripOrder.price}</td>
-                <td>${tripOrder.timestamp}</td>
+                <td>
+                    <fmt:parseDate value="${tripOrder.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                    <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
+                </td>
             </tr>
         </c:forEach>
         </tbody>
@@ -108,5 +153,8 @@
         </ul>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>
 </html>

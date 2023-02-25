@@ -3,10 +3,15 @@ package ua.rudniev.taxi.filter;
 import ua.rudniev.taxi.web.SessionAttributes;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@WebFilter(
+        filterName = "AuthenticationFilter",
+        servletNames = "OrderingServlet"
+)
 public class AuthenticationFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

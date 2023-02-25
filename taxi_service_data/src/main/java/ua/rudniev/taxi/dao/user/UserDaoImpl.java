@@ -1,5 +1,6 @@
 package ua.rudniev.taxi.dao.user;
 
+import ua.rudniev.taxi.connection.SQLConstants;
 import ua.rudniev.taxi.dao.utils.JdbcDaoUtils;
 import ua.rudniev.taxi.dao.utils.PasswordEncryptionService;
 import ua.rudniev.taxi.exception.DbException;
@@ -15,78 +16,48 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class UserDaoImpl implements UserDao {
-
-    public static final String TABLE_NAME = "app_user";
-
-    public static class Fields {
-
-        public static final String LOGIN = "LOGIN";
-
-        public static final String PASSHASH = "PASSHASH";
-
-        public static final String FIRSTNAME = "FIRSTNAME";
-
-        public static final String LASTNAME = "LASTNAME";
-
-        public static final String PHONE = "PHONE";
-
-        public static final String EMAIL = "EMAIL";
-
-        public static final String ROLES = "ROLES";
-    }
-
-    private static class Queries {
-        private static final String FIND_USER = "select " +
-                Fields.LOGIN + ", " +
-                Fields.FIRSTNAME + ", " +
-                Fields.LASTNAME + ", " +
-                Fields.PHONE + ", " +
-                Fields.EMAIL + ", " +
-                Fields.ROLES +
-                " from " + TABLE_NAME + " where login=? and passhash=?";
-        private static final String CREATE_USER = "insert into " + TABLE_NAME +
-                " (" + Fields.LOGIN + ", " +
-                Fields.PASSHASH + ", " +
-                Fields.FIRSTNAME + ", " +
-                Fields.LASTNAME + ", " +
-                Fields.PHONE + ", " +
-                Fields.EMAIL + ", " +
-                Fields.ROLES + ") " +
-                "values (?, ?, ?, ?, ?, ?, ?)";
-        private static final String UPDATE_USER = "update " + TABLE_NAME +
-                " set " + Fields.LOGIN + " = " + "?, " +
-                Fields.FIRSTNAME + " = " + "?, " +
-                Fields.LASTNAME + " = " + "?, " +
-                Fields.PHONE + " = " + "?, " +
-                Fields.EMAIL + " = " + "? " +
-                "where login=?";
-        private static final String UPDATE_PASSHASH = "update " + TABLE_NAME +
-                " set " + Fields.PASSHASH + " = ? " + "where login=? and passhash=?";
-        private static final String FIND_ALL_LOGINS = "select " + Fields.LOGIN +
-                " from " + TABLE_NAME;
-        private static final String CHECK_PASSWORD = "select " +
-                Fields.LOGIN + ", " +
-                Fields.PASSHASH +
-                " from " + TABLE_NAME + " where login=? and passhash=?";
+    @Override
+    public Optional<User> findUser(String login) {
+        User user = null;
+        try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
+                HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.FIND_USER))) {
+            stmt.setString(1, login);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                user = new User();
+                user.setLogin(rs.getString(SQLConstants.UserFields.LOGIN));
+                user.setFirstname(rs.getString(SQLConstants.UserFields.FIRSTNAME));
+                user.setLastname(rs.getString(SQLConstants.UserFields.LASTNAME));
+                user.setPhone(rs.getString(SQLConstants.UserFields.PHONE));
+                user.setEmail(rs.getString(SQLConstants.UserFields.EMAIL));
+                String[] roles = rs.getString(SQLConstants.UserFields.ROLES).split(",");
+                for (String r : roles) {
+                    user.addRole(Role.valueOf(r));
+                }
+            }
+        } catch (Exception e) {
+            throw new DbException(e);
+        }
+        return Optional.ofNullable(user);
     }
 
     @Override
-    public Optional<User> findUser(String login, String password) {
+    public Optional<User> authUser(String login, String password) {
         User user = null;
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.FIND_USER))) {
+                HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.AUTH_USER))) {
             String encryptedPassword = new String(Base64.getEncoder().encode(PasswordEncryptionService.getEncryptedPassword(password)));
             stmt.setString(1, login);
             stmt.setString(2, encryptedPassword);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 user = new User();
-                user.setLogin(rs.getString(Fields.LOGIN));
-                user.setFirstname(rs.getString(Fields.FIRSTNAME));
-                user.setLastname(rs.getString(Fields.LASTNAME));
-                user.setPhone(rs.getString(Fields.PHONE));
-                user.setEmail(rs.getString(Fields.EMAIL));
-                String[] roles = rs.getString(Fields.ROLES).split(",");
+                user.setLogin(rs.getString(SQLConstants.UserFields.LOGIN));
+                user.setFirstname(rs.getString(SQLConstants.UserFields.FIRSTNAME));
+                user.setLastname(rs.getString(SQLConstants.UserFields.LASTNAME));
+                user.setPhone(rs.getString(SQLConstants.UserFields.PHONE));
+                user.setEmail(rs.getString(SQLConstants.UserFields.EMAIL));
+                String[] roles = rs.getString(SQLConstants.UserFields.ROLES).split(",");
                 for (String r : roles) {
                     user.addRole(Role.valueOf(r));
                 }
@@ -100,7 +71,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void createUser(User user, String password) {
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.CREATE_USER))) {
+                HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.CREATE_USER))) {
             if (checkForExistingLogin(user.getLogin())) throw new UserAlreadyExistsException(user.getLogin());//check
             String encryptedPassword = new String(Base64.getEncoder().encode(PasswordEncryptionService.getEncryptedPassword(password)));
             stmt.setString(1, user.getLogin());
@@ -120,7 +91,7 @@ public class UserDaoImpl implements UserDao {
 
     public void updateUser(User user, String login) {//TODO сделать лучше
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.UPDATE_USER))) {
+                HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.UPDATE_USER))) {
             stmt.setString(1, user.getLogin());
             stmt.setString(2, user.getFirstname());
             stmt.setString(3, user.getLastname());
@@ -137,7 +108,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void updatePassword(User user, String oldPassword, String newPassword) {
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.UPDATE_PASSHASH))) {
+                HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.UPDATE_PASSHASH))) {
             String encryptedOldPassword = new String(Base64.getEncoder().encode(PasswordEncryptionService.getEncryptedPassword(oldPassword)));
             String encryptedNewPassword = new String(Base64.getEncoder().encode(PasswordEncryptionService.getEncryptedPassword(newPassword)));
             stmt.setString(1, encryptedNewPassword);
@@ -153,10 +124,10 @@ public class UserDaoImpl implements UserDao {
     //check
     private static boolean checkForExistingLogin(String login) {
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.FIND_ALL_LOGINS))){
+                HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.FIND_ALL_LOGINS))){
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                if (rs.getString(Fields.LOGIN).equals(login)) return true;
+                if (rs.getString(SQLConstants.UserFields.LOGIN).equals(login)) return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,9 +1,14 @@
 package ua.rudniev.taxi.filter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@WebFilter(
+        urlPatterns = "/jsp/*",
+        filterName = "JspFilter"
+)
 public class JspFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

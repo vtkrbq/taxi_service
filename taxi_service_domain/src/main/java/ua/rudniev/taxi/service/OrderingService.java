@@ -58,9 +58,9 @@ public class OrderingService {
         }, false);
     }
 
-    public List<TripOrder> findAllTripOrders (int pageIndex, int pageSize) {
+    public List<TripOrder> findAllTripOrders (int pageIndex, int pageSize, String orderType, String orderBy, String filterBy, String filterKey) {
         return transactionManager.doInTransaction(() ->
-                tripOrderDao.findAllTripOrders(pageIndex, pageSize), true);
+                tripOrderDao.findAllTripOrders(pageIndex, pageSize, orderType, orderBy, filterBy, filterKey), true);
     }
 
     public int getCountOfRecords() {

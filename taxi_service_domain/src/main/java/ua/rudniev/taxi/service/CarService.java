@@ -9,6 +9,7 @@ import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.transaction.TransactionManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CarService {
     private CarDao carDao;
@@ -35,6 +36,11 @@ public class CarService {
             carDao.createCar(car, user);
             return null;
         }, false);
+    }
+
+    public Optional<Car> findCarById(int id) {
+        return transactionManager.doInTransaction(() ->
+                carDao.findCarById(id), true);
     }
 
 }

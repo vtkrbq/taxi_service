@@ -1,155 +1,59 @@
 package ua.rudniev.taxi.dao.trip;
 
-import ua.rudniev.taxi.dao.car.CarDaoImpl;
-import ua.rudniev.taxi.dao.user.UserDaoImpl;
+import ua.rudniev.taxi.connection.SQLConstants;
 import ua.rudniev.taxi.dao.utils.JdbcDaoUtils;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Category;
 import ua.rudniev.taxi.model.trip.AddressPoint;
 import ua.rudniev.taxi.model.trip.TripOrder;
-import ua.rudniev.taxi.model.user.Role;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.transaction.HikariTransactionManager;
 
 import java.sql.*;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TripOrderDaoImpl implements TripOrderDao {
 
-    public static final String TABLE_NAME = "trip_order";
-
-    public static class Fields {
-
-        public static final String ID = "ID";
-
-        public static final String DEPARTURE_ADDRESS = "DEPARTURE_ADDRESS";
-
-        public static final String DEPARTURE_X = "DEPARTURE_X";
-
-        public static final String DEPARTURE_Y = "DEPARTURE_Y";
-
-        public static final String DESTINATION_ADDRESS = "DESTINATION_ADDRESS";
-
-        public static final String DESTINATION_X = "DESTINATION_X";
-
-        public static final String DESTINATION_Y = "DESTINATION_Y";
-
-        public static final String CATEGORY = "TRIP_CATEGORY";
-
-        public static final String CAPACITY = "TRIP_CAPACITY";
-
-        public static final String USER_LOGIN = "USER_LOGIN";
-
-        public static final String CAR_ID = "CAR_ID";
-
-        public static final String PRICE = "PRICE";
-
-        public static final String CREATED = "CREATED";
-    }
-
-    private static class Queries {
-        private static final String INSERT_TRIP_ORDER = "INSERT INTO trip_order " +
-                "(" + Fields.DEPARTURE_ADDRESS + ", " +
-                Fields.DESTINATION_ADDRESS + ", " +
-                Fields.USER_LOGIN + ", " +
-                Fields.CAR_ID + ", " +
-                Fields.CATEGORY + ", " +
-                Fields.CAPACITY + ", " +
-                Fields.PRICE + ", " +
-                Fields.CREATED + ") " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        private static final String FIND_ALL_TRIP_ORDERS = "select " +
-                TABLE_NAME + "." + Fields.DEPARTURE_ADDRESS + ", " +
-                TABLE_NAME + "." + Fields.DEPARTURE_X + ", " +
-                TABLE_NAME + "." + Fields.DEPARTURE_Y + ", " +
-                TABLE_NAME + "." + Fields.DESTINATION_ADDRESS + ", " +
-                TABLE_NAME + "." + Fields.DESTINATION_X + ", " +
-                TABLE_NAME + "." + Fields.DESTINATION_Y + ", " +
-                TABLE_NAME + "." + Fields.CATEGORY + ", " +
-                TABLE_NAME + "." + Fields.CAPACITY + ", " +
-                TABLE_NAME + "." + Fields.USER_LOGIN + ", " +
-                "client." + UserDaoImpl.Fields.FIRSTNAME + ", " +
-                "client." + UserDaoImpl.Fields.LASTNAME + ", " +
-                "client." + UserDaoImpl.Fields.PHONE + ", " +
-                "client." + UserDaoImpl.Fields.EMAIL + ", " +
-                CarDaoImpl.TABLE_NAME + "." + CarDaoImpl.Fields.CAR_NAME + ", " +
-                CarDaoImpl.TABLE_NAME + "." + CarDaoImpl.Fields.CAR_CATEGORY + ", " +
-                CarDaoImpl.TABLE_NAME + "." + CarDaoImpl.Fields.CAR_CAPACITY + ", " +
-                CarDaoImpl.TABLE_NAME + "." + CarDaoImpl.Fields.LICENSE_PLATE + ", " +
-                CarDaoImpl.TABLE_NAME + "." + CarDaoImpl.Fields.DRIVER_LOGIN + ", " +
-                "driver." + UserDaoImpl.Fields.FIRSTNAME + ", " +
-                "driver." + UserDaoImpl.Fields.LASTNAME + ", " +
-                "driver." + UserDaoImpl.Fields.PHONE + ", " +
-                "driver." + UserDaoImpl.Fields.EMAIL + ", " +
-                TABLE_NAME + "." + Fields.PRICE + ", " +
-                TABLE_NAME + "." + Fields.CREATED +
-                " from " + TABLE_NAME +
-                " inner join " + CarDaoImpl.TABLE_NAME + " on " + TABLE_NAME + "." + Fields.CAR_ID + " = car.id " +
-                " inner join " + UserDaoImpl.TABLE_NAME + " as client" +
-                " on " + TABLE_NAME + "." + Fields.USER_LOGIN + " = client.login" +
-                " inner join " + UserDaoImpl.TABLE_NAME + " as driver" +
-                " on " + CarDaoImpl.TABLE_NAME + "." + CarDaoImpl.Fields.DRIVER_LOGIN + " = driver.login" +
-                " limit ? " + "offset ?";
-        private static final String GET_COUNT_OF_RECORDS = "select count(distinct(id)) from " + TABLE_NAME;
-
-    }
-
     @Override
-    public List<TripOrder> findAllTripOrders(int pageIndex, int pageSize) {
+    public List<TripOrder> findAllTripOrders(int pageIndex, int pageSize, String sortType, String sortBy, String filterBy, String filterKey) {
         List<TripOrder> tripOrders = new ArrayList<>();
-        try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.FIND_ALL_TRIP_ORDERS))) {
-            stmt.setInt(1, pageSize);
-            stmt.setInt(2, pageIndex);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                TripOrder tripOrder = new TripOrder();
-                AddressPoint departure = new AddressPoint(
-                        rs.getDouble(Fields.DEPARTURE_X),
-                        rs.getDouble(Fields.DEPARTURE_Y),
-                        rs.getString(Fields.DEPARTURE_ADDRESS));
-                tripOrder.setDeparture(departure);
-                AddressPoint destination = new AddressPoint(
-                        rs.getDouble(Fields.DESTINATION_X),
-                        rs.getDouble(Fields.DESTINATION_Y),
-                        rs.getString(Fields.DESTINATION_ADDRESS));
-                tripOrder.setDestination(destination);
-
-                tripOrder.setCategory(Category.valueOf(rs.getString(Fields.CATEGORY)));
-                tripOrder.setCapacity(rs.getInt(Fields.CAPACITY));
-
-                User user = new User();
-                user.setLogin(rs.getString(Fields.USER_LOGIN));
-                user.setFirstname(rs.getString(UserDaoImpl.Fields.FIRSTNAME));
-                user.setLastname(rs.getString(UserDaoImpl.Fields.LASTNAME));
-                user.setPhone(rs.getString(UserDaoImpl.Fields.PHONE));
-                user.setEmail(rs.getString(UserDaoImpl.Fields.EMAIL));
-                tripOrder.setUser(user);
-
-                Car car = new Car();
-                User driver = new User();
-                driver.setLogin(rs.getString(CarDaoImpl.Fields.DRIVER_LOGIN));
-                driver.setFirstname(rs.getString(UserDaoImpl.Fields.FIRSTNAME));
-                driver.setLastname(rs.getString(UserDaoImpl.Fields.LASTNAME));
-                driver.setPhone(rs.getString(UserDaoImpl.Fields.PHONE));
-                driver.setEmail(rs.getString(UserDaoImpl.Fields.EMAIL));
-                car.setDriver(driver);
-                car.setCarName(rs.getString(CarDaoImpl.Fields.CAR_NAME));
-                car.setCarCategory(Category.valueOf(rs.getString(CarDaoImpl.Fields.CAR_CATEGORY)));
-                car.setCarCapacity(rs.getInt(CarDaoImpl.Fields.CAR_CAPACITY));
-                car.setLicensePlate(rs.getString(CarDaoImpl.Fields.LICENSE_PLATE));
-                tripOrder.setCar(car);
-
-
-                tripOrder.setPrice(rs.getBigDecimal(Fields.PRICE));
-                tripOrder.setTimestamp(rs.getTimestamp(Fields.CREATED).toInstant());
-
-                tripOrders.add(tripOrder);
+        if (sortBy == null) sortBy = SQLConstants.TripOrderFields.DEPARTURE_ADDRESS;
+        if (sortType == null) sortType = "asc";
+        String orderType = sortType;
+        String orderBy = sortBy;
+        if (filterKey == null) {
+            try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
+                    HikariTransactionManager
+                            .getCurrentConnection()
+                            .prepareStatement(
+                                    SQLConstants.FIND_ALL_TRIP_ORDERS))) {
+                stmt.setString(1, sortBy);
+                stmt.setString(2, sortType);
+                stmt.setInt(3, pageSize);
+                stmt.setInt(4, pageIndex);
+                ResultSet rs = stmt.executeQuery();
+                fillTripOrders(rs, tripOrders);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
+                    HikariTransactionManager
+                            .getCurrentConnection()
+                            .prepareStatement(
+                                    SQLConstants.FIND_ALL_TRIP_ORDERS_WITH_FILTER))) {
+                stmt.setString(1, filterBy);
+                stmt.setString(2, filterKey);
+                stmt.setString(3, orderBy);
+                stmt.setString(4, orderType);
+                stmt.setInt(5, pageSize);
+                stmt.setInt(6, pageIndex);
+                ResultSet rs = stmt.executeQuery();
+                fillTripOrders(rs, tripOrders);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return tripOrders;
     }
@@ -158,7 +62,7 @@ public class TripOrderDaoImpl implements TripOrderDao {
     public int getCountOfRecords() {
         int count = 0;
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.GET_COUNT_OF_RECORDS))) {
+                HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.GET_COUNT_OF_TRIP_ORDERS))) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 count = rs.getInt("count");
@@ -169,12 +73,10 @@ public class TripOrderDaoImpl implements TripOrderDao {
         return count;
     }
 
-
-
     @Override
     public void insert(TripOrder tripOrder) {
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                HikariTransactionManager.getCurrentConnection().prepareStatement(Queries.INSERT_TRIP_ORDER))) {
+                HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.INSERT_TRIP_ORDER))) {
             stmt.setString(1, tripOrder.getDeparture().getAddress());
             stmt.setString(2, tripOrder.getDestination().getAddress());
             stmt.setString(3, tripOrder.getUser().getLogin());
@@ -188,4 +90,52 @@ public class TripOrderDaoImpl implements TripOrderDao {
             e.printStackTrace();
         }
     }
+
+    private void fillTripOrders(ResultSet rs, List<TripOrder> tripOrders) throws SQLException {
+        TripOrder tripOrder = new TripOrder();
+        while (rs.next()) {
+            AddressPoint departure = new AddressPoint(
+                    rs.getDouble(SQLConstants.TripOrderFields.DEPARTURE_X),
+                    rs.getDouble(SQLConstants.TripOrderFields.DEPARTURE_Y),
+                    rs.getString(SQLConstants.TripOrderFields.DEPARTURE_ADDRESS));
+            tripOrder.setDeparture(departure);
+            AddressPoint destination = new AddressPoint(
+                    rs.getDouble(SQLConstants.TripOrderFields.DESTINATION_X),
+                    rs.getDouble(SQLConstants.TripOrderFields.DESTINATION_Y),
+                    rs.getString(SQLConstants.TripOrderFields.DESTINATION_ADDRESS));
+            tripOrder.setDestination(destination);
+
+            tripOrder.setCategory(Category.valueOf(rs.getString(SQLConstants.TripOrderFields.CATEGORY)));
+            tripOrder.setCapacity(rs.getInt(SQLConstants.TripOrderFields.CAPACITY));
+
+            User user = new User();
+            user.setLogin(rs.getString(SQLConstants.TripOrderFields.USER_LOGIN));
+            user.setFirstname(rs.getString(SQLConstants.UserFields.FIRSTNAME));
+            user.setLastname(rs.getString(SQLConstants.UserFields.LASTNAME));
+            user.setPhone(rs.getString(SQLConstants.UserFields.PHONE));
+            user.setEmail(rs.getString(SQLConstants.UserFields.EMAIL));
+            tripOrder.setUser(user);
+
+            Car car = new Car();
+            User driver = new User();
+            driver.setLogin(rs.getString(SQLConstants.CarFields.DRIVER_LOGIN));
+            driver.setFirstname(rs.getString(SQLConstants.UserFields.FIRSTNAME));
+            driver.setLastname(rs.getString(SQLConstants.UserFields.LASTNAME));
+            driver.setPhone(rs.getString(SQLConstants.UserFields.PHONE));
+            driver.setEmail(rs.getString(SQLConstants.UserFields.EMAIL));
+            car.setDriver(driver);
+            car.setId(rs.getInt(SQLConstants.CarFields.ID));
+            car.setCarName(rs.getString(SQLConstants.CarFields.CAR_NAME));
+            car.setCarCategory(Category.valueOf(rs.getString(SQLConstants.CarFields.CAR_CATEGORY)));
+            car.setCarCapacity(rs.getInt(SQLConstants.CarFields.CAR_CAPACITY));
+            car.setLicensePlate(rs.getString(SQLConstants.CarFields.LICENSE_PLATE));
+            tripOrder.setCar(car);
+
+
+            tripOrder.setPrice(rs.getBigDecimal(SQLConstants.TripOrderFields.PRICE));
+            tripOrder.setTimestamp(rs.getTimestamp(SQLConstants.TripOrderFields.CREATED).toInstant());
+            tripOrders.add(tripOrder);
+        }
+    }
 }
+

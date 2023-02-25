@@ -1,34 +1,17 @@
-html {
-  font-family: 'Exo 2';
+
+
+.control {
+    display: flex;
+    justify-content: right;
+    z-index: 99999999;
+    padding: 25px;
+    position: absolute;
 }
 
-.page-wrapper {
-  display: flex;
-  justify-content: space-between;
-}
-.left-panel-wrapper {
-  width: 100%;
-  padding-top: 30px;
-  padding-left: 50px;
-  padding-right: 150px;
-}
-
-.left-panel-wrapper-text{
-    margin-top: 20%;
-    padding: 60px;
-    color: #fff;
-}
-
-.left-panel-wrapper-text h2{
-    font-weight: 300;
-}
-
-.content-wrapper {
-  /*width: 250px;*/
-  width: calc(100% - 400px);
-  padding-top: 30px;
-  padding-right: 200px;
-  align: center;
+.map {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
 }
 
 .mainmenubtn {
@@ -59,6 +42,7 @@ html {
     border-radius: 7px;
     text-align: center;
     position: absolute;
+    z-index:99999999;
 }
 .dropdown-child a {
     color: white;

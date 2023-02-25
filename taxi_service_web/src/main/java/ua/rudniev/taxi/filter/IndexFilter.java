@@ -1,12 +1,18 @@
 package ua.rudniev.taxi.filter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+@WebFilter(
+        urlPatterns = "/index.jsp",
+        filterName = "IndexFilter",
+        servletNames = "RegistrationServlet"
+)
 public class IndexFilter implements Filter {
 
     @Override
