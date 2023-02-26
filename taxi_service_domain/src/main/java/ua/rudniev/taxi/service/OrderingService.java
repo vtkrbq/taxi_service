@@ -34,14 +34,13 @@ public class OrderingService {
         this.tripOrderDao = tripOrderDao;
     }
 
-    public Optional<NewTripInfo> findAndOrder(TripOrder tripOrder) {
+    public Optional<NewTripInfo> findAndOrder(TripOrder tripOrder, double distance) {
         return transactionManager.doInTransaction(() -> {
             List<Car> cars = carDao.findAvailableCars(tripOrder.getCapacity(), tripOrder.getCategory());
             Optional<NewTripInfo> newTripInfoOptional = cars
                     .stream()
                     .map(car -> new NewTripInfo(car, priceStrategy.calculatePrice(
-                            tripOrder.getDeparture(),
-                            tripOrder.getDestination(),
+                            distance,
                             car
                     )))
                     .min(Comparator.comparing(NewTripInfo::getPrice));

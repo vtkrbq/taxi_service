@@ -7,5 +7,5 @@ import ua.rudniev.taxi.model.trip.Point;
 import java.math.BigDecimal;
 
 public interface PriceStrategy {
-    BigDecimal calculatePrice(Point departure, Point destination, Car car);
+    BigDecimal calculatePrice(double distance, Car car);
 }

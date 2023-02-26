@@ -160,14 +160,18 @@ public class SQLConstants {
 
     public static final String INSERT_TRIP_ORDER = "INSERT INTO trip_order " +
             "(" + TripOrderFields.DEPARTURE_ADDRESS + ", " +
+            TripOrderFields.DEPARTURE_X + ", " +
+            TripOrderFields.DEPARTURE_Y + ", " +
             TripOrderFields.DESTINATION_ADDRESS + ", " +
+            TripOrderFields.DESTINATION_X + ", " +
+            TripOrderFields.DESTINATION_Y + ", " +
             TripOrderFields.USER_LOGIN + ", " +
             TripOrderFields.CAR_ID + ", " +
             TripOrderFields.CATEGORY + ", " +
             TripOrderFields.CAPACITY + ", " +
             TripOrderFields.PRICE + ", " +
             TripOrderFields.CREATED + ") " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String FIND_ALL_TRIP_ORDERS = "select " +
             TO_TABLE_NAME + "." + TripOrderFields.DEPARTURE_ADDRESS + ", " +
@@ -201,8 +205,7 @@ public class SQLConstants {
             " on " + TO_TABLE_NAME + "." + TripOrderFields.USER_LOGIN + " = client.login" +
             " inner join " + AU_TABLE_NAME + " as driver" +
             " on " + CAR_TABLE_NAME + "." + CarFields.DRIVER_LOGIN + " = driver.login" +
-            " order by ? ?" +
-            " limit ? " + "offset ?";
+            " order by " + TripOrderFields.DEPARTURE_ADDRESS + "asc";
 
     public static final String FIND_ALL_TRIP_ORDERS_WITH_FILTER = "select " +
             TO_TABLE_NAME + "." + TripOrderFields.DEPARTURE_ADDRESS + ", " +

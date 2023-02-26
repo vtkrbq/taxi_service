@@ -78,13 +78,17 @@ public class TripOrderDaoImpl implements TripOrderDao {
         try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
                 HikariTransactionManager.getCurrentConnection().prepareStatement(SQLConstants.INSERT_TRIP_ORDER))) {
             stmt.setString(1, tripOrder.getDeparture().getAddress());
-            stmt.setString(2, tripOrder.getDestination().getAddress());
-            stmt.setString(3, tripOrder.getUser().getLogin());
-            stmt.setInt(4, tripOrder.getCar().getId());
-            stmt.setString(5, tripOrder.getCategory().toString());
-            stmt.setInt(6, tripOrder.getCapacity());
-            stmt.setBigDecimal(7, tripOrder.getPrice());
-            stmt.setTimestamp(8, Timestamp.from(tripOrder.getTimestamp()));
+            stmt.setDouble(2, tripOrder.getDeparture().getX());
+            stmt.setDouble(3, tripOrder.getDeparture().getY());
+            stmt.setString(4, tripOrder.getDestination().getAddress());
+            stmt.setDouble(5, tripOrder.getDestination().getX());
+            stmt.setDouble(6, tripOrder.getDestination().getY());
+            stmt.setString(7, tripOrder.getUser().getLogin());
+            stmt.setInt(8, tripOrder.getCar().getId());
+            stmt.setString(9, tripOrder.getCategory().toString());
+            stmt.setInt(10, tripOrder.getCapacity());
+            stmt.setBigDecimal(11, tripOrder.getPrice());
+            stmt.setTimestamp(12, Timestamp.from(tripOrder.getTimestamp()));
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

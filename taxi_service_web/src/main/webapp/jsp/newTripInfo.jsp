@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/header.css" />
     <link rel="stylesheet" type="text/css" href="css/ordering.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
@@ -49,43 +50,62 @@
         </ul>
 		</nav>
 </header>
-<h2>Order</h2>
-<div>
-    You have successfully ordered a tripOrder
-    <table>
-        <tr>
-            <td>Departure address:</td>
-            <td>${tripOrder.departure.address}</td>
-        </tr>
-        <tr>
-            <td>Destination address:</td>
-            <td>${tripOrder.destination.address}</td>
-        </tr>
-        <tr>
-            <td>Category:</td>
-            <td>${tripOrder.category}</td>
-        </tr>
-        <tr>
-            <td>Capacity</td>
-            <td>${tripOrder.capacity}</td>
-        </tr>
-        <tr>
-            <td>Order time</td>
-            <td>${tripOrder.timestamp}</td>
-        </tr>
-        <tr>
-            <td>Car</td>
-            <td>${newTripInfo.car.carName}</td>
-        </tr>
-        <tr>
-            <td>Driver</td>
-            <td>${newTripInfo.car.driver.firstname} ${newTripInfo.car.driver.lastname}</td>
-        </tr>
-        <tr>
-            <td>Price</td>
-            <td>${newTripInfo.price} ₴</td>
-        </tr>
-    </table>
+<div class="page-wrapper">
+    <div class="left-panel-wrapper">
+        <div class="left-panel">
+            <table class="table" style="font-size: 20px; padding: 5px; font-family: Exo 2; width: 500px;">
+                <caption>
+                    <div style="padding-left: 0px; display: inline-block;">
+                        <b style="font-size: 32px; color: black;">You have successfully ordered taxi</b>
+                    </div>
+                </caption>
+                <tr>
+                    <td style="width: 300px;">Departure address:</td>
+                    <td style="width: 500px;">${tripOrder.departure.address}</td>
+                </tr>
+                <tr>
+                    <td>Destination address:</td>
+                    <td>${tripOrder.destination.address}</td>
+                </tr>
+                <tr>
+                    <td>Category:</td>
+                    <td>${tripOrder.category}</td>
+                </tr>
+                <tr>
+                    <td>Capacity:</td>
+                    <td>${tripOrder.capacity}</td>
+                </tr>
+                <tr>
+                    <td>Order time:</td>
+                    <td>
+                        <fmt:parseDate value="${tripOrder.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                        <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Car:</td>
+                    <td>${newTripInfo.car.carName}</td>
+                </tr>
+                <tr>
+                    <td>Driver:</td>
+                    <td>${newTripInfo.car.driver.firstname} ${newTripInfo.car.driver.lastname}</td>
+                </tr>
+                <tr>
+                    <td>Price:</td>
+                    <td>${newTripInfo.price} ₴</td>
+                </tr>
+                <tr>
+                    <td>Driver:</td>
+                    <td>${newTripInfo.car.driver.firstname} ${newTripInfo.car.driver.lastname}</td>
+                </tr>
+            </table>
+        </div>
+</div>
+
+<div class="content-wrapper">
+    <div class="content">
+    </div>
+</div>
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

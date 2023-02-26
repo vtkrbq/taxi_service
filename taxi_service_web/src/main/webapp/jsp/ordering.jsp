@@ -71,13 +71,19 @@
 <div style="position: relative;">
     <div id="control" class="control">
         <form action="${pageContext.request.contextPath}/ordering" method="post">
-            <div>
+            <div style="display: none;">
+               <label>
+                   <b> Distance: </b>
+                   <input type="text" id="distance" class="form-control" style="width: 400px;" name="distance">
+               </label>
+            </div>
+            <div style="display: none;">
                <label>
                    <b> Departure X: </b>
                    <input type="text" id="dx" class="form-control" style="width: 400px;" name="departureX" value="${tripOrder.departure.x}">
                </label>
             </div>
-            <div>
+            <div style="display: none;">
                <label>
                    <b> Departure Y: </b>
                    <input type="text" id="dy" class="form-control" style="width: 400px;" name="departureY" value="${tripOrder.departure.y}">
@@ -86,25 +92,31 @@
             <div>
                <label>
                    <b> Departure Address: </b>
+                   <%
+                        request.setCharacterEncoding("UTF-8");
+                   %>
                    <input type="text" id="depart" class="form-control" style="width: 400px;" name="departureAddress" value="${tripOrder.departure.address}" onfocusout="getDepartureCoords()">
                </label>
             </div>
-            <div>
+            <div style="display: none;">
                <label>
                    <b> Destination X: </b>
-                   <input type="text" class="form-control" style="width: 400px;" name="departureX" value="${tripOrder.destination.x}">
+                   <input type="text" id="dsx" class="form-control" style="width: 400px;" name="destinationX" value="${tripOrder.destination.x}">
                </label>
             </div>
-            <div>
+            <div style="display: none;">
                <label>
                    <b> Destination Y: </b>
-                   <input type="text" class="form-control" style="width: 400px;" name="departureY" value="${tripOrder.destination.y}">
+                   <input type="text" id="dsy" class="form-control" style="width: 400px;" name="destinationY" value="${tripOrder.destination.y}">
                </label>
             </div>
             <div>
                <label>
                    <b>Destination Address:</b>
-                   <input type="text" class="form-control" style="width: 400px;" name="destinationAddress" value="${tripOrder.destination.address}">
+                   <%
+                       request.setCharacterEncoding("UTF-8");
+                   %>
+                   <input type="text" id="destin" class="form-control" style="width: 400px;" name="destinationAddress" value="${tripOrder.destination.address}" onfocusout="getDestinationCoords()">
                </label>
             </div>
             <div><b>Category:</b></div>
@@ -134,11 +146,6 @@
                    </c:forEach>
                </div>
             </c:if>
-            <div class="form-group">
-                <textarea id="textarea">
-                  Текст
-                </textarea>
-            </div>
         </form>
     </div>
     <div id="map" class="map"></div>

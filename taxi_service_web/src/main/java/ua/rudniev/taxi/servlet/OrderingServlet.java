@@ -34,6 +34,8 @@ public class OrderingServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        double distance = Double.parseDouble(req.getParameter(FormFields.DISTANCE));
         double departureX = Double.parseDouble(req.getParameter(FormFields.DEPARTURE_X));
         double departureY = Double.parseDouble(req.getParameter(FormFields.DEPARTURE_Y));
         String departureAddress = req.getParameter(FormFields.DEPARTURE_ADDRESS);
@@ -51,7 +53,7 @@ public class OrderingServlet extends HttpServlet {
                 user,
                 Instant.now()
         );
-        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder);
+        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder, distance);
         RequestDispatcher dispatcher;
         req.setAttribute("tripOrder", tripOrder);
         if (newTripInfoOptional.isPresent()) {
@@ -67,6 +69,8 @@ public class OrderingServlet extends HttpServlet {
     }
 
     private static class FormFields {
+
+        private static final String DISTANCE = "distance";
 
         private static final String DEPARTURE_X = "departureX";
 
