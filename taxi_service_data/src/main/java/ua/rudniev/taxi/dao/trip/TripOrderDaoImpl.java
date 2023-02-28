@@ -18,37 +18,14 @@ public class TripOrderDaoImpl implements TripOrderDao {
     @Override
     public List<TripOrder> findAllTripOrders(int pageIndex, int pageSize, String sortType, String sortBy, String filterBy, String filterKey) {
         List<TripOrder> tripOrders = new ArrayList<>();
-        if (sortBy == null) sortBy = SQLConstants.TripOrderFields.DEPARTURE_ADDRESS;
-        if (sortType == null) sortType = "asc";
-        String orderType = sortType;
-        String orderBy = sortBy;
-        if (filterKey == null) {
+        if (sortBy == null && sortType == null && filterBy == null & filterKey == null) {
             try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
                     HikariTransactionManager
                             .getCurrentConnection()
                             .prepareStatement(
                                     SQLConstants.FIND_ALL_TRIP_ORDERS))) {
-                stmt.setString(1, sortBy);
-                stmt.setString(2, sortType);
-                stmt.setInt(3, pageSize);
-                stmt.setInt(4, pageIndex);
-                ResultSet rs = stmt.executeQuery();
-                fillTripOrders(rs, tripOrders);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try (PreparedStatement stmt = JdbcDaoUtils.wrapSqlException(() ->
-                    HikariTransactionManager
-                            .getCurrentConnection()
-                            .prepareStatement(
-                                    SQLConstants.FIND_ALL_TRIP_ORDERS_WITH_FILTER))) {
-                stmt.setString(1, filterBy);
-                stmt.setString(2, filterKey);
-                stmt.setString(3, orderBy);
-                stmt.setString(4, orderType);
-                stmt.setInt(5, pageSize);
-                stmt.setInt(6, pageIndex);
+                stmt.setInt(1, pageSize);
+                stmt.setInt(2, pageIndex);
                 ResultSet rs = stmt.executeQuery();
                 fillTripOrders(rs, tripOrders);
             } catch (SQLException e) {
@@ -96,8 +73,8 @@ public class TripOrderDaoImpl implements TripOrderDao {
     }
 
     private void fillTripOrders(ResultSet rs, List<TripOrder> tripOrders) throws SQLException {
-        TripOrder tripOrder = new TripOrder();
         while (rs.next()) {
+            TripOrder tripOrder = new TripOrder();
             AddressPoint departure = new AddressPoint(
                     rs.getDouble(SQLConstants.TripOrderFields.DEPARTURE_X),
                     rs.getDouble(SQLConstants.TripOrderFields.DEPARTURE_Y),

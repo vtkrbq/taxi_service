@@ -37,7 +37,7 @@
 		<div class="mobile-menu-btn"><i class="fa fa-bars"></i> Меню</div>
 		<nav class="main-menu top-menu">
         <ul>
-            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Home</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order</a></li>
             <c:set var="admin" scope="request" value="false"/>
             <c:set var="driver" scope="request" value="false"/>
             <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
@@ -49,7 +49,7 @@
                 </c:if>
             </c:forEach>
             <c:if test="${admin}">
-                <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order statistics</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
             </c:if>
             <c:if test="${driver}">
                 <li class="active"><a href="${pageContext.request.contextPath}/ordering">DRIVER</a></li>

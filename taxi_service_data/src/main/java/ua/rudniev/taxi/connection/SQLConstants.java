@@ -205,7 +205,8 @@ public class SQLConstants {
             " on " + TO_TABLE_NAME + "." + TripOrderFields.USER_LOGIN + " = client.login" +
             " inner join " + AU_TABLE_NAME + " as driver" +
             " on " + CAR_TABLE_NAME + "." + CarFields.DRIVER_LOGIN + " = driver.login" +
-            " order by " + TripOrderFields.DEPARTURE_ADDRESS + "asc";
+            " order by " + TripOrderFields.DEPARTURE_ADDRESS + " asc" +
+            "limit ? offset ?";
 
     public static final String FIND_ALL_TRIP_ORDERS_WITH_FILTER = "select " +
             TO_TABLE_NAME + "." + TripOrderFields.DEPARTURE_ADDRESS + ", " +

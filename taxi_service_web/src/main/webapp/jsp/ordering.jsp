@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://api.visicom.ua/apps/visicom-autocomplete.min.css">
+    <link rel="stylesheet" href="css/visicom-autocomplete.min.css">
     <link rel="stylesheet" href="resources/leaflet/leaflet.css" />
     <link rel="stylesheet" href="resources/plugins/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
     <link rel="stylesheet" href="resources/plugins/leaflet.contextmenu.css" />
@@ -20,11 +22,11 @@
             padding: 25px;
             background-color: white;
             position: absolute;
-
         }
     </style>
 </head>
 <body>
+<script src="https://api.visicom.ua/apps/visicom-autocomplete.min.js"></script>
 <script src="resources/leaflet/leaflet.js"></script>
 <script>
       $('.top-line').after('<div class="mobile-menu d-xl-none">');
@@ -32,7 +34,7 @@
       	$('.mobile-menu-btn').click(function(){
       		$('.mobile-menu').stop().slideToggle();
       	});
-  </script>
+</script>
 <header class="top-line">
 		<a href="${pageContext.request.contextPath}/ordering" class="logo"><img src="img/logo.png" alt="logo alt"></a>
 		<div class="login">
@@ -48,7 +50,7 @@
 		<div class="mobile-menu-btn"><i class="fa fa-bars"></i> Меню</div>
 		<nav class="main-menu top-menu">
         <ul>
-            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Home</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order</a></li>
             <c:set var="admin" scope="request" value="false"/>
             <c:set var="driver" scope="request" value="false"/>
             <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
@@ -95,7 +97,10 @@
                    <%
                         request.setCharacterEncoding("UTF-8");
                    %>
-                   <input type="text" id="depart" class="form-control" style="width: 400px;" name="departureAddress" value="${tripOrder.departure.address}" onfocusout="getDepartureCoords()">
+                   <div id="visicom-autocomplete-depart">
+                       <a href="https://api.visicom.ua/" target="_blank" style="width: 400px; height: 40px;">© Visicom</a>
+                  </div>
+                  <input type="text" id="depart" class="form-control" style="display: none; width: 400px; height: 40px;" name="departureAddress" value="${tripOrder.departure.address}" onfocusout="getDepartureCoords()">
                </label>
             </div>
             <div style="display: none;">
@@ -107,7 +112,7 @@
             <div style="display: none;">
                <label>
                    <b> Destination Y: </b>
-                   <input type="text" id="dsy" class="form-control" style="width: 400px;" name="destinationY" value="${tripOrder.destination.y}">
+                   <input type="text" id="dsy" class="form-control" style="width: 400px; height: 40px;" name="destinationY" value="${tripOrder.destination.y}">
                </label>
             </div>
             <div>
@@ -116,7 +121,10 @@
                    <%
                        request.setCharacterEncoding("UTF-8");
                    %>
-                   <input type="text" id="destin" class="form-control" style="width: 400px;" name="destinationAddress" value="${tripOrder.destination.address}" onfocusout="getDestinationCoords()">
+                   <div id="visicom-autocomplete-destin">
+                       <a href="https://api.visicom.ua/" target="_blank">© Visicom</a>
+                   </div>
+                   <input type="text" id="destin" class="form-control" style="display: none; width: 400px; height: 40px;" name="destinationAddress" value="${tripOrder.destination.address}" onfocusout="getDestinationCoords()">
                </label>
             </div>
             <div><b>Category:</b></div>
@@ -146,10 +154,39 @@
                    </c:forEach>
                </div>
             </c:if>
+
         </form>
     </div>
     <div id="map" class="map"></div>
 </div>
+<script>
+    var dep = document.getElementById("depart");
+    var des = document.getElementById("destin");
+    ac = new visicomAutoComplete({
+        selector: '#visicom-autocomplete-depart',
+        apiKey : '9bc097f16c0606e0fb92a8e0ac130127',
+        width: '400px',
+        height: '40px',
+        searchTextPrefix: 'м.Харків, ',
+        onSuggestSelected: suggest =>
+        {
+            dep.value = suggest.html,
+            getDepartureCoords();
+        }
+    });
+    ac2 = new visicomAutoComplete({
+        selector: '#visicom-autocomplete-destin',
+        apiKey : '9bc097f16c0606e0fb92a8e0ac130127',
+        width: '400px',
+        height: '40px',
+        searchTextPrefix: 'м.Харків, ',
+        onSuggestSelected: suggest =>
+        {
+            des.value = suggest.html,
+            getDestinationCoords();
+        }
+    });
+</script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="resources/plugins/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>

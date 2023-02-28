@@ -30,7 +30,7 @@
 		<div class="mobile-menu-btn"><i class="fa fa-bars"></i> Меню</div>
 		<nav class="main-menu top-menu">
         <ul>
-            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Home</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order</a></li>
             <c:set var="admin" scope="request" value="false"/>
             <c:set var="driver" scope="request" value="false"/>
             <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
@@ -93,10 +93,6 @@
                 <tr>
                     <td>Price:</td>
                     <td>${newTripInfo.price} ₴</td>
-                </tr>
-                <tr>
-                    <td>Driver:</td>
-                    <td>${newTripInfo.car.driver.firstname} ${newTripInfo.car.driver.lastname}</td>
                 </tr>
             </table>
         </div>

@@ -30,7 +30,6 @@ var getJSON = function(url, callback) {
 
 function getDepartureCoords() {
     var x = document.getElementById("depart");
-    var y = document.getElementById("textarea");
     var dx = document.getElementById("dx");
     var dy = document.getElementById("dy");
     var urlApi = 'https://api.visicom.ua/data-api/5.0/uk/geocode.json?text=' + x.value + '&key=9bc097f16c0606e0fb92a8e0ac130127&limit=1';
@@ -47,7 +46,7 @@ function getDepartureCoords() {
                 waypointDepart.addTo(layerGroup);
                 map.fitBounds(waypointDepart);
               }
-            });
+        });
     }
 }
 
