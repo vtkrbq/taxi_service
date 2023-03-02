@@ -62,7 +62,7 @@ public class OrderingService {
                 tripOrderDao.findAllTripOrders(pageIndex, pageSize, orderType, orderBy, filterBy, filterKey), true);
     }
 
-    public int getCountOfRecords() {
-        return transactionManager.doInTransaction(tripOrderDao::getCountOfRecords, true);
+    public int getCountOfRecords(String filterBy, String filterKey) {
+        return transactionManager.doInTransaction(() -> tripOrderDao.getCountOfRecords(filterBy, filterKey), true);
     }
 }

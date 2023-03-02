@@ -1,5 +1,6 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
@@ -7,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/header.css" />
     <link rel="stylesheet" type="text/css" href="css/ordering.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" type="text/css" href="css/table.css" />
+    <link rel="stylesheet" type="text/css" href="css/pagination.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
@@ -20,7 +21,7 @@
       	$('.mobile-menu-btn').click(function(){
       		$('.mobile-menu').stop().slideToggle();
       	});
-  </script>
+</script>
 <header class="top-line">
 		<a href="${pageContext.request.contextPath}/ordering" class="logo"><img src="img/logo.png" alt="logo alt"></a>
 		<div class="login">
@@ -66,63 +67,65 @@
         </ul>
 		</nav>
 </header>
-<div class="page-wrapper">
-    <div class="left-panel-wrapper">
-        <div class="left-panel" style="display: flex;">
-            <table style="font-size: 24px; font-family: Exo 2;">
-                <caption>
-                    <div style="padding-left: 0px; display: inline-block;">
-                        <b style="font-size: 32px; color: black;">Car ID: ${carView.id}</b>
-                        <a href="${pageContext.request.contextPath}/orderStatistics" class="btn btn-secondary" style="background-color: black; width: 100px; margin-left: 40px;">Back</a>
-                    </div>
-                </caption>
-                <tr>
-                    <td style="width: 150px;">Car:</td>
-                    <td>${carView.carName}</td>
-                </tr>
-                <tr>
-                    <td>License Plate:</td>
-                    <td>${carView.licensePlate}</td>
-                </tr>
-                <tr>
-                    <td>Category:</td>
-                    <td>${carView.carCategory}</td>
-                </tr>
-                <tr>
-                    <td>Capacity:</td>
-                    <td>${carView.carCapacity}</td>
-                </tr>
-            </table>
-            <table style="font-size: 24px; font-family: Exo 2;">
-                <caption>
-                    <div style="padding-left: 0px; display: inline-block;">
-                        <b style="font-size: 32px; color: black;">Driver: ${carView.driver.login}</b>
-                    </div>
-                </caption>
-                <tr>
-                    <td style="width: 150px;">Name:</td>
-                    <td>${carView.driver.firstname}</td>
-                </tr>
-                <tr>
-                    <td>Lastname:</td>
-                    <td>${carView.driver.lastname}</td>
-                </tr>
-                <tr>
-                    <td>Phone:</td>
-                    <td>${carView.driver.phone}</td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td>${carView.driver.email}</td>
-                </tr>
-            </table>
-        </div>
-</div>
-
-<div class="content-wrapper">
-    <div class="content">
+<div class="container" style="width: 100%;">
+    <h2>${currentUser.lastname} ${currentUser.firstname}&#39;s history<h2>
+    <table class="table table-striped table-class">
+        <thead>
+        <tr>
+            <th>Departure address</th>
+            <th>Destination address</th>
+            <th>Category</th>
+            <th>Capacity</th>
+            <th>Client name</th>
+            <th>Car</th>
+            <th>Price (₴)</th>
+            <th>Created</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="tripOrder" items="${tripOrders}">
+            <tr>
+                <td>${tripOrder.departure.address}</td>
+                <td>${tripOrder.destination.address}</td>
+                <td>${tripOrder.category}</td>
+                <td>${tripOrder.capacity}</td>
+                <td>
+                    <a style="color: black;" href="${pageContext.request.contextPath}/profileView?login=${tripOrder.user.login}">${tripOrder.user.lastname} ${tripOrder.user.firstname}</p>
+                </td>
+                <td>
+                    <a style="color: black;" href="${pageContext.request.contextPath}/carView?id=${tripOrder.car.id}">${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</p>
+                </td>
+                <td>${tripOrder.price} hrn.</td>
+                <td>
+                    <fmt:parseDate value="${tripOrder.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                    <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    <div style="width: 100%; text-align: center;">
+        <ul class="complex_list">
+            <c:if test="${currentPage != 1}">
+                <li><a href="${pageContext.request.contextPath}/userStatistics?currentPage=${currentPage - 1}"> < </a></li>
+            </c:if>
+                <c:forEach begin="1" end="${pagesQuantity}" var="i">
+                    <c:choose>
+                        <c:when test="${currentPage eq i}">
+                            <span style="text-decoration: underline; text-decoration-thickness: 1px;">${i}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a href="${pageContext.request.contextPath}/userStatistics?currentPage=${i}">${i}</a></li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            <c:if test="${currentPage lt pagesQuantity}">
+                <li><a href="${pageContext.request.contextPath}/userStatistics?currentPage=${currentPage + 1}"> > </a></li>
+            </c:if>
+        </ul>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>

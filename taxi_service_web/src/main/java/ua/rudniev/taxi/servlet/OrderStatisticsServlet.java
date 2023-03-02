@@ -17,26 +17,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
 @WebServlet("/orderStatistics")
 public class OrderStatisticsServlet extends HttpServlet {
     private final OrderingService orderingService = ComponentsContainer.getInstance().getOrderingService();
+    private String filterBy, filterKey, sortType, sortBy;
+    private int recordsPerPage = 5;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int currentPage = 1;
-        int recordsPerPage = 5;
-        String filterBy = req.getParameter("filterBy");
-        String filterKey = req.getParameter("filterKey");
-        String sortType = req.getParameter("sortType");
-        String sortBy = req.getParameter("sortBy");
+        if (Boolean.getBoolean(req.getParameter("sortedAndFiltered"))) { //TODO check with pirog
+            filterBy = req.getParameter("filterBy");
+            filterKey = req.getParameter("filterKey");
+            sortType = req.getParameter("sortType");
+            sortBy = req.getParameter("sortBy");
+            recordsPerPage = Integer.parseInt(req.getParameter("sortBy"));
+        }
         if (req.getParameter("currentPage") != null) currentPage = Integer.parseInt(req.getParameter("currentPage"));
-        if (req.getParameter("filterBy") != null) filterBy = req.getParameter("filterBy");
-        if (req.getParameter("filterKey") != null) filterKey = req.getParameter("filterKey");
         List<TripOrder> tripOrders = orderingService.findAllTripOrders(
                 (currentPage - 1) * recordsPerPage,
                 recordsPerPage,
@@ -44,7 +43,7 @@ public class OrderStatisticsServlet extends HttpServlet {
                 sortBy,
                 filterBy,
                 filterKey);
-        int totalRecords = orderingService.getCountOfRecords();
+        int totalRecords = orderingService.getCountOfRecords(filterBy, filterKey);
         int pagesQuantity = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
         req.setAttribute("tripOrders", tripOrders);
         req.setAttribute("pagesQuantity", pagesQuantity);
@@ -56,14 +55,17 @@ public class OrderStatisticsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String sortType = req.getParameter("sortType");
-        String sortBy = req.getParameter("sortBy");
-        String filterBy = req.getParameter("filterBy");
-        String filterKey = req.getParameter("filterKey");
+        sortType = req.getParameter("sortType");
+        sortBy = req.getParameter("sortBy");
+        filterBy = req.getParameter("filterBy");
+        filterKey = req.getParameter("filterKey");
+        recordsPerPage = Integer.parseInt(req.getParameter("quantity"));
         req.setAttribute("sortType", sortType);
         req.setAttribute("sortBy", sortBy);
         req.setAttribute("filterBy", filterBy);
         req.setAttribute("filterKey", filterKey);
+        req.setAttribute("quantity", recordsPerPage);
+        req.setAttribute("sortedAndFiltered", true); //TODO check with pirog AND RESET BUTTON
         resp.sendRedirect(req.getContextPath() + "/orderStatistics");
     }
 }

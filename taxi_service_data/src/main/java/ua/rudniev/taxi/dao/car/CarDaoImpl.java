@@ -97,6 +97,10 @@ public class CarDaoImpl implements CarDao {
             stmt.setInt(3, car.getCarCapacity());
             stmt.setString(4, car.getLicensePlate());
             stmt.setString(5, user.getLogin());
+            stmt.setString(6, user.getLogin());
+            stmt.setString(7, car.getCurrentAddress().getAddress());
+            stmt.setDouble(8, car.getCurrentAddress().getX());
+            stmt.setDouble(9, car.getCurrentAddress().getY());
             stmt.executeUpdate();
             HikariTransactionManager.getCurrentConnection().commit();
         } catch (Exception e) {

@@ -29,6 +29,15 @@
                 <button class="mainmenubtn"><c:out value="${currentUser.firstname} ${currentUser.lastname}"/></button>
                     <div class="dropdown-child">
                         <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile">Profile</a>
+                        <c:set var="driver" scope="request" value="false"/>
+                        <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
+                            <c:if test="${userRole == 'DRIVER'}">
+                                <c:set var="driver" scope="request" value="true"/>
+                            </c:if>
+                        </c:forEach>
+                        <c:if test="${driver}">
+                            <a class="mainmenubtn" href="${pageContext.request.contextPath}/carRegistration">Car registration</a>
+                        </c:if>
                         <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout">Sign out</a>
                     </div>
             </div>
@@ -47,11 +56,12 @@
                     <c:set var="driver" scope="request" value="true"/>
                 </c:if>
             </c:forEach>
+            <li class="active"><a href="${pageContext.request.contextPath}/userStatistics">Order history</a></li>
             <c:if test="${admin}">
                 <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
             </c:if>
             <c:if test="${driver}">
-                <li class="active"><a href="${pageContext.request.contextPath}/ordering">DRIVER</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/driverStatistics">Driver statistics</li>
             </c:if>
         </ul>
 		</nav>

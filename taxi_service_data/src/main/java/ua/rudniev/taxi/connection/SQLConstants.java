@@ -40,6 +40,12 @@ public class SQLConstants {
         public static final String CAR_CAPACITY = "CAR_CAPACITY";
 
         public static final String LICENSE_PLATE = "LICENSE_PLATE";
+
+        public static final String CURRENT_ADDRESS = "CURRENT_ADDRESS";
+
+        public static final String CURRENT_POINT_X = "CURRENT_POINT_X";
+
+        public static final String CURRENT_POINT_Y = "CURRENT_POINT_Y";
     }
 
     public static class TripOrderFields {
@@ -139,8 +145,12 @@ public class SQLConstants {
             CarFields.CAR_CATEGORY + ", " +
             CarFields.CAR_CAPACITY + ", " +
             CarFields.LICENSE_PLATE + ", " +
-            CarFields.DRIVER_LOGIN + ") " +
-            "values (?, ?, ?, ?, ?)";
+            CarFields.DRIVER_LOGIN + ", " +
+            CarFields.STATUS + ", " +
+            CarFields.CURRENT_ADDRESS + ", " +
+            CarFields.CURRENT_POINT_X + ", " +
+            CarFields.CURRENT_POINT_Y + ") " +
+            "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String FIND_CAR_WITH_DRIVER = "select " +
             CAR_TABLE_NAME + "." + CarFields.ID + ", " +
@@ -205,10 +215,10 @@ public class SQLConstants {
             " on " + TO_TABLE_NAME + "." + TripOrderFields.USER_LOGIN + " = client.login" +
             " inner join " + AU_TABLE_NAME + " as driver" +
             " on " + CAR_TABLE_NAME + "." + CarFields.DRIVER_LOGIN + " = driver.login" +
-            " order by " + TripOrderFields.DEPARTURE_ADDRESS + " asc" +
-            "limit ? offset ?";
+            " order by " + TripOrderFields.CREATED + " desc" +
+            " limit ? offset ?";
 
-    public static final String FIND_ALL_TRIP_ORDERS_WITH_FILTER = "select " +
+    public static final String FIND_ALL_TRIP_ORDERS_FOR_SORT_AND_FILTER = "select " +
             TO_TABLE_NAME + "." + TripOrderFields.DEPARTURE_ADDRESS + ", " +
             TO_TABLE_NAME + "." + TripOrderFields.DEPARTURE_X + ", " +
             TO_TABLE_NAME + "." + TripOrderFields.DEPARTURE_Y + ", " +
@@ -239,11 +249,12 @@ public class SQLConstants {
             " inner join " + AU_TABLE_NAME + " as client" +
             " on " + TO_TABLE_NAME + "." + TripOrderFields.USER_LOGIN + " = client.login" +
             " inner join " + AU_TABLE_NAME + " as driver" +
-            " on " + CAR_TABLE_NAME + "." + CarFields.DRIVER_LOGIN + " = driver.login" +
-            " where ? = ?" +
-            " order by ? ?" +
-            " limit ? " + "offset ?";
+            " on " + CAR_TABLE_NAME + "." + CarFields.DRIVER_LOGIN + " = driver.login";
 
-    public static final String GET_COUNT_OF_TRIP_ORDERS = "select count(distinct(id)) from " + TO_TABLE_NAME;
-
+    public static final String GET_COUNT_OF_TRIP_ORDERS = "select count(distinct(trip_order.id)) from " + TO_TABLE_NAME +
+            " inner join " + CAR_TABLE_NAME + " on " + TO_TABLE_NAME + "." + TripOrderFields.CAR_ID + " = car.id " +
+            " inner join " + AU_TABLE_NAME + " as client" +
+            " on " + TO_TABLE_NAME + "." + TripOrderFields.USER_LOGIN + " = client.login" +
+            " inner join " + AU_TABLE_NAME + " as driver" +
+            " on " + CAR_TABLE_NAME + "." + CarFields.DRIVER_LOGIN + " = driver.login";
 }

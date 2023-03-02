@@ -20,17 +20,4 @@ public class PasswordEncryptionService {
         SecretKeyFactory f = SecretKeyFactory.getInstance(algorithm);
         return f.generateSecret(spec).getEncoded();
     }
-
-//        public static boolean authenticate(String attemptedPassword, byte[] encryptedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
-//        byte[] encryptedAttemtpedPassword = getEncryptedPassword(attemptedPassword);
-//        return Arrays.equals(encryptedPassword, encryptedAttemtpedPassword);
-//    }
-//
-//        public static byte[] generateSalt() throws NoSuchAlgorithmException{
-//        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-//
-//        byte[] salt = new byte[8];
-//        random.nextBytes(salt);
-//        return salt;
-//    }
 }

@@ -3,6 +3,7 @@ package ua.rudniev.taxi.servlet;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Category;
+import ua.rudniev.taxi.model.car.Status;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.service.CarService;
 import ua.rudniev.taxi.servlet.validation.ValidationUtils;
@@ -32,8 +33,8 @@ public class CarRegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<String> errors = new ArrayList<>();
+        req.setCharacterEncoding("UTF-8");//TODO filter add to all servlets
         String carName = req.getParameter(FormFields.CAR_NAME);
-//        String carCategory = req.getParameter(FormFields.CAR_CATEGORY);
         String carCategory = req.getParameter(FormFields.CAR_CATEGORY).toUpperCase();
         String carCapacity = req.getParameter(FormFields.CAR_CAPACITY);
         String licensePlate = req.getParameter(FormFields.LICENSE_PLATE);
@@ -41,12 +42,14 @@ public class CarRegistrationServlet extends HttpServlet {
         ValidationUtils.validateCarCategory(errors, carCategory);
         ValidationUtils.validateCarCapacity(errors, carCapacity);
         ValidationUtils.validateLicensePlate(errors, licensePlate);
-        Car car = new Car();
-        car.setCarName(carName);
-        car.setCarCategory(Category.valueOf(carCategory));
-        car.setCarCapacity(Integer.parseInt(carCapacity));
-        car.setLicensePlate(licensePlate);
         User user = (User) req.getSession().getAttribute(CURRENT_USER);
+        Car car = new Car(
+                user,
+                carName,
+                Category.valueOf(carCategory),
+                Status.AVAILABLE,
+                Integer.parseInt(carCapacity),
+                licensePlate);
         if (errors.isEmpty()) {
             try {
                 carService.createCar(car, user);

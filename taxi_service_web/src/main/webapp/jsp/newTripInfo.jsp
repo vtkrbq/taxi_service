@@ -16,39 +16,16 @@
 </head>
 <body>
 <header class="top-line">
-		<a href="${pageContext.request.contextPath}/ordering" class="logo"><img src="img/logo.png" alt="logo alt"></a>
+		<a href="#" class="logo"><img src="img/logo.png" alt="logo alt"></a>
 		<div class="login">
 		    <i class="fa fa-login"></i>
 		    <div class="dropdown">
                 <button class="mainmenubtn"><c:out value="${currentUser.firstname} ${currentUser.lastname}"/></button>
                     <div class="dropdown-child">
-                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile">Profile</a>
                         <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout">Sign out</a>
                     </div>
             </div>
 		</div>
-		<div class="mobile-menu-btn"><i class="fa fa-bars"></i> Меню</div>
-		<nav class="main-menu top-menu">
-        <ul>
-            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order</a></li>
-            <c:set var="admin" scope="request" value="false"/>
-            <c:set var="driver" scope="request" value="false"/>
-            <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
-                <c:if test="${userRole == 'ADMIN'}">
-                    <c:set var="admin" scope="request" value="true"/>
-                </c:if>
-                <c:if test="${userRole == 'DRIVER'}">
-                    <c:set var="driver" scope="request" value="true"/>
-                </c:if>
-            </c:forEach>
-            <c:if test="${admin}">
-                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
-            </c:if>
-            <c:if test="${driver}">
-                <li class="active"><a href="${pageContext.request.contextPath}/ordering">DRIVER</a></li>
-            </c:if>
-        </ul>
-		</nav>
 </header>
 <div class="page-wrapper">
     <div class="left-panel-wrapper">
@@ -62,6 +39,14 @@
                 <tr>
                     <td style="width: 300px;">Departure address:</td>
                     <td style="width: 500px;">${tripOrder.departure.address}</td>
+                </tr>
+                <tr>
+                    <td>Departure X:</td>
+                    <td><span id="dx">${tripOrder.departure.x}</span></td>
+                </tr>
+                <tr>
+                    <td>Departure Y:</td>
+                    <td><span id="dy">${tripOrder.departure.y}</span></td>
                 </tr>
                 <tr>
                     <td>Destination address:</td>

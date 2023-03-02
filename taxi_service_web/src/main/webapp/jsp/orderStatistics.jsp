@@ -30,6 +30,15 @@
                 <button class="mainmenubtn"><c:out value="${currentUser.firstname} ${currentUser.lastname}"/></button>
                     <div class="dropdown-child">
                         <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile">Profile</a>
+                        <c:set var="driver" scope="request" value="false"/>
+                        <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
+                            <c:if test="${userRole == 'DRIVER'}">
+                                <c:set var="driver" scope="request" value="true"/>
+                            </c:if>
+                        </c:forEach>
+                        <c:if test="${driver}">
+                            <a class="mainmenubtn" href="${pageContext.request.contextPath}/carRegistration">Car registration</a>
+                        </c:if>
                         <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout">Sign out</a>
                     </div>
             </div>
@@ -48,56 +57,69 @@
                     <c:set var="driver" scope="request" value="true"/>
                 </c:if>
             </c:forEach>
+            <li class="active"><a href="${pageContext.request.contextPath}/userStatistics">Order history</a></li>
             <c:if test="${admin}">
                 <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
             </c:if>
             <c:if test="${driver}">
-                <li class="active"><a href="${pageContext.request.contextPath}/ordering">DRIVER</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/driverStatistics">Driver statistics</a></li>
             </c:if>
         </ul>
 		</nav>
 </header>
-<div class="container">
-    <form action="orderStatistics">
+<div style="padding-right: 10%; padding-left: 10%">
+    <form action="orderStatistics" method="post">
         <div style="display: flex; justify-content: right;">
+            <div style="display: flex; align-items: center;">
+                <label style="margin: 5px; width: 280px; text-align: right;">Records per page:</label>
+                <select name="quantity" class="custom-select" style="margin: 5px; width: 100px;">
+                  <option value="5" selected>5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                  <option value="25">25</option>
+                </select>
+            </div>
             <div style="display: flex; align-items: center;">
                 <label style="margin: 5px; width: 200px; text-align: right;">Sort:</label>
                 <select name="sortType" class="custom-select">
-                  <option value="asc" selected>Ascending</option>
+                  <option value="asc">Ascending</option>
                   <option value="desc">Descending</option>
                 </select>
             </div>
             <div style="display: flex; margin: 5px; align-items: center;">
                 <label style="margin: 5px; width: 200px; text-align: right;">Sort by:</label>
                 <select name="sortBy" class="custom-select">
-                  <option value="departure_address" selected>Departure address</option>
+                  <option value="departure_address">Departure address</option>
                   <option value="destination_address">Destination address</option>
                   <option value="trip_category">Category</option>
                   <option value="trip_capacity">Capacity</option>
-                  <option value="trip_order.lastname">Client name</option>
+                  <option value="client.lastname">Client name</option>
                   <option value="car.car_name">Car</option>
                   <option value="trip_order.price">Price</option>
-                  <option value="trip_order.created">Created</option>
+                  <option value="trip_order.created" selected>Created</option>
                 </select>
             </div>
             <div style="display: flex; margin: 5px; align-items: center;">
-                <label style="margin: 5px; width: 250px; text-align: right;">Filter by:</label>
-                <select name="filterBy" class="custom-select" style="margin: 5px;">
-                    <option value="departure_address" selected>Departure address</option>
+                <label style="margin: 5px; width: 150px; text-align: right;">Filter by:</label>
+                <select name="filterBy" class="custom-select" style="margin: 5px; width: 150px;">
+                    <option value="" selected>Select...</option>
+                    <option value="departure_address">Departure address</option>
                     <option value="destination_address">Destination address</option>
                     <option value="trip_category">Category</option>
                     <option value="trip_capacity">Capacity</option>
-                    <option value="trip_order.lastname">Client name</option>
+                    <option value="client.lastname">Client name</option>
                     <option value="car.car_name">Car</option>
                     <option value="trip_order.price">Price</option>
                     <option value="trip_order.created">Created</option>
                 </select>
-                <input type="text" name="filterKey" class="form-control" placeholder="Filter key" style="margin: 5px;">
-                <button type="submit" class="btn btn-black" style="width: 300px; margin: 5px;">Filter</button>
+                <input type="text" name="filterKey" class="form-control" placeholder="Filter key" style="margin: 5px; width: 150px;">
+                <button type="submit" class="btn btn-black" style="width: 100px; margin: 5px;">Filter</button>
+                <a class="btn btn-secondary" href="${pageContext.request.contextPath}/orderStatistics" style="width: 100px; margin: 5px;">Reset</a>
             </div>
         </div>
     <form>
-    <table class="table table-striped table-class">
+    <table class="table table-striped table-class" style="width: 100%">
         <thead>
         <tr>
             <th>Departure address</th>
@@ -106,7 +128,7 @@
             <th>Capacity</th>
             <th>Client name</th>
             <th>Car</th>
-            <th>Price</th>
+            <th>Price (₴)</th>
             <th>Created</th>
         </tr>
         </thead>
@@ -123,7 +145,7 @@
                 <td>
                     <a style="color: black;" href="${pageContext.request.contextPath}/carView?id=${tripOrder.car.id}">${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</p>
                 </td>
-                <td>${tripOrder.price}</td>
+                <td>${tripOrder.price} hrn.</td>
                 <td>
                     <fmt:parseDate value="${tripOrder.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                     <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
@@ -140,7 +162,7 @@
                 <c:forEach begin="1" end="${pagesQuantity}" var="i">
                     <c:choose>
                         <c:when test="${currentPage eq i}">
-                            ${i}
+                            <span style="text-decoration: underline; text-decoration-thickness: 1px;">${i}</span>
                         </c:when>
                         <c:otherwise>
                             <li><a href="${pageContext.request.contextPath}/orderStatistics?currentPage=${i}">${i}</a></li>
