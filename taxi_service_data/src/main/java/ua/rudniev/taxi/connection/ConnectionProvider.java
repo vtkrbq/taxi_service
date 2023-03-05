@@ -11,7 +11,7 @@ public class ConnectionProvider {
     private static final HikariDataSource ds;
 
     static {
-        config.setDriverClassName("org.postgresql.Driver");
+        config.setDriverClassName("org.postgresql.Driver"); //TODO: Пирог: вынести в проперти. Это вроде нужно было в условиях
         config.setJdbcUrl("jdbc:postgresql://localhost:5432/taxi_service?currentSchema=public");
         config.setAutoCommit(false);
         config.setUsername("vtkrbq");

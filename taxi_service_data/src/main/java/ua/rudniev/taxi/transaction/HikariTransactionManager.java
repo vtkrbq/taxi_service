@@ -1,11 +1,13 @@
 package ua.rudniev.taxi.transaction;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.rudniev.taxi.connection.ConnectionProvider;
 import ua.rudniev.taxi.exception.DbException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Slf4j
 public class HikariTransactionManager implements TransactionManager {
 
     private static final ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();
@@ -20,10 +22,13 @@ public class HikariTransactionManager implements TransactionManager {
             return result;
         } catch (Exception e) {
             try {
+                log.error("An error occurred in transaction", e);
                 conn.rollback();
+                if (e instanceof RuntimeException) throw (RuntimeException) e;
                 throw new DbException("An error occurred with DB", e);
             } catch (SQLException ex) {
-                throw new DbException("An error occurred with rollback", ex);
+                log.error("An error occurred while trying to rollback", ex);
+                throw new DbException("An error occurred while trying to rollback", ex);
             }
         } finally {
             connectionHolder.remove();

@@ -2,9 +2,7 @@ package ua.rudniev.taxi.servlet;
 
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.model.car.Car;
-import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.service.CarService;
-import ua.rudniev.taxi.service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,8 +19,8 @@ public class CarViewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        Car carView = carService.findCarById(id).orElse(new Car());
-        req.setAttribute("carView", carView);
+        Car carView = carService.findCarById(id).orElse(new Car());//Пирог: Должна быть страничка not found я думаю
+        req.setAttribute("carView", carView); //Пирог: лучше просто car или carModel
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/carView.jsp");
         dispatcher.forward(req, resp);
     }

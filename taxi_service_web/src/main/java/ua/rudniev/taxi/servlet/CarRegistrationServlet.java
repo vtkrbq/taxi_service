@@ -33,7 +33,7 @@ public class CarRegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<String> errors = new ArrayList<>();
-        req.setCharacterEncoding("UTF-8");//TODO filter add to all servlets
+        req.setCharacterEncoding("UTF-8");//TODO: filter add to all servlets
         String carName = req.getParameter(FormFields.CAR_NAME);
         String carCategory = req.getParameter(FormFields.CAR_CATEGORY).toUpperCase();
         String carCapacity = req.getParameter(FormFields.CAR_CAPACITY);
@@ -52,7 +52,7 @@ public class CarRegistrationServlet extends HttpServlet {
                 licensePlate);
         if (errors.isEmpty()) {
             try {
-                carService.createCar(car, user);
+                carService.createCar(car);
             } catch (Exception e) {
                 log("An error has occurred while creating a car", e);
                 errors.add("Technical error has occurred");

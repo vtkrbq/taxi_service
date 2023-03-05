@@ -1,5 +1,8 @@
 package ua.rudniev.taxi.service;
 
+import ua.rudniev.taxi.dao.common.filter.Filter;
+import ua.rudniev.taxi.dao.common.order.OrderBy;
+import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.model.NewTripInfo;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Status;
@@ -57,12 +60,15 @@ public class OrderingService {
         }, false);
     }
 
-    public List<TripOrder> findAllTripOrders (int pageIndex, int pageSize, String orderType, String orderBy, String filterBy, String filterKey) {
+    public List<TripOrder> findAllTripOrders(int pageIndex,
+                                             int pageSize,
+                                             List<OrderBy<TripOrderField>> orderByList,
+                                             List<Filter<TripOrderField>> filters) {
         return transactionManager.doInTransaction(() ->
-                tripOrderDao.findAllTripOrders(pageIndex, pageSize, orderType, orderBy, filterBy, filterKey), true);
+                tripOrderDao.findAllTripOrders(pageIndex, pageSize, orderByList, filters), true);
     }
 
-    public int getCountOfRecords(String filterBy, String filterKey) {
-        return transactionManager.doInTransaction(() -> tripOrderDao.getCountOfRecords(filterBy, filterKey), true);
+    public int getCountOfRecords(List<Filter<TripOrderField>> filters) {
+        return transactionManager.doInTransaction(() -> tripOrderDao.getCountOfRecords(filters), true);
     }
 }

@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
         ValidationUtils.validateMandatory(errors, password, "Password");
         Optional<User> userOptional = Optional.empty();
         if (errors.isEmpty()) {
-            userOptional = userService.authUser(login, password);
+            userOptional = userService.findUserByLoginAndPassword(login, password);
             if (userOptional.isEmpty()) {
                 errors.add("Login or password is incorrect");
             }

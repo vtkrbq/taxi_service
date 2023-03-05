@@ -8,13 +8,9 @@ import ua.rudniev.taxi.transaction.TransactionManager;
 import java.util.Optional;
 
 public class UserService {
-    private UserDao userDao;
+    private final UserDao userDao;
 
-    private TransactionManager transactionManager;
-
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    private final TransactionManager transactionManager;
     public UserService(
             UserDao userDao,
             TransactionManager transactionManager
@@ -28,9 +24,9 @@ public class UserService {
             userDao.findUser(login), true);
     }
 
-    public Optional<User> authUser(String login, String password) {
+    public Optional<User> findUserByLoginAndPassword(String login, String password) {
         return transactionManager.doInTransaction(() ->
-            userDao.authUser(login, password), true);
+            userDao.findUserByLoginAndPassword(login, password), true);
     }
 
     public void createUser(User user, String password) {

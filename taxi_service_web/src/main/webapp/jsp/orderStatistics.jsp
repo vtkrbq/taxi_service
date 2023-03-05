@@ -68,7 +68,7 @@
 		</nav>
 </header>
 <div style="padding-right: 10%; padding-left: 10%">
-    <form action="orderStatistics" method="post">
+    <form action="orderStatistics" method="get">
         <div style="display: flex; justify-content: right;">
             <div style="display: flex; align-items: center;">
                 <label style="margin: 5px; width: 280px; text-align: right;">Records per page:</label>
@@ -83,35 +83,36 @@
             <div style="display: flex; align-items: center;">
                 <label style="margin: 5px; width: 200px; text-align: right;">Sort:</label>
                 <select name="sortType" class="custom-select">
-                  <option value="asc">Ascending</option>
-                  <option value="desc">Descending</option>
+                  <option value="ASC">Ascending</option>
+                  <option value="DESC">Descending</option>
+                  <option value="DESC">Descending</option>
                 </select>
             </div>
             <div style="display: flex; margin: 5px; align-items: center;">
                 <label style="margin: 5px; width: 200px; text-align: right;">Sort by:</label>
                 <select name="sortBy" class="custom-select">
-                  <option value="departure_address">Departure address</option>
-                  <option value="destination_address">Destination address</option>
-                  <option value="trip_category">Category</option>
-                  <option value="trip_capacity">Capacity</option>
-                  <option value="client.lastname">Client name</option>
-                  <option value="car.car_name">Car</option>
-                  <option value="trip_order.price">Price</option>
-                  <option value="trip_order.created" selected>Created</option>
+                  <option value="DEPARTURE_ADDRESS">Departure address</option>
+                  <option value="DESTINATION_ADDRESS">Destination address</option>
+                  <option value="CATEGORY">Category</option>
+                  <option value="CAPACITY">Capacity</option>
+                  <option value="CLIENT_LAST_NAME">Client name</option>
+                  <option value="CAR_NAME">Car</option>
+                  <option value="PRICE">Price</option>
+                  <option value="CREATED" selected>Created</option>
                 </select>
             </div>
             <div style="display: flex; margin: 5px; align-items: center;">
                 <label style="margin: 5px; width: 150px; text-align: right;">Filter by:</label>
                 <select name="filterBy" class="custom-select" style="margin: 5px; width: 150px;">
                     <option value="" selected>Select...</option>
-                    <option value="departure_address">Departure address</option>
-                    <option value="destination_address">Destination address</option>
-                    <option value="trip_category">Category</option>
-                    <option value="trip_capacity">Capacity</option>
-                    <option value="client.lastname">Client name</option>
-                    <option value="car.car_name">Car</option>
-                    <option value="trip_order.price">Price</option>
-                    <option value="trip_order.created">Created</option>
+                    <option value="DEPARTURE_ADDRESS">Departure address</option>
+                    <option value="DESTINATION_ADDRESS">Destination address</option>
+                    <option value="CATEGORY">Category</option>
+                    <option value="CAPACITY">Capacity</option>
+                    <option value="CLIENT_LAST_NAME">Client name</option>
+                    <option value="CAR_NAME">Car</option>
+                    <option value="PRICE">Price</option>
+                    <option value="CREATED">Created</option>
                 </select>
                 <input type="text" name="filterKey" class="form-control" placeholder="Filter key" style="margin: 5px; width: 150px;">
                 <button type="submit" class="btn btn-black" style="width: 100px; margin: 5px;">Filter</button>
