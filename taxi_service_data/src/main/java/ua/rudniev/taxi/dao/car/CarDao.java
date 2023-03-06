@@ -11,4 +11,5 @@ public interface CarDao {
     Optional<Car> findCarById(int id);
     void update(Car car);
     void createCar(Car car);
+    void completeTrip (int id);
 }

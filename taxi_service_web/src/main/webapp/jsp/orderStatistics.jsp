@@ -70,8 +70,8 @@
 <div style="padding-right: 10%; padding-left: 10%">
     <form action="orderStatistics" method="get">
         <div style="display: flex; justify-content: right;">
-            <div style="display: flex; align-items: center;">
-                <label style="margin: 5px; width: 280px; text-align: right;">Records per page:</label>
+            <div style="display: flex; align-items: center; margin: 10px; margin-left: 20px; margin-right: 50px;">
+                <label style="margin: 5px;">Records per page:</label>
                 <select name="quantity" class="custom-select" style="margin: 5px; width: 100px;">
                   <option value="5" selected>5</option>
                   <option value="10">10</option>
@@ -79,30 +79,23 @@
                   <option value="20">20</option>
                   <option value="25">25</option>
                 </select>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <label style="margin: 5px; width: 200px; text-align: right;">Sort:</label>
-                <select name="sortType" class="custom-select">
+                <label style="margin: 5px; text-align: right;">Sort:</label>
+                <select name="sortType" class="custom-select" style="margin: 5px; width: 150px; padding-right: 0px;">
                   <option value="ASC">Ascending</option>
-                  <option value="DESC">Descending</option>
-                  <option value="DESC">Descending</option>
+                  <option value="DESC" selected>Descending</option>
                 </select>
-            </div>
-            <div style="display: flex; margin: 5px; align-items: center;">
-                <label style="margin: 5px; width: 200px; text-align: right;">Sort by:</label>
-                <select name="sortBy" class="custom-select">
+                <label style="margin: 5px;">Sort by:</label>
+                <select name="sortBy" class="custom-select" style="margin: 5px; width: 150px;">
                   <option value="DEPARTURE_ADDRESS">Departure address</option>
                   <option value="DESTINATION_ADDRESS">Destination address</option>
                   <option value="CATEGORY">Category</option>
                   <option value="CAPACITY">Capacity</option>
-                  <option value="CLIENT_LAST_NAME">Client name</option>
+                  <option value="CLIENT_LAST_NAME">Client lastname</option>
                   <option value="CAR_NAME">Car</option>
                   <option value="PRICE">Price</option>
                   <option value="CREATED" selected>Created</option>
                 </select>
-            </div>
-            <div style="display: flex; margin: 5px; align-items: center;">
-                <label style="margin: 5px; width: 150px; text-align: right;">Filter by:</label>
+                <label style="margin: 5px;">Filter by:</label>
                 <select name="filterBy" class="custom-select" style="margin: 5px; width: 150px;">
                     <option value="" selected>Select...</option>
                     <option value="DEPARTURE_ADDRESS">Departure address</option>
@@ -112,9 +105,9 @@
                     <option value="CLIENT_LAST_NAME">Client name</option>
                     <option value="CAR_NAME">Car</option>
                     <option value="PRICE">Price</option>
-                    <option value="CREATED">Created</option>
                 </select>
                 <input type="text" name="filterKey" class="form-control" placeholder="Filter key" style="margin: 5px; width: 150px;">
+                <input type="date" name="created" class="form-control" placeholder="Pick a date"  style="margin: 5px; width: 150px;">
                 <button type="submit" class="btn btn-black" style="width: 100px; margin: 5px;">Filter</button>
                 <a class="btn btn-secondary" href="${pageContext.request.contextPath}/orderStatistics" style="width: 100px; margin: 5px;">Reset</a>
             </div>
@@ -131,6 +124,7 @@
             <th>Car</th>
             <th>Price (₴)</th>
             <th>Created</th>
+            <th>Completed</th>
         </tr>
         </thead>
         <tbody>
@@ -148,8 +142,19 @@
                 </td>
                 <td>${tripOrder.price} hrn.</td>
                 <td>
-                    <fmt:parseDate value="${tripOrder.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                    <fmt:parseDate value="${tripOrder.timestampCreated}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                     <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
+                </td>
+                <td>
+                    <c:choose>
+                      <c:when test="${tripOrder.timestampEnd == toCompare}">
+                        On route
+                      </c:when>
+                      <c:otherwise>
+                        <fmt:parseDate value="${tripOrder.timestampEnd}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                        <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
+                      </c:otherwise>
+                    </c:choose>
                 </td>
             </tr>
         </c:forEach>

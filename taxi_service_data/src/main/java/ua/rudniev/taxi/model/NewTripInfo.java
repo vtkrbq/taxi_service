@@ -9,9 +9,12 @@ public class NewTripInfo {
 
     private final BigDecimal price;
 
-    public NewTripInfo(Car car, BigDecimal price) {
+    private final int eta;
+
+    public NewTripInfo(Car car, BigDecimal price, int eta) {
         this.car = car;
         this.price = price;
+        this.eta = eta;
     }
 
     public Car getCar() {
@@ -20,5 +23,9 @@ public class NewTripInfo {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public int getEta() {
+        return eta;
     }
 }

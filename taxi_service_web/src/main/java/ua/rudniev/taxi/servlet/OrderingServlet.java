@@ -39,6 +39,7 @@ public class OrderingServlet extends HttpServlet {
         double departureX = Double.parseDouble(req.getParameter(FormFields.DEPARTURE_X));
         double departureY = Double.parseDouble(req.getParameter(FormFields.DEPARTURE_Y));
         String departureAddress = req.getParameter(FormFields.DEPARTURE_ADDRESS);
+        AddressPoint departure = new AddressPoint(departureX, departureY, departureAddress);
         double destinationX = Double.parseDouble(req.getParameter(FormFields.DESTINATION_X));
         double destinationY = Double.parseDouble(req.getParameter(FormFields.DESTINATION_Y));
         String destinationAddress = req.getParameter(FormFields.DESTINATION_ADDRESS);
@@ -53,7 +54,7 @@ public class OrderingServlet extends HttpServlet {
                 user,
                 Instant.now()
         );
-        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder, distance);
+        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder, distance, departure);
         RequestDispatcher dispatcher;
         req.setAttribute("tripOrder", tripOrder);
         if (newTripInfoOptional.isPresent()) {

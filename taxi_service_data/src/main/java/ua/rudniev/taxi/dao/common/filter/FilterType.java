@@ -5,5 +5,7 @@ public enum FilterType {
     EQUALS,
     NOT_EQUALS,
     MORE,
-    LESS
+    LESS,
+    BETWEEN,
+    AND
 }

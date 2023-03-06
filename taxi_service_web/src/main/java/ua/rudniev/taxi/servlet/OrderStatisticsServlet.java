@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,6 @@ import static ua.rudniev.taxi.dao.common.field.FieldType.*;
 @WebServlet("/orderStatistics")
 public class OrderStatisticsServlet extends HttpServlet {
     private final OrderingService orderingService = ComponentsContainer.getInstance().getOrderingService();
-    //private String filterBy, filterKey, sortType, sortBy; //Пирог: так делать категорически нельзя.
-    // Один и тот же сервлет может обрабатывать несколько запросов и бмогут перетираться значния из разных потоков
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -42,6 +41,8 @@ public class OrderStatisticsServlet extends HttpServlet {
         String filterKey = req.getParameter("filterKey");
         String sortTypeStr = req.getParameter("sortType");
         String sortByStr = req.getParameter("sortBy");
+        String filterDate = req.getParameter("created");
+
         if (!StringUtils.isEmptyOrNull(req.getParameter("quantity"))) recordsPerPage = Integer.parseInt(req.getParameter("quantity"));
         if (!StringUtils.isEmptyOrNull(req.getParameter("currentPage"))) currentPage = Integer.parseInt(req.getParameter("currentPage"));
 
@@ -61,6 +62,15 @@ public class OrderStatisticsServlet extends HttpServlet {
             filters.add(filter);
         }
 
+        if (!StringUtils.isEmptyOrNull(filterDate)) {
+            TripOrderField dateCreated = TripOrderField.CREATED;
+            Filter<TripOrderField> dateFilter = new Filter<>(
+                    dateCreated,
+                    getValueByField(filterDate, dateCreated)
+            );
+            filters.add(dateFilter);
+        }
+
         List<TripOrder> tripOrders = orderingService.findAllTripOrders(
                 (currentPage - 1) * recordsPerPage,
                 recordsPerPage,
@@ -68,6 +78,7 @@ public class OrderStatisticsServlet extends HttpServlet {
                 filters);
         int totalRecords = orderingService.getCountOfRecords(filters);
         int pagesQuantity = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+        req.setAttribute("toCompare", Instant.MIN);
         req.setAttribute("tripOrders", tripOrders);
         req.setAttribute("pagesQuantity", pagesQuantity);
         req.setAttribute("recordsPerPage", recordsPerPage);
@@ -88,7 +99,7 @@ public class OrderStatisticsServlet extends HttpServlet {
             return new Value(new BigDecimal(value));
         }
         if(fieldType == INSTANT) {
-            throw new IllegalArgumentException("Instant is not supported yet");
+            return new Value(Instant.parse(value + "T00:00:00Z"));
         }
         throw new IllegalArgumentException("Unknown fieldType: " + fieldType);
     }

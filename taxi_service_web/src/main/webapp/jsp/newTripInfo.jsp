@@ -41,14 +41,6 @@
                     <td style="width: 500px;">${tripOrder.departure.address}</td>
                 </tr>
                 <tr>
-                    <td>Departure X:</td>
-                    <td><span id="dx">${tripOrder.departure.x}</span></td>
-                </tr>
-                <tr>
-                    <td>Departure Y:</td>
-                    <td><span id="dy">${tripOrder.departure.y}</span></td>
-                </tr>
-                <tr>
                     <td>Destination address:</td>
                     <td>${tripOrder.destination.address}</td>
                 </tr>
@@ -63,7 +55,7 @@
                 <tr>
                     <td>Order time:</td>
                     <td>
-                        <fmt:parseDate value="${tripOrder.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                        <fmt:parseDate value="${tripOrder.timestampCreated}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                         <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
                     </td>
                 </tr>
@@ -74,6 +66,10 @@
                 <tr>
                     <td>Driver:</td>
                     <td>${newTripInfo.car.driver.firstname} ${newTripInfo.car.driver.lastname}</td>
+                </tr>
+                <tr>
+                    <td>Estimated time arrival:</td>
+                    <td>${newTripInfo.eta} min</td>
                 </tr>
                 <tr>
                     <td>Price:</td>

@@ -12,24 +12,26 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 public class TripOrder {
+    private int id;
     private AddressPoint departure;
     private AddressPoint destination;
     private Category category;
     private int capacity;
     private User user;
-    private Instant timestamp;
+    private Instant timestampCreated;
+    private Instant timestampEnd;
 
     private Car car;
 
     private BigDecimal price;
 
-    public TripOrder(AddressPoint departure, AddressPoint destination, Category category, int capacity, User user, Instant timestamp) {
+    public TripOrder(AddressPoint departure, AddressPoint destination, Category category, int capacity, User user, Instant timestampCreated) {
         this.departure = departure;
         this.destination = destination;
         this.category = category;
         this.capacity = capacity;
         this.user = user;
-        this.timestamp = timestamp;
+        this.timestampCreated = timestampCreated;
     }
 
     public TripOrder(AddressPoint departure,
@@ -39,7 +41,8 @@ public class TripOrder {
                      User user,
                      Car car,
                      BigDecimal price,
-                     Instant timestamp) {
+                     Instant timestampCreated,
+                     Instant timestampEnd) {
         this.departure = departure;
         this.destination = destination;
         this.category = category;
@@ -47,6 +50,7 @@ public class TripOrder {
         this.user = user;
         this.car = car;
         this.price = price;
-        this.timestamp = timestamp;
+        this.timestampCreated = timestampCreated;
+        this.timestampEnd = timestampEnd;
     }
 }

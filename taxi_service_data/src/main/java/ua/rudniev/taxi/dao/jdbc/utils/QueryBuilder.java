@@ -6,19 +6,25 @@ import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.common.filter.FilterType;
 import ua.rudniev.taxi.dao.common.filter.Value;
 import ua.rudniev.taxi.dao.common.order.OrderBy;
+import ua.rudniev.taxi.dao.trip.TripOrderField;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static ua.rudniev.taxi.dao.common.field.FieldType.*;
+import static ua.rudniev.taxi.dao.trip.TripOrderField.CREATED;
 
 public class QueryBuilder {
 
     private final Map<FilterType, String> filterTypeStringMap;
+    private int filterSize = 0;
 
     public QueryBuilder() {
         filterTypeStringMap = new HashMap<>();
@@ -26,6 +32,8 @@ public class QueryBuilder {
         filterTypeStringMap.put(FilterType.NOT_EQUALS, "<>");
         filterTypeStringMap.put(FilterType.MORE, ">");
         filterTypeStringMap.put(FilterType.LESS, "<");
+        filterTypeStringMap.put(FilterType.BETWEEN, "between");
+        filterTypeStringMap.put(FilterType.AND, "and");
     }
 
     public <T extends Field> String getFilterOrderAndLimitPart(List<Filter<T>> filters, List<OrderBy<T>> orderByList, FieldMapper<T> fieldMapper) {
@@ -42,9 +50,10 @@ public class QueryBuilder {
             int pageIndex,
             int pageSize
     ) throws SQLException {
+        filterSize += filters.size();
         fillParams(preparedStatement, filters);
-        preparedStatement.setInt(filters.size() + 1, pageSize);
-        preparedStatement.setInt(filters.size() + 2, pageIndex);
+        preparedStatement.setInt(filterSize + 1, pageSize);
+        preparedStatement.setInt(filterSize + 2, pageIndex);
     }
 
     public <T extends Field> void fillParams(
@@ -68,8 +77,10 @@ public class QueryBuilder {
         } else if (fieldType == BIG_DECIMAL) {
             preparedStatement.setBigDecimal(index, value.getBigDecimal());
         } else if (fieldType == INSTANT) {
-            Timestamp timestamp = Timestamp.from(value.getInstant());
-            preparedStatement.setTimestamp(index, timestamp);
+            Timestamp timestampFrom = Timestamp.from(value.getInstant().minus(1, ChronoUnit.DAYS));
+            Timestamp timestampTo = Timestamp.from(value.getInstant().plus(1, ChronoUnit.DAYS));
+            preparedStatement.setTimestamp(index, timestampFrom);
+            preparedStatement.setTimestamp(index + 1, timestampTo);
         }
     }
 
@@ -83,8 +94,15 @@ public class QueryBuilder {
                 sb.append(" AND");
             }
             String fieldName = fieldMapper.mapToSqlField(filter.getField());
-            String operator = filterTypeStringMap.get(filter.getFilterType());
-            sb.append(" ").append(fieldName).append(" ").append(operator).append(" ?");
+            if (fieldName.equals("trip_order.created")) { //TODO dich again :(
+                filterSize += 1;
+                String operatorFirst = "BETWEEN";
+                String operatorSecond = "AND";
+                sb.append(" ").append(fieldName).append(" ").append(operatorFirst).append(" ?").append(" ").append(operatorSecond).append(" ?");
+            } else {
+                String operator = filterTypeStringMap.get(filter.getFilterType());
+                sb.append(" ").append(fieldName).append(" ").append(operator).append(" ?");
+            }
         }
         return sb.toString();
     }

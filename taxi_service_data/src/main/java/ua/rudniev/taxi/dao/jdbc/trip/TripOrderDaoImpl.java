@@ -84,13 +84,18 @@ public class TripOrderDaoImpl implements TripOrderDao {
             stmt.setString(9, tripOrder.getCategory().toString());
             stmt.setInt(10, tripOrder.getCapacity());
             stmt.setBigDecimal(11, tripOrder.getPrice());
-            stmt.setTimestamp(12, Timestamp.from(tripOrder.getTimestamp()));
+            stmt.setTimestamp(12, Timestamp.from(tripOrder.getTimestampCreated()));
             stmt.executeUpdate();
             return null;
         });
     }
 
     private TripOrder convertRowToTripOrder(ResultSet rs) throws SQLException {
+
+        Instant timestampEnd;
+        if (rs.getTimestamp(TripOrderSqlConstants.TripOrderFields.END_OF_TRIP) == null) timestampEnd = Instant.MIN;
+        else timestampEnd = rs.getTimestamp(TripOrderSqlConstants.TripOrderFields.END_OF_TRIP).toInstant();
+
         AddressPoint departureAddressPoint = new AddressPoint(
                 rs.getDouble(TripOrderSqlConstants.TripOrderFields.DEPARTURE_X),
                 rs.getDouble(TripOrderSqlConstants.TripOrderFields.DEPARTURE_Y),
@@ -108,7 +113,21 @@ public class TripOrderDaoImpl implements TripOrderDao {
         Car car = carJdbcHelper.fillCar(rs, driver, TripOrderSqlConstants.CAR_PREFIX);
         BigDecimal price = rs.getBigDecimal(TripOrderSqlConstants.TripOrderFields.PRICE);
         Instant created = rs.getTimestamp(TripOrderSqlConstants.TripOrderFields.CREATED).toInstant();
-        return new TripOrder(departureAddressPoint, destinationAddressPoint, category, capacity, client, car, price, created);
+
+        TripOrder tripOrder = new TripOrder(departureAddressPoint, destinationAddressPoint, category, capacity, client, car, price, created, timestampEnd);
+        tripOrder.setId(rs.getInt(TripOrderSqlConstants.TripOrderFields.ID));
+
+        return tripOrder;
+    }
+
+    @Override
+    public void completeTripOrder(int id) {
+        prepareStatementProvider.withPrepareStatement(TripOrderSqlConstants.COMPLETE_TRIP_VIA_TO, (stmt) -> {
+            stmt.setTimestamp(1, Timestamp.from(Instant.now()));
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+            return null;
+        });
     }
 }
 

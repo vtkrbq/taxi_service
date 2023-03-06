@@ -67,8 +67,8 @@
         </ul>
 		</nav>
 </header>
-<div class="container" style="width: 100%;">
-    <h2>${currentUser.lastname} ${currentUser.firstname}&#39;s history<h2>
+<div style="padding-right: 10%; padding-left: 10%">
+    <h2 style="padding-top: 10px; padding-bot: 10px">${currentUser.lastname} ${currentUser.firstname}&#39;s history<h2>
     <table class="table table-striped table-class">
         <thead>
         <tr>
@@ -80,6 +80,7 @@
             <th>Car</th>
             <th>Price (₴)</th>
             <th>Created</th>
+            <th>Completed</th>
         </tr>
         </thead>
         <tbody>
@@ -97,8 +98,19 @@
                 </td>
                 <td>${tripOrder.price} hrn.</td>
                 <td>
-                    <fmt:parseDate value="${tripOrder.timestamp}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                    <fmt:parseDate value="${tripOrder.timestampCreated}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                     <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
+                </td>
+                <td>
+                    <c:choose>
+                       <c:when test="${tripOrder.timestampEnd == toCompare}">
+                         On route
+                       </c:when>
+                       <c:otherwise>
+                         <fmt:parseDate value="${tripOrder.timestampEnd}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                         <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
+                       </c:otherwise>
+                     </c:choose>
                 </td>
             </tr>
         </c:forEach>

@@ -15,4 +15,5 @@ public interface TripOrderDao {
     );
     void insert(TripOrder tripOrder);
     int getCountOfRecords(List<Filter<TripOrderField>> filters);
+    void completeTripOrder (int id);
 }

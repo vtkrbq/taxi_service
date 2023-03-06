@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
@@ -44,11 +45,20 @@ public class DriverStatisticsServlet  extends HttpServlet {
                 List.of(filter));
         int totalRecords = orderingService.getCountOfRecords(List.of(filter));
         int pagesQuantity = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+        req.setAttribute("toCompare", Instant.MIN);
         req.setAttribute("tripOrders", tripOrders);
         req.setAttribute("pagesQuantity", pagesQuantity);
         req.setAttribute("recordsPerPage", recordsPerPage);
         req.setAttribute("currentPage", currentPage);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/driverStatistics.jsp");
         dispatcher.forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        int carId = Integer.parseInt(req.getParameter("car_id"));
+        orderingService.completeTripOrder(id, carId);
+        resp.sendRedirect(req.getContextPath() + "/driverStatistics");
     }
 }

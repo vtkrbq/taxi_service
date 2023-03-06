@@ -2,10 +2,12 @@ package ua.rudniev.taxi.service;
 
 import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.common.order.OrderBy;
+import ua.rudniev.taxi.dao.jdbc.car.CarDaoImpl;
 import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.model.NewTripInfo;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Status;
+import ua.rudniev.taxi.model.trip.AddressPoint;
 import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.dao.car.CarDao;
 import ua.rudniev.taxi.dao.trip.TripOrderDao;
@@ -24,7 +26,6 @@ public class OrderingService {
     private final TransactionManager transactionManager;
 
     private final TripOrderDao tripOrderDao;
-
     public OrderingService(
             CarDao carRepository,
             PriceStrategy priceStrategy,
@@ -37,15 +38,18 @@ public class OrderingService {
         this.tripOrderDao = tripOrderDao;
     }
 
-    public Optional<NewTripInfo> findAndOrder(TripOrder tripOrder, double distance) {
+    public Optional<NewTripInfo> findAndOrder(TripOrder tripOrder, double distance, AddressPoint departureAddress) {
         return transactionManager.doInTransaction(() -> {
-            List<Car> cars = carDao.findAvailableCars(tripOrder.getCapacity(), tripOrder.getCategory());
+            List<Car> cars = carDao.findAvailableCars(tripOrder.getCapacity(), tripOrder.getCategory());//TODO rollback doesnt work?
             Optional<NewTripInfo> newTripInfoOptional = cars
                     .stream()
-                    .map(car -> new NewTripInfo(car, priceStrategy.calculatePrice(
-                            distance,
-                            car
-                    )))
+                    .map(car -> new NewTripInfo(
+                            car,
+                            priceStrategy.calculatePrice(
+                                distance,
+                                car
+                            ),
+                            calculateEta(departureAddress, car.getCurrentAddress())))
                     .min(Comparator.comparing(NewTripInfo::getPrice));
             newTripInfoOptional.ifPresent(newTripInfo -> {
                         Car car = newTripInfo.getCar();
@@ -70,5 +74,21 @@ public class OrderingService {
 
     public int getCountOfRecords(List<Filter<TripOrderField>> filters) {
         return transactionManager.doInTransaction(() -> tripOrderDao.getCountOfRecords(filters), true);
+    }
+
+    public void completeTripOrder (int id, int carId) {
+        transactionManager.doInTransaction(() -> {
+            tripOrderDao.completeTripOrder(id);
+            carDao.completeTrip(carId);
+            return null;
+        }, false);
+    }
+
+    private int calculateEta(AddressPoint client, AddressPoint driver) {//TODO tyt??
+        double t = ((Math.sqrt(
+                Math.pow(driver.getX() - client.getX(), 2)
+                        + Math.pow(driver.getY() - client.getY(), 2)
+        ) * 100) / 60) * 15;
+        return (int) (t * (Math.random() * (5 - 2) + 2));
     }
 }

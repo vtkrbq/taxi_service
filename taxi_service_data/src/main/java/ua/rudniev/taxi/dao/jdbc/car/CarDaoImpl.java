@@ -49,6 +49,7 @@ public class CarDaoImpl implements CarDao {
             while (rs.next()) {
                 User driver = userJdbcHelper.fillUser(rs, false);
                 Car car = carJdbcHelper.fillCar(rs, driver);
+                //TODO if capacity = category =
                 cars.add(car);
             }
             return cars;
@@ -57,7 +58,20 @@ public class CarDaoImpl implements CarDao {
 
     @Override
     public void update(Car car) {
-
+        prepareStatementProvider.withPrepareStatement(CarSqlConstants.UPDATE_CAR, stmt -> {
+            stmt.setString(1, car.getCarName());
+            stmt.setString(2, car.getCarCategory().toString());
+            stmt.setInt(3, car.getCarCapacity());
+            stmt.setString(4, car.getLicensePlate());
+            stmt.setString(5, car.getDriver().getLogin());
+            stmt.setString(6, car.getStatus().toString());
+            stmt.setString(7, car.getCurrentAddress().getAddress());
+            stmt.setDouble(8, car.getCurrentAddress().getX());
+            stmt.setDouble(9, car.getCurrentAddress().getY());
+            stmt.setDouble(10, car.getId());
+            stmt.executeUpdate();
+            return null;
+        });
     }
 
     @Override
@@ -72,6 +86,15 @@ public class CarDaoImpl implements CarDao {
             stmt.setString(7, car.getCurrentAddress().getAddress());
             stmt.setDouble(8, car.getCurrentAddress().getX());
             stmt.setDouble(9, car.getCurrentAddress().getY());
+            stmt.executeUpdate();
+            return null;
+        });
+    }
+
+    @Override
+    public void completeTrip(int id) {
+        prepareStatementProvider.withPrepareStatement(CarSqlConstants.COMPLETE_TRIP_VIA_CAR, stmt -> {
+            stmt.setInt(1, id);
             stmt.executeUpdate();
             return null;
         });

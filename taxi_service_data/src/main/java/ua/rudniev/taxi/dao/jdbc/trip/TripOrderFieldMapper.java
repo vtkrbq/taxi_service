@@ -17,7 +17,7 @@ public class TripOrderFieldMapper implements FieldMapper<TripOrderField> {
         tripOrderFieldMap.put(TripOrderField.CATEGORY, "trip_category");
         tripOrderFieldMap.put(TripOrderField.CAPACITY, "trip_capacity");
         tripOrderFieldMap.put(TripOrderField.CLIENT_LAST_NAME, "client.lastname");
-        tripOrderFieldMap.put(TripOrderField.CAR_NAME, "car.car_name");
+        tripOrderFieldMap.put(TripOrderField.CAR_NAME, "car.name");
         tripOrderFieldMap.put(TripOrderField.PRICE, "trip_order.price");
         tripOrderFieldMap.put(TripOrderField.CREATED, "trip_order.created");
         tripOrderFieldMap.put(TripOrderField.DRIVER_LOGIN, "car.driver_login");
