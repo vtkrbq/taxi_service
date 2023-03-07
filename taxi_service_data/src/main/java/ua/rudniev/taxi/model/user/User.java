@@ -16,13 +16,15 @@ public class User {
     private String phone;
     private String email;
     private final Set<Role> roles = new HashSet<>();
+    private int discount;
 
-    public User(String login, String firstname, String lastname, String phone, String email) {
+    public User(String login, String firstname, String lastname, String phone, String email, int discount) {
         this.login = login;
         this.firstname = firstname;
         this.lastname = lastname;
         this.phone = phone;
         this.email = email;
+        this.discount = discount;
     }
 
     public String rolesToString() {

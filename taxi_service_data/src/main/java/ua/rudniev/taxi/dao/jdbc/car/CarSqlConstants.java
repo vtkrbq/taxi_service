@@ -47,7 +47,7 @@ public class CarSqlConstants {
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.PHONE + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.EMAIL + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.ROLES +
-            " from car inner join app_user on app_user.login=car.driver_login where status='AVAILABLE'";
+            " from car inner join app_user on app_user.login=car.driver_login";
 
     public static final String CREATE_CAR = "insert into " + CAR_TABLE_NAME +
             " (" + CarFields.NAME + ", " +

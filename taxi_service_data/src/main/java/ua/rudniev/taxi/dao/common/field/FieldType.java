@@ -4,5 +4,6 @@ public enum FieldType {
     INTEGER,
     STRING,
     BIG_DECIMAL,
-    INSTANT
+    INSTANT,
+    DOUBLE
 }

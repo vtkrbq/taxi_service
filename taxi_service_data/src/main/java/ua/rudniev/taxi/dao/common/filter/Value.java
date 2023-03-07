@@ -13,6 +13,8 @@ public class Value {
 
     private BigDecimal bigDecimal;
 
+    private Double doubleValue;
+
     public Value(String string) {
         this.string = string;
     }
@@ -27,6 +29,10 @@ public class Value {
 
     public Value(BigDecimal bigDecimal) {
         this.bigDecimal = bigDecimal;
+    }
+
+    public Value(Double doubleValue) {
+        this.doubleValue = doubleValue;
     }
 
     public String getString() {
@@ -47,5 +53,13 @@ public class Value {
 
     public void setInstant(Instant instant) {
         this.instant = instant;
+    }
+
+    public void setInteger(int integer) {
+        this.integer = integer;
+    }
+
+    public Double getDoubleValue() {
+        return doubleValue;
     }
 }

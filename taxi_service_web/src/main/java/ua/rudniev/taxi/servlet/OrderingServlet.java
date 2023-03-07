@@ -1,12 +1,20 @@
 package ua.rudniev.taxi.servlet;
 
 import ua.rudniev.taxi.ComponentsContainer;
+import ua.rudniev.taxi.StringUtils;
+import ua.rudniev.taxi.dao.car.CarField;
+import ua.rudniev.taxi.dao.common.filter.Filter;
+import ua.rudniev.taxi.dao.common.filter.FilterType;
+import ua.rudniev.taxi.dao.common.filter.Value;
+import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.model.NewTripInfo;
 import ua.rudniev.taxi.model.car.Category;
+import ua.rudniev.taxi.model.car.Status;
 import ua.rudniev.taxi.model.trip.AddressPoint;
 import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.service.OrderingService;
+import ua.rudniev.taxi.servlet.utils.ValueProvider;
 import ua.rudniev.taxi.web.SessionAttributes;
 
 import javax.servlet.RequestDispatcher;
@@ -54,7 +62,26 @@ public class OrderingServlet extends HttpServlet {
                 user,
                 Instant.now()
         );
-        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder, distance, departure);
+        List<Filter<CarField>> filters = new ArrayList<>();
+        Filter<CarField> filterCategory = new Filter<>(
+                CarField.CATEGORY,
+                new Value(tripOrder.getCategory().toString())
+        );
+        filters.add(filterCategory);
+        Filter<CarField> filterCapacity = new Filter<>(
+                CarField.CAPACITY,
+                new Value(tripOrder.getCapacity()),
+                FilterType.MORE_OR_EQUALS
+        );
+        filters.add(filterCapacity);
+
+        Filter<CarField> filterStatus = new Filter<>(
+                CarField.STATUS,
+                new Value(Status.AVAILABLE.toString())
+        );
+        filters.add(filterStatus);
+
+        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder, distance, departure, filters);
         RequestDispatcher dispatcher;
         req.setAttribute("tripOrder", tripOrder);
         if (newTripInfoOptional.isPresent()) {
@@ -62,7 +89,7 @@ public class OrderingServlet extends HttpServlet {
             req.setAttribute("newTripInfo", newTripInfoOptional.get());
         } else {
             List<String> errors = new ArrayList<>();
-            errors.add("There is no available cars");
+            errors.add("There is no available cars: <br>You can try different category or several cars");
             dispatcher = req.getRequestDispatcher("/jsp/ordering.jsp");
             req.setAttribute("errors", errors);
         }

@@ -2,6 +2,7 @@ package ua.rudniev.taxi;
 
 import ua.rudniev.taxi.dao.car.CarDao;
 import ua.rudniev.taxi.dao.jdbc.car.CarDaoImpl;
+import ua.rudniev.taxi.dao.jdbc.car.CarFieldMapper;
 import ua.rudniev.taxi.dao.jdbc.car.CarJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.trip.TripOrderFieldMapper;
 import ua.rudniev.taxi.dao.jdbc.user.UserJdbcHelper;
@@ -49,6 +50,8 @@ public class ComponentsContainer {
 
     private TripOrderFieldMapper tripOrderFieldMapper;
 
+    private CarFieldMapper carFieldMapper;
+
     private QueryBuilder queryBuilder;
 
     private ComponentsContainer() {
@@ -95,7 +98,9 @@ public class ComponentsContainer {
             carDao = new CarDaoImpl(
                     getUserJdbcHelper(),
                     getCarJdbcHelper(),
-                    getPrepareStatementProvider()
+                    getPrepareStatementProvider(),
+                    getQueryBuilder(),
+                    getCarFieldMapper()
             );
         }
         return carDao;
@@ -173,6 +178,13 @@ public class ComponentsContainer {
             tripOrderFieldMapper = new TripOrderFieldMapper();
         }
         return tripOrderFieldMapper;
+    }
+
+    public synchronized CarFieldMapper getCarFieldMapper() {
+        if (carFieldMapper == null) {
+            carFieldMapper = new CarFieldMapper();
+        }
+        return carFieldMapper;
     }
 
     public synchronized QueryBuilder getQueryBuilder() {

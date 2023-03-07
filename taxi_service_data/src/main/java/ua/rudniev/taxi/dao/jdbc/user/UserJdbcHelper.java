@@ -20,6 +20,7 @@ public class UserJdbcHelper {
         user.setLastname(resultSet.getString(prefix + UserSqlConstants.UserFields.LASTNAME));
         user.setPhone(resultSet.getString(prefix + UserSqlConstants.UserFields.PHONE));
         user.setEmail(resultSet.getString(prefix + UserSqlConstants.UserFields.EMAIL));
+        user.setDiscount(resultSet.getInt(prefix + UserSqlConstants.UserFields.DISCOUNT));
         if (fillRoles) {
             String[] roles = resultSet.getString(prefix + UserSqlConstants.UserFields.ROLES).split(",");
             for (String r : roles) {

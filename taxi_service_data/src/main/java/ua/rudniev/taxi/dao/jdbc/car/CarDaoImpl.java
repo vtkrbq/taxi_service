@@ -1,10 +1,14 @@
 package ua.rudniev.taxi.dao.jdbc.car;
 
 import ua.rudniev.taxi.dao.car.CarDao;
+import ua.rudniev.taxi.dao.car.CarField;
+import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.jdbc.user.UserJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.utils.PrepareStatementProvider;
+import ua.rudniev.taxi.dao.jdbc.utils.QueryBuilder;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Category;
+import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.model.user.User;
 
 import java.sql.ResultSet;
@@ -20,11 +24,17 @@ public class CarDaoImpl implements CarDao {
 
     private final PrepareStatementProvider prepareStatementProvider;
 
+    private final QueryBuilder queryBuilder;
 
-    public CarDaoImpl(UserJdbcHelper userJdbcHelper, CarJdbcHelper carJdbcHelper, PrepareStatementProvider prepareStatementProvider) {
+    private final CarFieldMapper carFieldMapper;
+
+
+    public CarDaoImpl(UserJdbcHelper userJdbcHelper, CarJdbcHelper carJdbcHelper, PrepareStatementProvider prepareStatementProvider, QueryBuilder queryBuilder, CarFieldMapper carFieldMapper) {
         this.userJdbcHelper = userJdbcHelper;
         this.carJdbcHelper = carJdbcHelper;
+        this.queryBuilder = queryBuilder;
         this.prepareStatementProvider = prepareStatementProvider;
+        this.carFieldMapper = carFieldMapper;
     }
 
     @Override
@@ -42,15 +52,15 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public List<Car> findAvailableCars(int capacity, Category category) {
-        return prepareStatementProvider.withPrepareStatement(CarSqlConstants.FIND_AVAILABLE_CARS, stmt -> {
+    public List<Car> findAvailableCars(List<Filter<CarField>> filters) {
+        String query = CarSqlConstants.FIND_AVAILABLE_CARS + queryBuilder.getFilterPart(filters, carFieldMapper);
+        return prepareStatementProvider.withPrepareStatement(query, (preparedStatement) -> {
+            queryBuilder.fillParams(preparedStatement, filters);
+            ResultSet rs = preparedStatement.executeQuery();
             List<Car> cars = new ArrayList<>();
-            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 User driver = userJdbcHelper.fillUser(rs, false);
                 Car car = carJdbcHelper.fillCar(rs, driver);
-
-                //TODO if capacity = category =
                 cars.add(car);
             }
             return cars;

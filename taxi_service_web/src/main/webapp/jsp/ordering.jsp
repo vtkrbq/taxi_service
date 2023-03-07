@@ -81,7 +81,9 @@
 		</nav>
 </header>
 <div style="position: relative;">
+    <c:set var="noCars" scope="request" value="false"/>
     <div id="control" class="control">
+
         <form action="${pageContext.request.contextPath}/ordering" method="post">
             <div style="display: none;">
                <label>
@@ -158,13 +160,13 @@
             <button type="submit" class="btn btn-black">Order</button>
             <%--@elvariable id="errors" type="java.util.List<String>"--%>
             <c:if test="${errors != null && not empty errors}">
-               <div style="color: red">
+               <div style="color: red; padding-top: 10px;">
                    <c:forEach items="${errors}" var="error" >
                        <div><c:out value="${error}"/></div>
+                       <c:set var="noCars" scope="request" value="true"/>
                    </c:forEach>
                </div>
             </c:if>
-
         </form>
     </div>
     <div id="map" class="map"></div>

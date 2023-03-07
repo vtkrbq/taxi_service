@@ -1,8 +1,11 @@
 package ua.rudniev.taxi.service;
 
 import ua.rudniev.taxi.dao.car.CarDao;
+import ua.rudniev.taxi.dao.car.CarField;
+import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Category;
+import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.transaction.TransactionManager;
 
 import java.util.List;
@@ -21,8 +24,8 @@ public class CarService {
         this.transactionManager = transactionManager;
     }
 
-    public List<Car> findAvailableCars(int capacity, Category category) {
-        return transactionManager.doInTransaction(() -> carDao.findAvailableCars(capacity, category));
+    public List<Car> findAvailableCars(List<Filter<CarField>> filters) {
+        return transactionManager.doInTransaction(() -> carDao.findAvailableCars(filters));
     }
 
     public void createCar(Car car) {

@@ -19,6 +19,8 @@ public class UserSqlConstants {
         public static final String EMAIL = "EMAIL";
 
         public static final String ROLES = "ROLES";
+
+        public static final String DISCOUNT = "DISCOUNT";
     }
 
     public static final String AUTH_USER = "select " +
@@ -27,7 +29,8 @@ public class UserSqlConstants {
             UserFields.LASTNAME + ", " +
             UserFields.PHONE + ", " +
             UserFields.EMAIL + ", " +
-            UserFields.ROLES +
+            UserFields.ROLES + ", " +
+            UserFields.DISCOUNT +
             " from " + USER_TABLE_NAME + " where login=? and passhash=?";
 
     public static final String FIND_USER = "select " +
@@ -36,7 +39,8 @@ public class UserSqlConstants {
             UserFields.LASTNAME + ", " +
             UserFields.PHONE + ", " +
             UserFields.EMAIL + ", " +
-            UserFields.ROLES +
+            UserFields.ROLES + ", " +
+            UserFields.DISCOUNT +
             " from " + USER_TABLE_NAME + " where " + UserFields.LOGIN + "=?";
 
     public static final String CREATE_USER = "insert into " + USER_TABLE_NAME +
@@ -55,6 +59,7 @@ public class UserSqlConstants {
             UserFields.LASTNAME + " = " + "?, " +
             UserFields.PHONE + " = " + "?, " +
             UserFields.EMAIL + " = " + "? " +
+            UserFields.DISCOUNT + " = " + "? " +
             "where login=?";
 
     public static final String UPDATE_PASSHASH = "update " + USER_TABLE_NAME +
@@ -62,5 +67,4 @@ public class UserSqlConstants {
 
     public static final String FIND_ALL_LOGINS = "select " + UserFields.LOGIN +
             " from " + USER_TABLE_NAME;
-
 }

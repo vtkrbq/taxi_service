@@ -1,5 +1,6 @@
 package ua.rudniev.taxi.service;
 
+import ua.rudniev.taxi.dao.car.CarField;
 import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.common.order.OrderBy;
 import ua.rudniev.taxi.dao.jdbc.car.CarDaoImpl;
@@ -14,6 +15,8 @@ import ua.rudniev.taxi.dao.trip.TripOrderDao;
 import ua.rudniev.taxi.service.price.PriceStrategy;
 import ua.rudniev.taxi.transaction.TransactionManager;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +41,9 @@ public class OrderingService {
         this.tripOrderDao = tripOrderDao;
     }
 
-    public Optional<NewTripInfo> findAndOrder(TripOrder tripOrder, double distance, AddressPoint departureAddress) {
+    public Optional<NewTripInfo> findAndOrder(TripOrder tripOrder, double distance, AddressPoint departureAddress, List<Filter<CarField>> filters) {
         return transactionManager.doInTransaction(() -> {
-            List<Car> cars = carDao.findAvailableCars(tripOrder.getCapacity(), tripOrder.getCategory());//TODO rollback doesnt work?
+            List<Car> cars = carDao.findAvailableCars(filters);//TODO rollback doesnt work?
             Optional<NewTripInfo> newTripInfoOptional = cars
                     .stream()
                     .map(car -> new NewTripInfo(
@@ -56,7 +59,8 @@ public class OrderingService {
                         car.setStatus(Status.ON_ROUTE);
                         carDao.update(car);
                         tripOrder.setCar(car);
-                        tripOrder.setPrice(newTripInfo.getPrice());
+                        BigDecimal discount = newTripInfo.getPrice().multiply(BigDecimal.valueOf(tripOrder.getUser().getDiscount())).divide(BigDecimal.valueOf(100), RoundingMode.DOWN);
+                        tripOrder.setPrice(newTripInfo.getPrice().subtract(discount));
                         tripOrderDao.insert(tripOrder);
                     }
             );

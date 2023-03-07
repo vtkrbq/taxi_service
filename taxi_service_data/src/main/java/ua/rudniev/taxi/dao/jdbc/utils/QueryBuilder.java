@@ -31,6 +31,8 @@ public class QueryBuilder {
         filterTypeStringMap.put(FilterType.NOT_EQUALS, "<>");
         filterTypeStringMap.put(FilterType.MORE, ">");
         filterTypeStringMap.put(FilterType.LESS, "<");
+        filterTypeStringMap.put(FilterType.LESS_OR_EQUALS, "<=");
+        filterTypeStringMap.put(FilterType.MORE_OR_EQUALS, ">=");
     }
 
     public <T extends Field> String getFilterOrderAndLimitPart(List<Filter<T>> filters, List<OrderBy<T>> orderByList, FieldMapper<T> fieldMapper) {

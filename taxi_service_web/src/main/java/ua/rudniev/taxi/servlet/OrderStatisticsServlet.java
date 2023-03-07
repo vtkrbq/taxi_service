@@ -12,6 +12,7 @@ import ua.rudniev.taxi.dao.common.order.OrderByType;
 import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.service.OrderingService;
+import ua.rudniev.taxi.servlet.utils.ValueProvider;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -59,7 +60,7 @@ public class OrderStatisticsServlet extends HttpServlet {
             TripOrderField field = TripOrderField.valueOf(filterBy);
             Filter<TripOrderField> filter = new Filter<>(
                     field,
-                    getValueByField(filterKey, field)
+                    ValueProvider.getValueByField(filterKey, field)
             );
             filters.add(filter);
         }
@@ -67,7 +68,7 @@ public class OrderStatisticsServlet extends HttpServlet {
         if (!StringUtils.isEmptyOrNull(filterDate)) {
             TripOrderField dateCreated = TripOrderField.CREATED;
 
-            Value fromDate = getValueByField(filterDate, dateCreated);
+            Value fromDate = ValueProvider.getValueByField(filterDate, dateCreated);
             fromDate.setInstant(fromDate.getInstant().minus(1, ChronoUnit.DAYS));
 
             Filter<TripOrderField> dateFromFilter = new Filter<>(
@@ -78,7 +79,7 @@ public class OrderStatisticsServlet extends HttpServlet {
 
             filters.add(dateFromFilter);
 
-            Value toDate = getValueByField(filterDate, dateCreated);
+            Value toDate = ValueProvider.getValueByField(filterDate, dateCreated);
             toDate.setInstant(toDate.getInstant().plus(1, ChronoUnit.DAYS));
 
             Filter<TripOrderField> dateToFilter = new Filter<>(
@@ -103,22 +104,5 @@ public class OrderStatisticsServlet extends HttpServlet {
         req.setAttribute("currentPage", currentPage);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/orderStatistics.jsp");
         dispatcher.forward(req, resp);
-    }
-
-    private Value getValueByField(String value, Field field) { //TODO: это можно в отельный класс вынести
-        FieldType fieldType = field.getFieldType();
-        if(fieldType == INTEGER) {
-            return new Value(Integer.parseInt(value));
-        }
-        if(fieldType == STRING) {
-            return new Value(value);
-        }
-        if(fieldType == BIG_DECIMAL) {
-            return new Value(new BigDecimal(value));
-        }
-        if(fieldType == INSTANT) {
-            return new Value(Instant.parse(value + "T00:00:00Z"));
-        }
-        throw new IllegalArgumentException("Unknown fieldType: " + fieldType);
     }
 }
