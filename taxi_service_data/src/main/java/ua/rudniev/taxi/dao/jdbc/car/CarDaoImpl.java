@@ -49,6 +49,7 @@ public class CarDaoImpl implements CarDao {
             while (rs.next()) {
                 User driver = userJdbcHelper.fillUser(rs, false);
                 Car car = carJdbcHelper.fillCar(rs, driver);
+
                 //TODO if capacity = category =
                 cars.add(car);
             }

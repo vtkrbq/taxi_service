@@ -44,4 +44,8 @@ public class Value {
     public BigDecimal getBigDecimal() {
         return bigDecimal;
     }
+
+    public void setInstant(Instant instant) {
+        this.instant = instant;
+    }
 }

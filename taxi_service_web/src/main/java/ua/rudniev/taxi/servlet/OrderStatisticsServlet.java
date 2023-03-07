@@ -5,6 +5,7 @@ import ua.rudniev.taxi.StringUtils;
 import ua.rudniev.taxi.dao.common.field.Field;
 import ua.rudniev.taxi.dao.common.field.FieldType;
 import ua.rudniev.taxi.dao.common.filter.Filter;
+import ua.rudniev.taxi.dao.common.filter.FilterType;
 import ua.rudniev.taxi.dao.common.filter.Value;
 import ua.rudniev.taxi.dao.common.order.OrderBy;
 import ua.rudniev.taxi.dao.common.order.OrderByType;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,11 +66,27 @@ public class OrderStatisticsServlet extends HttpServlet {
 
         if (!StringUtils.isEmptyOrNull(filterDate)) {
             TripOrderField dateCreated = TripOrderField.CREATED;
-            Filter<TripOrderField> dateFilter = new Filter<>(
+
+            Value fromDate = getValueByField(filterDate, dateCreated);
+            fromDate.setInstant(fromDate.getInstant().minus(1, ChronoUnit.DAYS));
+
+            Filter<TripOrderField> dateFromFilter = new Filter<>(
                     dateCreated,
-                    getValueByField(filterDate, dateCreated)
+                    fromDate,
+                    FilterType.MORE
             );
-            filters.add(dateFilter);
+
+            filters.add(dateFromFilter);
+
+            Value toDate = getValueByField(filterDate, dateCreated);
+            toDate.setInstant(toDate.getInstant().plus(1, ChronoUnit.DAYS));
+
+            Filter<TripOrderField> dateToFilter = new Filter<>(
+                    dateCreated,
+                    toDate,
+                    FilterType.LESS
+            );
+            filters.add(dateToFilter);
         }
 
         List<TripOrder> tripOrders = orderingService.findAllTripOrders(
