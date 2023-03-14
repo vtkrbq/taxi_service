@@ -1,10 +1,15 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<c:if test="${empty lang}">
+    <c:set var="lang" scope="session" value="en"/>
+</c:if>
+<fmt:setBundle basename="${sessionScope.lang}"/>
+<fmt:requestEncoding value="UTF-8" />
 <html>
 <head>
-    <title>Taxi Service</title>
+    <title><fmt:message key="site.name" /></title>
     <link rel="stylesheet" type="text/css" href="css/header.css" />
     <link rel="stylesheet" type="text/css" href="css/ordering.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -22,7 +27,7 @@
 		    <div class="dropdown">
                 <button class="mainmenubtn"><c:out value="${currentUser.firstname} ${currentUser.lastname}"/></button>
                     <div class="dropdown-child">
-                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout">Sign out</a>
+                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout"><fmt:message key="ddm.logout.button" /></a>
                     </div>
             </div>
 		</div>
@@ -33,46 +38,46 @@
             <table class="table" style="font-size: 20px; padding: 5px; font-family: Exo 2; width: 500px;">
                 <caption>
                     <div style="padding-left: 0px; display: inline-block;">
-                        <b style="font-size: 32px; color: black;">You have successfully ordered taxi</b>
+                        <b style="font-size: 32px; color: black;"><fmt:message key="success.label" /></b>
                     </div>
                 </caption>
                 <tr>
-                    <td style="width: 300px;">Departure address:</td>
+                    <td style="width: 300px;"><fmt:message key="success.label" />:</td>
                     <td style="width: 500px;">${tripOrder.departure.address}</td>
                 </tr>
                 <tr>
-                    <td>Destination address:</td>
+                    <td><fmt:message key="depart.address.field" />:</td>
                     <td>${tripOrder.destination.address}</td>
                 </tr>
                 <tr>
-                    <td>Category:</td>
+                    <td><fmt:message key="destin.address.field" />:</td>
                     <td>${tripOrder.category}</td>
                 </tr>
                 <tr>
-                    <td>Capacity:</td>
+                    <td><fmt:message key="category.field" />:</td>
                     <td>${tripOrder.capacity}</td>
                 </tr>
                 <tr>
-                    <td>Order time:</td>
+                    <td><fmt:message key="capacity.field" />:</td>
                     <td>
                         <fmt:parseDate value="${tripOrder.timestampCreated}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                         <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
                     </td>
                 </tr>
                 <tr>
-                    <td>Car:</td>
+                    <td><fmt:message key="car.field" />:</td>
                     <td>${newTripInfo.car.carName}</td>
                 </tr>
                 <tr>
-                    <td>Driver:</td>
+                    <td><fmt:message key="driver.label" />:</td>
                     <td>${newTripInfo.car.driver.firstname} ${newTripInfo.car.driver.lastname}</td>
                 </tr>
                 <tr>
-                    <td>Estimated time arrival:</td>
+                    <td><fmt:message key="eta.label" />:</td>
                     <td>${newTripInfo.eta} min</td>
                 </tr>
                 <tr>
-                    <td>Price:</td>
+                    <td><fmt:message key="price.field" />:</td>
                     <td>${newTripInfo.price} ₴</td>
                 </tr>
             </table>

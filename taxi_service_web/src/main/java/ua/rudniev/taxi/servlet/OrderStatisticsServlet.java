@@ -11,6 +11,7 @@ import ua.rudniev.taxi.dao.common.order.OrderBy;
 import ua.rudniev.taxi.dao.common.order.OrderByType;
 import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.model.trip.TripOrder;
+import ua.rudniev.taxi.model.user.Role;
 import ua.rudniev.taxi.service.OrderingService;
 import ua.rudniev.taxi.servlet.utils.ValueProvider;
 
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.rudniev.taxi.dao.common.field.FieldType.*;
+import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
 @WebServlet("/orderStatistics")
 public class OrderStatisticsServlet extends HttpServlet {
@@ -46,11 +48,13 @@ public class OrderStatisticsServlet extends HttpServlet {
         String sortByStr = req.getParameter("sortBy");
         String filterDate = req.getParameter("created");
 
-        if (!StringUtils.isEmptyOrNull(req.getParameter("quantity"))) recordsPerPage = Integer.parseInt(req.getParameter("quantity"));
-        if (!StringUtils.isEmptyOrNull(req.getParameter("currentPage"))) currentPage = Integer.parseInt(req.getParameter("currentPage"));
+        if (!StringUtils.isEmptyOrNull(req.getParameter("quantity")))
+            recordsPerPage = Integer.parseInt(req.getParameter("quantity"));
+        if (!StringUtils.isEmptyOrNull(req.getParameter("currentPage")))
+            currentPage = Integer.parseInt(req.getParameter("currentPage"));
 
-        if(!StringUtils.isEmptyOrNull(sortByStr)) orderByField = TripOrderField.valueOf(sortByStr);
-        if(!StringUtils.isEmptyOrNull(sortTypeStr)) orderByType = OrderByType.valueOf(sortTypeStr);
+        if (!StringUtils.isEmptyOrNull(sortByStr)) orderByField = TripOrderField.valueOf(sortByStr);
+        if (!StringUtils.isEmptyOrNull(sortTypeStr)) orderByType = OrderByType.valueOf(sortTypeStr);
 
         OrderBy<TripOrderField> orderBy = new OrderBy<>(orderByField, orderByType);
 
@@ -89,7 +93,12 @@ public class OrderStatisticsServlet extends HttpServlet {
             );
             filters.add(dateToFilter);
         }
-
+        req.getSession().setAttribute("filterBy", filterBy);
+        req.getSession().setAttribute("filterKey", filterKey);
+        req.getSession().setAttribute("sortType", sortTypeStr);
+        req.getSession().setAttribute("sortBy", sortByStr);
+        req.getSession().setAttribute("created", filterDate);
+        req.getSession().setAttribute("quantity", recordsPerPage);
         List<TripOrder> tripOrders = orderingService.findAllTripOrders(
                 (currentPage - 1) * recordsPerPage,
                 recordsPerPage,

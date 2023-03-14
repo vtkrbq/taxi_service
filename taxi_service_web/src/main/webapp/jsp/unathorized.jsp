@@ -1,15 +1,21 @@
 <%@ page isELIgnored="false"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<c:if test="${empty lang}">
+    <c:set var="lang" scope="session" value="en"/>
+</c:if>
+<fmt:setBundle basename="${sessionScope.lang}"/>
+<fmt:requestEncoding value="UTF-8" />
 <html>
 <head>
-    <title>Unauthorized</title>
+    <title><fmt:message key="site.name" /></title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
-<h2>please <a href="${pageContext.request.contextPath}/src/main/webapp">login</a> for view this page</h2>
+<h2><fmt:message key="please.label" /> <a href="${pageContext.request.contextPath}/src/main/webapp"><fmt:message key="login.message.label" /></a> <fmt:message key="message.label" /></h2>
 </body>
 </html>
 

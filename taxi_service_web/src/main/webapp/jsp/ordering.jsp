@@ -1,12 +1,19 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<c:if test="${empty lang}">
+    <c:set var="lang" scope="session" value="en"/>
+</c:if>
+<fmt:setBundle basename="${sessionScope.lang}"/>
+<fmt:requestEncoding value="UTF-8" />
 <html>
 <head>
-    <title>Taxi Service</title>
+    <title><fmt:message key="site.name" /></title>
     <link rel="stylesheet" type="text/css" href="css/header.css" />
     <link rel="stylesheet" type="text/css" href="css/ordering.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/lang.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
@@ -29,6 +36,11 @@
 <script src="https://api.visicom.ua/apps/visicom-autocomplete.min.js"></script>
 <script src="resources/leaflet/leaflet.js"></script>
 <script>
+    function forward(control) {
+      control.form.submit();
+    }
+</script>
+<script>
       $('.top-line').after('<div class="mobile-menu d-xl-none">');
       	$('.top-menu').clone().appendTo('.mobile-menu');
       	$('.mobile-menu-btn').click(function(){
@@ -38,11 +50,13 @@
 <header class="top-line">
 		<a href="${pageContext.request.contextPath}/ordering" class="logo"><img src="img/logo.png" alt="logo alt"></a>
 		<div class="login">
-		    <i class="fa fa-login"></i>
-		    <div class="dropdown">
+		    <a href="${pageContext.request.contextPath}/language?lang=ua"><img src="img/ua.png" alt="ua language" style="width: 25px; height:25px; border-radius: 25px;"></a>
+		    <img src="img/slash.png" alt="logo alt" style="width: 1px; height:25px;">
+		    <a href="${pageContext.request.contextPath}/language?lang=en"><img src="img/en.png" alt="en language" style="width: 25px; height:25px; border-radius: 25px;"></a>
+            <div class="dropdown">
                 <button class="mainmenubtn"><c:out value="${currentUser.firstname} ${currentUser.lastname}"/></button>
                     <div class="dropdown-child">
-                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile">Profile</a>
+                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile"><fmt:message key="ddm.profile.button" /></a>
                         <c:set var="driver" scope="request" value="false"/>
                         <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
                             <c:if test="${userRole == 'DRIVER'}">
@@ -50,16 +64,16 @@
                             </c:if>
                         </c:forEach>
                         <c:if test="${driver}">
-                            <a class="mainmenubtn" href="${pageContext.request.contextPath}/carRegistration">Car registration</a>
+                            <a class="mainmenubtn" href="${pageContext.request.contextPath}/carRegistration"><fmt:message key="ddm.car.reg.button" /></a>
                         </c:if>
-                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout">Sign out</a>
+                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout"><fmt:message key="ddm.logout.button" /></a>
                     </div>
             </div>
-		</div>
+        </div>
 		<div class="mobile-menu-btn"><i class="fa fa-bars"></i> Меню</div>
 		<nav class="main-menu top-menu">
         <ul>
-            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/ordering"><fmt:message key="a.home" /></a></li>
             <c:set var="admin" scope="request" value="false"/>
             <c:set var="driver" scope="request" value="false"/>
             <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
@@ -70,12 +84,12 @@
                     <c:set var="driver" scope="request" value="true"/>
                 </c:if>
             </c:forEach>
-            <li class="active"><a href="${pageContext.request.contextPath}/userStatistics">Order history</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/userStatistics"><fmt:message key="a.history" /></a>
             <c:if test="${admin}">
-                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics"><fmt:message key="a.order.stat" /></a></li>
             </c:if>
             <c:if test="${driver}">
-                <li class="active"><a href="${pageContext.request.contextPath}/driverStatistics">Driver statistics</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/driverStatistics"><fmt:message key="a.driver.history" /></a></li>
             </c:if>
         </ul>
 		</nav>
@@ -105,7 +119,7 @@
             </div>
             <div>
                <label>
-                   <b> Departure Address: </b>
+                   <b> <fmt:message key="depart.address.field" />: </b>
                    <%
                         request.setCharacterEncoding("UTF-8");
                    %>
@@ -129,7 +143,7 @@
             </div>
             <div>
                <label>
-                   <b>Destination Address:</b>
+                   <b><fmt:message key="destin.address.field" />:</b>
                    <%
                        request.setCharacterEncoding("UTF-8");
                    %>
@@ -139,25 +153,25 @@
                    <input type="text" id="destin" class="form-control" style="display: none; width: 400px; height: 40px;" name="destinationAddress" value="${tripOrder.destination.address}" onfocusout="getDestinationCoords()">
                </label>
             </div>
-            <div><b>Category:</b></div>
+            <div><b><fmt:message key="economy.label" />:</b></div>
                <label>
-                   Economy
+                   <fmt:message key="economy.label" />
                    <input type="radio" class="form-control" name="category" value="ECONOMY" ${tripOrder.category.name() == 'ECONOMY'?'checked':''}>
                </label>
                <span>&nbsp;&nbsp;&nbsp;</span>
                <label>
-                   Comfort
+                   <fmt:message key="comfort.label" />
                    <input type="radio" class="form-control" name="category" value="COMFORT" ${tripOrder.category.name() == 'COMFORT'?'checked':''}>
                </label>
                <span>&nbsp;&nbsp;&nbsp;</span>
                <label>
-                   Premium
+                   <fmt:message key="premium.label" />
                    <input type="radio" class="form-control" name="category" value="BUSINESS" ${tripOrder.category.name() == 'BUSINESS'?'checked':''}>
                </label>
             <div class="form-group">
-               <label><b>Capacity:</b></label><input type="text" class="form-control" style="width: 400px;" name="capacity" value="${tripOrder.capacity}">
+               <label><b><fmt:message key="capacity.field" />:</b></label><input type="text" class="form-control" style="width: 400px;" name="capacity" value="${tripOrder.capacity}">
             </div>
-            <button type="submit" class="btn btn-black">Order</button>
+            <button type="submit" class="btn btn-black"><fmt:message key="order.button" /></button>
             <%--@elvariable id="errors" type="java.util.List<String>"--%>
             <c:if test="${errors != null && not empty errors}">
                <div style="color: red; padding-top: 10px;">

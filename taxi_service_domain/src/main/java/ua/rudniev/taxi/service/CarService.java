@@ -39,5 +39,4 @@ public class CarService {
         return transactionManager.doInTransaction(() ->
                 carDao.findCarById(id), true);
     }
-
 }

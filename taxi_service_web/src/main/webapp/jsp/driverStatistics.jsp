@@ -1,10 +1,15 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<c:if test="${empty lang}">
+    <c:set var="lang" scope="session" value="en"/>
+</c:if>
+<fmt:setBundle basename="${sessionScope.lang}"/>
+<fmt:requestEncoding value="UTF-8" />
 <html>
 <head>
-    <title>Taxi Service</title>
+    <title><fmt:message key="site.name" /></title>
     <link rel="stylesheet" type="text/css" href="css/header.css" />
     <link rel="stylesheet" type="text/css" href="css/ordering.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -25,19 +30,31 @@
 <header class="top-line">
 		<a href="${pageContext.request.contextPath}/ordering" class="logo"><img src="img/logo.png" alt="logo alt"></a>
 		<div class="login">
+		    <a href="${pageContext.request.contextPath}/language?lang=ua"><img src="img/ua.png" alt="ua language" style="width: 25px; height:25px; border-radius: 25px;"></a>
+            <img src="img/slash.png" alt="logo alt" style="width: 1px; height:25px;">
+            <a href="${pageContext.request.contextPath}/language?lang=en"><img src="img/en.png" alt="en language" style="width: 25px; height:25px; border-radius: 25px;"></a>
 		    <i class="fa fa-login"></i>
 		    <div class="dropdown">
                 <button class="mainmenubtn"><c:out value="${currentUser.firstname} ${currentUser.lastname}"/></button>
                     <div class="dropdown-child">
-                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile">Profile</a>
-                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout">Sign out</a>
+                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile"><fmt:message key="ddm.profile.button" /></a>
+                        <c:set var="driver" scope="request" value="false"/>
+                        <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
+                            <c:if test="${userRole == 'DRIVER'}">
+                                <c:set var="driver" scope="request" value="true"/>
+                            </c:if>
+                        </c:forEach>
+                        <c:if test="${driver}">
+                            <a class="mainmenubtn" href="${pageContext.request.contextPath}/carRegistration"><fmt:message key="ddm.car.reg.button" /></a>
+                        </c:if>
+                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout"><fmt:message key="ddm.logout.button" /></a>
                     </div>
             </div>
 		</div>
 		<div class="mobile-menu-btn"><i class="fa fa-bars"></i> Меню</div>
 		<nav class="main-menu top-menu">
         <ul>
-            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/ordering"><fmt:message key="a.home" /></a></li>
             <c:set var="admin" scope="request" value="false"/>
             <c:set var="driver" scope="request" value="false"/>
             <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
@@ -48,29 +65,29 @@
                     <c:set var="driver" scope="request" value="true"/>
                 </c:if>
             </c:forEach>
-            <li class="active"><a href="${pageContext.request.contextPath}/userStatistics">Order history</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/userStatistics"><fmt:message key="a.history" /></a></li>
             <c:if test="${admin}">
-                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics"><fmt:message key="a.order.stat" /></a></li>
             </c:if>
             <c:if test="${driver}">
-                <li class="active"><a href="${pageContext.request.contextPath}/driverStatistics">Driver statistics</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/driverStatistics"><fmt:message key="a.driver.history" /></a></li>
             </c:if>
         </ul>
 		</nav>
 </header>
 <div style="padding-right: 10%; padding-left: 10%">
-    <h2 style="padding-top: 10px; padding-bot: 10px">${currentUser.lastname} ${currentUser.firstname}&#39;s history as driver<h2>
-    <table class="table table-striped table-class">
+    <h2 style="padding-top: 10px; padding-bot: 10px"><fmt:message key="h2.label" /> ${currentUser.lastname} ${currentUser.firstname}<h2>
+    <table class="table table-striped table-class" style="text-align: center;">
         <thead>
         <tr>
-            <th>Departure address</th>
-            <th>Destination address</th>
-            <th>Category</th>
-            <th>Capacity</th>
-            <th>Car</th>
-            <th>Price (₴)</th>
-            <th>Created</th>
-            <th>Completed</th>
+            <th><fmt:message key="depart.address.field" /></th>
+            <th><fmt:message key="destin.address.field" /></th>
+            <th><fmt:message key="category.field" /></th>
+            <th><fmt:message key="capacity.field" /></th>
+            <th><fmt:message key="car.field" /></th>
+            <th><fmt:message key="price.field" />(₴)</th>
+            <th><fmt:message key="created.field" /></th>
+            <th><fmt:message key="completed.field" /></th>
         </tr>
         </thead>
         <tbody>
@@ -81,9 +98,9 @@
                 <td>${tripOrder.category}</td>
                 <td>${tripOrder.capacity}</td>
                 <td>
-                    <a style="color: black;" href="${pageContext.request.contextPath}/carView?id=${tripOrder.car.id}">${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</p>
+                    <a style="color: black;" href="${pageContext.request.contextPath}/car?id=${tripOrder.car.id}">${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</p>
                 </td>
-                <td>${tripOrder.price} hrn.</td>
+                <td>${tripOrder.price} <fmt:message key="money.label" />.</td>
                 <td>
                     <fmt:parseDate value="${tripOrder.timestampCreated}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                     <fmt:formatDate pattern="HH:mm dd MMM yyyy" value="${parsedDateTime}" />
@@ -94,7 +111,7 @@
                         <form method="post">
                             <input type="text" name="id" style="display: none;" value="${tripOrder.id}">
                             <input type="text" name="car_id" style="display: none;" value="${tripOrder.car.id}">
-                            <button type="submit" style="btn btn-secondary">Complete</button>
+                            <button type="submit" style="btn btn-black"><fmt:message key="complete.button" /></button>
                         <form>
                       </c:when>
                       <c:otherwise>

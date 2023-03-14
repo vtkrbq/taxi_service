@@ -66,6 +66,7 @@ public class TripOrderSqlConstants {
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.LASTNAME + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.LASTNAME + ", " +
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.PHONE + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.PHONE + ", " +
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.EMAIL + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.EMAIL + ", " +
+            CLIENT_ALIAS + "." + UserSqlConstants.UserFields.DISCOUNT + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.DISCOUNT + ", " +
             CAR_TABLE_NAME + "." + CarSqlConstants.CarFields.ID + " as " + CAR_PREFIX + CarSqlConstants.CarFields.ID + ", " +
             CAR_TABLE_NAME + "." + CarSqlConstants.CarFields.NAME + " as " + CAR_PREFIX + CarSqlConstants.CarFields.NAME + ", " +
             CAR_TABLE_NAME + "." + CarSqlConstants.CarFields.CATEGORY + " as " + CAR_PREFIX + CarSqlConstants.CarFields.CATEGORY + ", " +
@@ -79,6 +80,7 @@ public class TripOrderSqlConstants {
             DRIVER_ALIAS + "." + UserSqlConstants.UserFields.LASTNAME + " as " + DRIVER_PREFIX + UserSqlConstants.UserFields.LASTNAME + ", " +
             DRIVER_ALIAS + "." + UserSqlConstants.UserFields.PHONE + " as " + DRIVER_PREFIX + UserSqlConstants.UserFields.PHONE + ", " +
             DRIVER_ALIAS + "." + UserSqlConstants.UserFields.EMAIL + " as " + DRIVER_PREFIX + UserSqlConstants.UserFields.EMAIL + ", " +
+            DRIVER_ALIAS + "." + UserSqlConstants.UserFields.DISCOUNT + " as " + DRIVER_PREFIX + UserSqlConstants.UserFields.DISCOUNT + ", " +
             TO_TABLE_NAME + "." + TripOrderFields.PRICE + ", " +
             TO_TABLE_NAME + "." + TripOrderFields.CREATED + ", " +
             TO_TABLE_NAME + "." + TripOrderFields.END_OF_TRIP +

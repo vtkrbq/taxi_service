@@ -31,11 +31,12 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         List<String> errors = new ArrayList<>();
         String login = req.getParameter(FormFields.LOGIN);
         String password = req.getParameter(FormFields.PASSWORD);
         String confirmedPassword = req.getParameter(FormFields.CONFIRM_PASSWORD);
-        String name = req.getParameter(FormFields.NAME);//TODO: fix UTF-8
+        String name = req.getParameter(FormFields.FIRSTNAME);
         String lastname = req.getParameter(FormFields.LASTNAME);
         String phone = req.getParameter(FormFields.PHONE);
         String email = req.getParameter(FormFields.EMAIL);
@@ -84,7 +85,7 @@ public class RegistrationServlet extends HttpServlet {
         private static final String LOGIN = "login";
         private static final String PASSWORD = "password";
         private static final String CONFIRM_PASSWORD = "confirmPassword";
-        private static final String NAME = "name";
+        private static final String FIRSTNAME = "firstname";
         private static final String LASTNAME = "lastname";
         private static final String PHONE = "phone";
         private static final String EMAIL = "email";

@@ -1,8 +1,15 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<c:if test="${empty lang}">
+    <c:set var="lang" scope="session" value="en"/>
+</c:if>
+<fmt:setBundle basename="${sessionScope.lang}"/>
+<fmt:requestEncoding value="UTF-8" />
 <html>
 <head>
+    <title><fmt:message key="site.name" /></title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link rel="stylesheet" type="text/css" href="css/select.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +21,7 @@
 <body>
 <div class="sidenav">
     <div class="login-main-text">
-        <p>Login or register from here to access.</p>
+        <p><fmt:message key="welcome.label" /></p>
         <img src="img/main.png" style="width: 600px; height: 600px;" alt="Taxi service">
     </div>
 </div>
@@ -23,11 +30,12 @@
         <div class="register-form">
             <form action="${pageContext.request.contextPath}/carRegistration" method="post">
                 <div class="form-group">
-                    <label>Car</label>
-                    <input type="text" name="carName" class="form-control" placeholder="Car" value="${car.carName}">
+                    <label><fmt:message key="car.label" /></label>
+                    <fmt:message key="car.placeholder" var="car_placeholder"/>
+                    <input type="text" name="carName" class="form-control" placeholder="${car_placeholder}" value="${car.carName}">
                 </div>
                 <div class="form-group">
-                    <label>Car category</label>
+                    <label><fmt:message key="car.сategory.label" /></label>
                     <div class="select">
                         <select name="carCategory" value="${car.carCategory}">
                             <option>Economy</option>
@@ -38,14 +46,16 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Car capacity</label>
-                    <input type="text" name="carCapacity" class="form-control" placeholder="Car capacity" value="${car.carCapacity}">
+                    <label><fmt:message key="car.сapacity.label" /></label>
+                    <fmt:message key="car.сapacity.placeholder" var="car_сapacity_placeholder" />
+                    <input type="text" name="carCapacity" class="form-control" placeholder="${car_сapacity_placeholder}" value="${car.carCapacity}">
                 </div>
                 <div class="form-group">
-                    <label>License plate</label>
-                    <input type="text" name="licensePlate" class="form-control" placeholder="Name" value="${car.licensePlate}">
+                    <label><fmt:message key="car.license.plate.label" /></label>
+                    <fmt:message key="car.license.plate.placeholder" var="car_license_plate_placeholder"/>
+                    <input type="text" name="licensePlate" class="form-control" placeholder="${car_license_plate_placeholder}" value="${car.licensePlate}">
                 </div>
-                <button type="submit" class="btn btn-black">Register car</button>
+                <button type="submit" class="btn btn-black"><fmt:message key="reg.car.button" /></button>
                 <c:if test="${errors != null && not empty errors}">
                     <div style="color: red">
                         <c:forEach items="${errors}" var="error" >

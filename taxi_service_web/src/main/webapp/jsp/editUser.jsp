@@ -1,9 +1,15 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<c:if test="${empty lang}">
+    <c:set var="lang" scope="session" value="en"/>
+</c:if>
+<fmt:setBundle basename="${sessionScope.lang}"/>
+<fmt:requestEncoding value="UTF-8" />
 <html>
 <head>
-    <title>Taxi Service</title>
+    <title><fmt:message key="site.name" /></title>
     <link rel="stylesheet" type="text/css" href="css/header.css" />
     <link rel="stylesheet" type="text/css" href="css/ordering.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -24,11 +30,14 @@
 <header class="top-line">
 		<a href="${pageContext.request.contextPath}/ordering" class="logo"><img src="img/logo.png" alt="logo alt"></a>
 		<div class="login">
+		    <a href="${pageContext.request.contextPath}/language?lang=ua"><img src="img/ua.png" alt="ua language" style="width: 25px; height:25px; border-radius: 25px;"></a>
+            <img src="img/slash.png" alt="logo alt" style="width: 1px; height:25px;">
+            <a href="${pageContext.request.contextPath}/language?lang=en"><img src="img/en.png" alt="en language" style="width: 25px; height:25px; border-radius: 25px;"></a>
 		    <i class="fa fa-login"></i>
 		    <div class="dropdown">
                 <button class="mainmenubtn"><c:out value="${currentUser.firstname} ${currentUser.lastname}"/></button>
                     <div class="dropdown-child">
-                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile">Profile</a>
+                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/profile"><fmt:message key="ddm.profile.button" /></a>
                         <c:set var="driver" scope="request" value="false"/>
                         <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
                             <c:if test="${userRole == 'DRIVER'}">
@@ -36,16 +45,16 @@
                             </c:if>
                         </c:forEach>
                         <c:if test="${driver}">
-                            <a class="mainmenubtn" href="${pageContext.request.contextPath}/carRegistration">Car registration</a>
+                            <a class="mainmenubtn" href="${pageContext.request.contextPath}/carRegistration"><fmt:message key="ddm.car.reg.button" /></a>
                         </c:if>
-                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout">Sign out</a>
+                        <a class="mainmenubtn" href="${pageContext.request.contextPath}/logout"><fmt:message key="ddm.logout.button" /></a>
                     </div>
             </div>
 		</div>
 		<div class="mobile-menu-btn"><i class="fa fa-bars"></i> Меню</div>
 		<nav class="main-menu top-menu">
         <ul>
-            <li class="active"><a href="${pageContext.request.contextPath}/ordering">Order</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/ordering"><fmt:message key="a.home" /></a></li>
             <c:set var="admin" scope="request" value="false"/>
             <c:set var="driver" scope="request" value="false"/>
             <c:forEach items="${sessionScope.currentUser.roles}" var="userRole" >
@@ -56,12 +65,12 @@
                     <c:set var="driver" scope="request" value="true"/>
                 </c:if>
             </c:forEach>
-            <li class="active"><a href="${pageContext.request.contextPath}/userStatistics">Order history</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/userStatistics"><fmt:message key="a.history" /></a></li>
             <c:if test="${admin}">
-                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics">Order statistics</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/orderStatistics"><fmt:message key="a.order.stat" /></a></li>
             </c:if>
             <c:if test="${driver}">
-                <li class="active"><a href="${pageContext.request.contextPath}/driverStatistics">Driver statistics</li>
+                <li class="active"><a href="${pageContext.request.contextPath}/driverStatistics"><fmt:message key="a.driver.history" /></a></li>
             </c:if>
         </ul>
 		</nav>
@@ -74,36 +83,36 @@
                     <caption>
                         <div style="padding-left: 0px; display: inline-block;">
                             <b style="font-size: 32px; color: black;">${currentUser.login}</b>
-                            <button type="submit" class="btn btn-secondary" style="background-color: black; width: 100px; margin-left: 40px;">Save</button>
-                            <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary" style="width: 100px; margin-left: 40px;">Cancel</a>
+                            <button type="submit" class="btn btn-secondary" style="background-color: black; width: 100px; margin-left: 40px;"><fmt:message key="save.button" /></button>
+                            <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary" style="width: 100px; margin-left: 40px;"><fmt:message key="cancel.button" /></a>
                         </div>
                     </caption>
                     <tr>
-                        <td style="width: 150px;">Login:</td>
+                        <td style="width: 150px;"><fmt:message key="login.label" />:</td>
                         <td><input type="text" name="login" class="form-control" value="${currentUser.login}"></td>
                     </tr>
                     <tr>
-                        <td style="width: 150px;">Password:</td>
+                        <td style="width: 150px;"><fmt:message key="password.label" />:</td>
                         <td>
                             <input type="password" name="password" class="form-control" value="********" disabled>
-                            <a href="${pageContext.request.contextPath}/changePassword" style="font-size: 12px; width: 100px;">Change password</a>
+                            <a href="${pageContext.request.contextPath}/changePassword" style="font-size: 12px; width: 100px;"><fmt:message key="a.change.pass" /></a>
                         </td>
 
                     </tr>
                     <tr>
-                        <td>Name:</td>
+                        <td><fmt:message key="name.label" />:</td>
                         <td><input type="text" name="firstname" class="form-control" value="${currentUser.firstname}"></td>
                     </tr>
                     <tr>
-                        <td>Lastname:</td>
+                        <td><fmt:message key="lastname.label" />:</td>
                         <td><input type="text" name="lastname" class="form-control" value="${currentUser.lastname}"></td>
                     </tr>
                     <tr>
-                        <td>Phone:</td>
+                        <td><fmt:message key="phone.label" />:</td>
                         <td><input type="text" name="phone" class="form-control" value="${currentUser.phone}"></td>
                     </tr>
                     <tr>
-                        <td>Email:</td>
+                        <td><fmt:message key="email.label" />:</td>
                         <td><input type="text" name="email" class="form-control" value="${currentUser.email}"></td>
                     </tr>
                     <tr>

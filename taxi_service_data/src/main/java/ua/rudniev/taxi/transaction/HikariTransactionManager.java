@@ -13,7 +13,7 @@ public class HikariTransactionManager implements TransactionManager {
     private static final ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();
     @Override
     public <T> T doInTransaction(Execution<T> execution, boolean readOnly) {
-            Connection conn = getConnection();
+        Connection conn = getConnection();
         connectionHolder.set(conn);
         try(conn) {
             conn.setReadOnly(readOnly);

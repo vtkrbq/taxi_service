@@ -46,6 +46,7 @@ public class CarSqlConstants {
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.LASTNAME + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.PHONE + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.EMAIL + ", " +
+            UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.DISCOUNT + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.ROLES +
             " from car inner join app_user on app_user.login=car.driver_login";
 
@@ -67,11 +68,15 @@ public class CarSqlConstants {
             CAR_TABLE_NAME + "." + CarFields.CATEGORY + ", " +
             CAR_TABLE_NAME + "." + CarFields.CAPACITY + ", " +
             CAR_TABLE_NAME + "." + CarFields.LICENSE_PLATE + ", " +
+            CAR_TABLE_NAME + "." + CarFields.CURRENT_ADDRESS + ", " +
+            CAR_TABLE_NAME + "." + CarFields.CURRENT_POINT_X + ", " +
+            CAR_TABLE_NAME + "." + CarFields.CURRENT_POINT_Y + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.LOGIN + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.FIRSTNAME + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.LASTNAME + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.PHONE + ", " +
-            UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.EMAIL + " " +
+            UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.EMAIL + ", " +
+            UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.DISCOUNT + " " +
             "from " + CAR_TABLE_NAME +
             " inner join " + UserSqlConstants.USER_TABLE_NAME +
             " on " + CAR_TABLE_NAME + "." + CarFields.DRIVER_LOGIN + " = " + UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.LOGIN +

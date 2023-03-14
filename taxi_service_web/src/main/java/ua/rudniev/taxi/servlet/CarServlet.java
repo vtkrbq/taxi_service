@@ -12,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/carView")
-public class CarViewServlet extends HttpServlet {
+@WebServlet("/car")
+public class CarServlet extends HttpServlet {
     private final CarService carService = ComponentsContainer.getInstance().getCarService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        Car carView = carService.findCarById(id).orElse(new Car());//Пирог: Должна быть страничка not found я думаю
-        req.setAttribute("carView", carView); //Пирог: лучше просто car или carModel
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/carView.jsp");
+        Car car = carService.findCarById(id).orElse(new Car());//Пирог: Должна быть страничка not found я думаю
+        req.setAttribute("car", car);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/car.jsp");
         dispatcher.forward(req, resp);
     }
 }
