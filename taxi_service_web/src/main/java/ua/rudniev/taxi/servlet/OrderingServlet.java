@@ -80,20 +80,20 @@ public class OrderingServlet extends HttpServlet {
                 new Value(Status.AVAILABLE.toString())
         );
         filters.add(filterStatus);
-
-        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder, distance, departure, filters);
         RequestDispatcher dispatcher;
-        req.setAttribute("tripOrder", tripOrder);
+        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder, distance, departure, filters);
+        req.getSession().setAttribute("tripOrder", tripOrder);
         if (newTripInfoOptional.isPresent()) {
-            dispatcher = req.getRequestDispatcher("/jsp/newTripInfo.jsp");
-            req.setAttribute("newTripInfo", newTripInfoOptional.get());
+            req.getSession().setAttribute("newTripInfo", newTripInfoOptional.get());
+            resp.sendRedirect("newTripInfo.do");
+            //PRG pattern
         } else {
             List<String> errors = new ArrayList<>();
             errors.add("There is no available cars: <br>You can try different category or several cars");
             dispatcher = req.getRequestDispatcher("/jsp/ordering.jsp");
             req.setAttribute("errors", errors);
+            dispatcher.forward(req, resp);
         }
-        dispatcher.forward(req, resp);
     }
 
     private static class FormFields {

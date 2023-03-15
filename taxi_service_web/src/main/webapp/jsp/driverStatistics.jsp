@@ -111,7 +111,7 @@
                         <form method="post">
                             <input type="text" name="id" style="display: none;" value="${tripOrder.id}">
                             <input type="text" name="car_id" style="display: none;" value="${tripOrder.car.id}">
-                            <button type="submit" style="btn btn-black"><fmt:message key="complete.button" /></button>
+                            <button type="submit" style="btn btn-black; width: 100px; height: 30px; border-radius: 10px;"><fmt:message key="complete.button" /></button>
                         <form>
                       </c:when>
                       <c:otherwise>
