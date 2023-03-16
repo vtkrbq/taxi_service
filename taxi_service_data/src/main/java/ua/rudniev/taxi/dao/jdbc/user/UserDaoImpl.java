@@ -65,12 +65,11 @@ public class UserDaoImpl implements UserDao {
             stmt.setString(6, user.getEmail());
             stmt.setString(7, user.rolesToString());
             stmt.executeUpdate();
-            //TODO доавить экеспешн
             return null;
         });
     }
 
-    public void updateUser(User user, String login) {//TODO сделать лучше
+    public void updateUser(User user, String login) {
         prepareStatementProvider.withPrepareStatement(UserSqlConstants.UPDATE_USER, stmt -> {
             stmt.setString(1, user.getLogin());
             stmt.setString(2, user.getFirstname());

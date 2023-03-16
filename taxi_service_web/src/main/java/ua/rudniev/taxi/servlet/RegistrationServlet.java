@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.servlet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.exception.UserAlreadyExistsException;
 import ua.rudniev.taxi.model.user.Role;
@@ -22,6 +24,7 @@ import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
+    private static final Logger LOGGER = LogManager.getLogger(RegistrationServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,17 +59,21 @@ public class RegistrationServlet extends HttpServlet {
         if (errors.isEmpty()) {
             try {
                 userService.createUser(user, password);
+                LOGGER.info("New user " + user.getLogin() + " has been registered");
             } catch (UserAlreadyExistsException e) {
+                LOGGER.error("An error has occurred while creating a user that already been created", e);
                 errors.add("User with login " + login + " is already exist");
             } catch (Exception e) {
-                log("An error has occurred while creating a user", e);
+                LOGGER.error("An error has occurred while creating a user", e);
                 errors.add("Technical error has occurred");
             }
         }
         if (errors.isEmpty()) {
             if (registerAsDriver != null) {
                 user.addRole(Role.DRIVER);
+                LOGGER.info("New user " + user.getLogin() + " has been registered as driver");
                 userService.updateUser(user, login);
+                LOGGER.info("User " + user.getLogin() + " role has been updated");
                 req.getSession().setAttribute(CURRENT_USER, user);
                 resp.sendRedirect(req.getContextPath() + "/carRegistration");
             } else {

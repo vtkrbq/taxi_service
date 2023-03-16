@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.servlet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.common.filter.Value;
@@ -25,7 +27,7 @@ import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 @WebServlet("/driverStatistics")
 public class DriverStatisticsServlet  extends HttpServlet {
     private final OrderingService orderingService = ComponentsContainer.getInstance().getOrderingService();
-
+    private static final Logger LOGGER = LogManager.getLogger(DriverStatisticsServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -59,6 +61,7 @@ public class DriverStatisticsServlet  extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         int carId = Integer.parseInt(req.getParameter("car_id"));
         orderingService.completeTripOrder(id, carId);
+        LOGGER.info("Trip with id " + id + " has been completed");
         resp.sendRedirect(req.getContextPath() + "/driverStatistics");
     }
 }

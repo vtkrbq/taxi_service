@@ -53,4 +53,8 @@ public class TripOrder {
         this.timestampCreated = timestampCreated;
         this.timestampEnd = timestampEnd;
     }
+
+    public String toString() {
+        return "[from: " + departure + " to: " + destination + " client: " + user.getLogin() + "]";
+    }
 }

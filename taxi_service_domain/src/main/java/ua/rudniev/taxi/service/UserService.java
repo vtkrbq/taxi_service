@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.model.user.Role;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.dao.user.UserDao;
@@ -11,6 +13,9 @@ public class UserService {
     private final UserDao userDao;
 
     private final TransactionManager transactionManager;
+
+    private static final Logger LOGGER = LogManager.getLogger(UserService.class);
+
     public UserService(
             UserDao userDao,
             TransactionManager transactionManager
@@ -33,6 +38,7 @@ public class UserService {
         transactionManager.doInTransaction(() -> {
             user.addRole(Role.USER);
             userDao.createUser(user, password);
+            LOGGER.info("New user " + user.getLogin() + " has been registered");
             return null;
         }, false);
     }
@@ -40,6 +46,7 @@ public class UserService {
     public void updateUser(User user, String login) {
         transactionManager.doInTransaction(() -> {
             userDao.updateUser(user, login);
+            LOGGER.info("User " + user.getLogin() + " has been updated");
             return null;
         }, false);
     }
@@ -47,6 +54,7 @@ public class UserService {
     public void updatePassword(User user, String oldPassword, String newPassword) {
         transactionManager.doInTransaction(() -> {
             userDao.updatePassword(user, oldPassword, newPassword);
+            LOGGER.info("Password for user " + user.getLogin() + " has been changed");
             return null;
         }, false);
     }

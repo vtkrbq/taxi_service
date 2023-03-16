@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.servlet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.service.UserService;
@@ -21,6 +23,8 @@ import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
+    private static final Logger LOGGER = LogManager.getLogger(LoginServlet.class);
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,6 +42,7 @@ public class LoginServlet extends HttpServlet {
         }
         if (errors.isEmpty()) {
             req.getSession().setAttribute(CURRENT_USER, userOptional.get());
+            LOGGER.info("User " + userOptional.get().getLogin() + " has logged in");
             resp.sendRedirect(req.getContextPath() + "/ordering");
         } else {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/index.jsp");

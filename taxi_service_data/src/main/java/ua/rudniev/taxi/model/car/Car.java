@@ -41,4 +41,8 @@ public class Car {
                 36.328126,
                 "Харків, вул. Гвардійців-Широнінців, 5");
     }
+
+    public String toString() {
+        return "[" + carName + ", " + licensePlate + ", " + carCategory  + ", " + carCapacity + "]";
+    }
 }

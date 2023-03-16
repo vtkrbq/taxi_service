@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.dao.car.CarDao;
 import ua.rudniev.taxi.dao.car.CarField;
 import ua.rudniev.taxi.dao.common.filter.Filter;
@@ -16,6 +18,9 @@ public class CarService {
 
     private final TransactionManager transactionManager;
 
+    private static final Logger LOGGER = LogManager.getLogger(CarService.class);
+
+
     public CarService(
             CarDao carDao,
             TransactionManager transactionManager
@@ -31,6 +36,7 @@ public class CarService {
     public void createCar(Car car) {
         transactionManager.doInTransaction(() -> {
             carDao.createCar(car);
+            LOGGER.info("New car " + car + " has been registered");
             return null;
         }, false);
     }

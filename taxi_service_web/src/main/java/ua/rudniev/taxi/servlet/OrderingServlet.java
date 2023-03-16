@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.servlet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.StringUtils;
 import ua.rudniev.taxi.dao.car.CarField;
@@ -33,6 +35,8 @@ import java.util.Optional;
 public class OrderingServlet extends HttpServlet {
 
     private final OrderingService orderingService = ComponentsContainer.getInstance().getOrderingService();
+    private static final Logger LOGGER = LogManager.getLogger(OrderingServlet.class);
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -85,11 +89,12 @@ public class OrderingServlet extends HttpServlet {
         req.getSession().setAttribute("tripOrder", tripOrder);
         if (newTripInfoOptional.isPresent()) {
             req.getSession().setAttribute("newTripInfo", newTripInfoOptional.get());
+            LOGGER.info("Order " + tripOrder + " has been created and taken by driver: " + newTripInfoOptional.get().getCar().getDriver().getLogin());
             resp.sendRedirect("newTripInfo.do");
             //PRG pattern
         } else {
             List<String> errors = new ArrayList<>();
-            errors.add("There is no available cars: <br>You can try different category or several cars");
+            errors.add("There is no available cars: \nYou can try different category or several cars");//TODO check \n
             dispatcher = req.getRequestDispatcher("/jsp/ordering.jsp");
             req.setAttribute("errors", errors);
             dispatcher.forward(req, resp);

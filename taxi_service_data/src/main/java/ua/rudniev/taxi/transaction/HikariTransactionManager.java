@@ -1,6 +1,8 @@
 package ua.rudniev.taxi.transaction;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.connection.ConnectionProvider;
 import ua.rudniev.taxi.exception.DbException;
 
@@ -11,6 +13,9 @@ import java.sql.SQLException;
 public class HikariTransactionManager implements TransactionManager {
 
     private static final ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();
+
+    private static final Logger LOGGER = LogManager.getLogger(HikariTransactionManager.class);
+
     @Override
     public <T> T doInTransaction(Execution<T> execution, boolean readOnly) {
         Connection conn = getConnection();
@@ -22,12 +27,13 @@ public class HikariTransactionManager implements TransactionManager {
             return result;
         } catch (Exception e) {
             try {
-                log.error("An error occurred in transaction", e);
+                LOGGER.error("An error occurred in transaction", e);
                 conn.rollback();
                 if (e instanceof RuntimeException) throw (RuntimeException) e;
+                LOGGER.error("An error occurred with DB", e);
                 throw new DbException("An error occurred with DB", e);
             } catch (SQLException ex) {
-                log.error("An error occurred while trying to rollback", ex);
+                LOGGER.error("An error occurred while trying to rollback", ex);
                 throw new DbException("An error occurred while trying to rollback", ex);
             }
         } finally {
@@ -39,6 +45,7 @@ public class HikariTransactionManager implements TransactionManager {
         try {
             return ConnectionProvider.getConnection();
         } catch (SQLException e) {
+            LOGGER.error("An error occurred with getting connection", e);
             throw new DbException("An error occurred with getting connection", e);
         }
     }

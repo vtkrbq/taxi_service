@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.servlet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.exception.UserAlreadyExistsException;
 import ua.rudniev.taxi.model.user.Role;
@@ -24,11 +26,13 @@ import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 public class EditUserServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
     private String oldLogin;
+    private static final Logger LOGGER = LogManager.getLogger(EditUserServlet.class);
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute(CURRENT_USER);
-        oldLogin = user.getLogin();
+        oldLogin = user.getLogin();//TODO remake this bs
         req.getSession().setAttribute(FormFields.FIRSTNAME, user.getFirstname());
         req.getSession().setAttribute(FormFields.LASTNAME, user.getLastname());
         req.getSession().setAttribute(FormFields.PHONE, user.getPhone());
@@ -59,10 +63,11 @@ public class EditUserServlet extends HttpServlet {
         if (errors.isEmpty()) {
             try {
                 userService.updateUser(user, oldLogin);
+                LOGGER.info("User " + user.getLogin() + " has been updated");
             } catch (UserAlreadyExistsException e) {
                 errors.add("User with login " + newLogin + " is already exist");
             } catch (Exception e) {
-                log("An error has occurred while creating a user", e);
+                LOGGER.error("An error has occurred while updating a user", e);
                 errors.add("Technical error has occurred");
             }
         }

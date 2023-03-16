@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.dao.car.CarField;
 import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.common.order.OrderBy;
@@ -29,6 +31,9 @@ public class OrderingService {
     private final TransactionManager transactionManager;
 
     private final TripOrderDao tripOrderDao;
+
+    private static final Logger LOGGER = LogManager.getLogger(OrderingService.class);
+
     public OrderingService(
             CarDao carRepository,
             PriceStrategy priceStrategy,
@@ -62,6 +67,7 @@ public class OrderingService {
                         BigDecimal discount = newTripInfo.getPrice().multiply(BigDecimal.valueOf(tripOrder.getUser().getDiscount())).divide(BigDecimal.valueOf(100), RoundingMode.DOWN);
                         tripOrder.setPrice(newTripInfo.getPrice().subtract(discount));
                         tripOrderDao.insert(tripOrder);
+                        LOGGER.info("Order " + tripOrder + " has been created" + newTripInfoOptional.get().getCar().getDriver().getLogin());
                     }
             );
             return newTripInfoOptional;
@@ -84,6 +90,7 @@ public class OrderingService {
         transactionManager.doInTransaction(() -> {
             tripOrderDao.completeTripOrder(id);
             carDao.completeTrip(carId);
+            LOGGER.info("Trip with id " + id + " has been completed");
             return null;
         }, false);
     }

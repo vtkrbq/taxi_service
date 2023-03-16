@@ -1,5 +1,7 @@
 package ua.rudniev.taxi.servlet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Category;
@@ -23,6 +25,7 @@ import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 @WebServlet("/carRegistration")
 public class CarRegistrationServlet extends HttpServlet {
     private final CarService carService = ComponentsContainer.getInstance().getCarService();
+    private static final Logger LOGGER = LogManager.getLogger(CarRegistrationServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -53,8 +56,9 @@ public class CarRegistrationServlet extends HttpServlet {
         if (errors.isEmpty()) {
             try {
                 carService.createCar(car);
+                LOGGER.info("New car " + car + " has been registered");
             } catch (Exception e) {
-                log("An error has occurred while creating a car", e);
+                LOGGER.error("An error has occurred while creating a car", e);
                 errors.add("Technical error has occurred");
             }
         }
