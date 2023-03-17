@@ -20,7 +20,7 @@ public class JspFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         httpResponse.setStatus(403);
         RequestDispatcher dispatcher = servletRequest.getRequestDispatcher(
-                "/forbidden.jsp");
+                "/jsp/forbidden.jsp");
         dispatcher.forward(servletRequest, servletResponse);
     }
 

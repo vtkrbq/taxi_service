@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/newTripInfo.do")
+@WebServlet(
+        name = "NewTripInfoServlet",
+        urlPatterns = "/newTripInfo.do"
+)
 public class NewTripInfoServlet extends HttpServlet {
 
     @Override

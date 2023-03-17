@@ -17,7 +17,10 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/profile")
+@WebServlet(
+        name = "ProfileServlet",
+        urlPatterns = "/profile"
+)
 public class ProfileServlet extends HttpServlet {
 
     @Override

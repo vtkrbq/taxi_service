@@ -3,12 +3,10 @@ package ua.rudniev.taxi.servlet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
-import ua.rudniev.taxi.StringUtils;
 import ua.rudniev.taxi.dao.car.CarField;
 import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.common.filter.FilterType;
 import ua.rudniev.taxi.dao.common.filter.Value;
-import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.model.NewTripInfo;
 import ua.rudniev.taxi.model.car.Category;
 import ua.rudniev.taxi.model.car.Status;
@@ -16,7 +14,6 @@ import ua.rudniev.taxi.model.trip.AddressPoint;
 import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.service.OrderingService;
-import ua.rudniev.taxi.servlet.utils.ValueProvider;
 import ua.rudniev.taxi.web.SessionAttributes;
 
 import javax.servlet.RequestDispatcher;
@@ -31,7 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/ordering")
+@WebServlet(
+        name = "OrderingServlet",
+        urlPatterns = "/ordering"
+)
 public class OrderingServlet extends HttpServlet {
 
     private final OrderingService orderingService = ComponentsContainer.getInstance().getOrderingService();
@@ -46,7 +46,6 @@ public class OrderingServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         double distance = Double.parseDouble(req.getParameter(FormFields.DISTANCE));
         double departureX = Double.parseDouble(req.getParameter(FormFields.DEPARTURE_X));
         double departureY = Double.parseDouble(req.getParameter(FormFields.DEPARTURE_Y));

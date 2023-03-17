@@ -20,7 +20,10 @@ import java.util.Optional;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/login")
+@WebServlet(
+        name = "LoginServlet",
+        urlPatterns = "/login"
+)
 public class LoginServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
     private static final Logger LOGGER = LogManager.getLogger(LoginServlet.class);

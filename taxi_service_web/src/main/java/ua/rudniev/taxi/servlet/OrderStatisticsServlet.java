@@ -31,7 +31,10 @@ import java.util.List;
 import static ua.rudniev.taxi.dao.common.field.FieldType.*;
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/orderStatistics")
+@WebServlet(
+        name = "OrderStatisticsServlet",
+        urlPatterns = "/orderStatistics"
+)
 public class OrderStatisticsServlet extends HttpServlet {
     private final OrderingService orderingService = ComponentsContainer.getInstance().getOrderingService();
 

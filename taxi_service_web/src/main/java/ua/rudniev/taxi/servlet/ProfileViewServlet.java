@@ -15,7 +15,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 
-@WebServlet("/profileView")
+@WebServlet(
+        name = "ProfileViewServlet",
+        urlPatterns = "/profileView"
+)
 public class ProfileViewServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
 

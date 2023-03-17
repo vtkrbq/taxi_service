@@ -58,7 +58,8 @@ public class UserSqlConstants {
             UserFields.FIRSTNAME + " = " + "?, " +
             UserFields.LASTNAME + " = " + "?, " +
             UserFields.PHONE + " = " + "?, " +
-            UserFields.EMAIL + " = " + "? " +
+            UserFields.EMAIL + " = " + "?, " +
+            UserFields.ROLES + " = " + "?, " +
             UserFields.DISCOUNT + " = " + "? " +
             "where login=?";
 

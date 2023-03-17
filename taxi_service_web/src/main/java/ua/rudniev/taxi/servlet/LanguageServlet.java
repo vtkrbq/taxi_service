@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/language")
+@WebServlet(
+        name = "LanguageServlet",
+        urlPatterns = "/language"
+)
 public class LanguageServlet extends HttpServlet {
 
     @Override
@@ -19,7 +22,6 @@ public class LanguageServlet extends HttpServlet {
         if (!StringUtils.isEmptyOrNull(lang)) {
             req.getSession().setAttribute("lang", lang);
         }
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/ordering.jsp");
-        dispatcher.forward(req, resp);
+        resp.sendRedirect(req.getContextPath());
     }
 }

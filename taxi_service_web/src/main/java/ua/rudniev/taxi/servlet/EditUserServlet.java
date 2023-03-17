@@ -22,7 +22,10 @@ import java.util.Optional;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/editUser")
+@WebServlet(
+        name = "EditUserServlet",
+        urlPatterns = "/editUser"
+)
 public class EditUserServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
     private String oldLogin;
@@ -45,7 +48,7 @@ public class EditUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<String> errors = new ArrayList<>();
         String newLogin = req.getParameter(FormFields.LOGIN);
-        String name = req.getParameter(FormFields.FIRSTNAME);//TODO: fix UTF-8
+        String name = req.getParameter(FormFields.FIRSTNAME);
         String lastname = req.getParameter(FormFields.LASTNAME);
         String phone = req.getParameter(FormFields.PHONE);
         String email = req.getParameter(FormFields.EMAIL);

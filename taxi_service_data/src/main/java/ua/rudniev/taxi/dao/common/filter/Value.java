@@ -1,8 +1,15 @@
 package ua.rudniev.taxi.dao.common.filter;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
+/**
+ * This class has fields and methods that helps building sql queries
+ */
+@Data
 public class Value {
 
     private String string;
@@ -33,33 +40,5 @@ public class Value {
 
     public Value(Double doubleValue) {
         this.doubleValue = doubleValue;
-    }
-
-    public String getString() {
-        return string;
-    }
-
-    public int getInteger() {
-        return integer;
-    }
-
-    public Instant getInstant() {
-        return instant;
-    }
-
-    public BigDecimal getBigDecimal() {
-        return bigDecimal;
-    }
-
-    public void setInstant(Instant instant) {
-        this.instant = instant;
-    }
-
-    public void setInteger(int integer) {
-        this.integer = integer;
-    }
-
-    public Double getDoubleValue() {
-        return doubleValue;
     }
 }

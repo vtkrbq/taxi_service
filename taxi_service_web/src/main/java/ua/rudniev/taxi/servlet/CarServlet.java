@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/car")
+@WebServlet(
+        name = "CarServlet",
+        urlPatterns = "/car"
+)
 public class CarServlet extends HttpServlet {
     private final CarService carService = ComponentsContainer.getInstance().getCarService();
 

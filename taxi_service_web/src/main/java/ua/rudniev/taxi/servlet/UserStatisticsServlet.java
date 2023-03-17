@@ -22,7 +22,10 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/userStatistics")
+@WebServlet(
+        name = "UserStatisticsServlet",
+        urlPatterns = "/userStatistics"
+)
 public class UserStatisticsServlet extends HttpServlet {
     private final OrderingService orderingService = ComponentsContainer.getInstance().getOrderingService();
 

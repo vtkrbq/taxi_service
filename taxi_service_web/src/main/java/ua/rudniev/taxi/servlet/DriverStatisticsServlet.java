@@ -24,7 +24,10 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/driverStatistics")
+@WebServlet(
+        name = "DriverStatisticsServlet",
+        urlPatterns = "/driverStatistics"
+)
 public class DriverStatisticsServlet  extends HttpServlet {
     private final OrderingService orderingService = ComponentsContainer.getInstance().getOrderingService();
     private static final Logger LOGGER = LogManager.getLogger(DriverStatisticsServlet.class);

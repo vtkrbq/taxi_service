@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This is implementation class of CarDao interface that has fields and methods for working with jdbc
+ */
 public class CarDaoImpl implements CarDao {
 
     private final UserJdbcHelper userJdbcHelper;
@@ -93,7 +96,7 @@ public class CarDaoImpl implements CarDao {
             stmt.setInt(3, car.getCarCapacity());
             stmt.setString(4, car.getLicensePlate());
             stmt.setString(5, car.getDriver().getLogin());
-            stmt.setString(5, car.getStatus().name());
+            stmt.setString(6, car.getStatus().name());
             stmt.setString(7, car.getCurrentAddress().getAddress());
             stmt.setDouble(8, car.getCurrentAddress().getX());
             stmt.setDouble(9, car.getCurrentAddress().getY());

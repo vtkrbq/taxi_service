@@ -21,7 +21,10 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/changePassword")
+@WebServlet(
+        name = "ChangePasswordServlet",
+        urlPatterns = "/changePassword"
+)
 public class ChangePasswordServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
     private static final Logger LOGGER = LogManager.getLogger(ChangePasswordServlet.class);
@@ -34,7 +37,6 @@ public class ChangePasswordServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");//TODO: filter add to all servlets
         List<String> errors = new ArrayList<>();
         String oldPassword = req.getParameter(FormFields.OLD_PASSWORD);
         String newPassword = req.getParameter(FormFields.OLD_CONFIRM_PASSWORD);

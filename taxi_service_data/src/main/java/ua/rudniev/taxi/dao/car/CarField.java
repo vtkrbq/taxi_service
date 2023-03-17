@@ -3,6 +3,9 @@ package ua.rudniev.taxi.dao.car;
 import ua.rudniev.taxi.dao.common.field.Field;
 import ua.rudniev.taxi.dao.common.field.FieldType;
 
+/**
+ * Enum class that has fields and methods for simplification of work with repository
+ */
 public enum CarField implements Field {
     NAME(FieldType.STRING),
     CATEGORY(FieldType.STRING),

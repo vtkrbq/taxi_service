@@ -19,9 +19,14 @@
 <body>
 <h2><fmt:message key="reg.label" /></h2>
 <div class="sidenav">
+    <div style="padding-left: 10px;">
+        <a href="${pageContext.request.contextPath}/language?lang=ua"><img src="img/ua.png" alt="ua language" style="width: 25px; height:25px; border-radius: 25px;"></a>
+        <img src="img/slash.png" alt="logo alt" style="width: 1px; height:25px;">
+        <a href="${pageContext.request.contextPath}/language?lang=en"><img src="img/en.png" alt="en language" style="width: 25px; height:25px; border-radius: 25px;"></a>
+    </div>
     <div class="login-main-text">
         <p><fmt:message key="reg.welcome.label" /></p>
-        <img src="img/main.png" style="width: 600px; height: 600px;" alt="Taxi service">
+        <img src="img/main.png" style="width: 580px; height: 580px; margin-left: 5%;" alt="Taxi service">
     </div>
 </div>
 <div class="main">

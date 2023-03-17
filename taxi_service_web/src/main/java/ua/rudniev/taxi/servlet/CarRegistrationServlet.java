@@ -22,7 +22,10 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/carRegistration")
+@WebServlet(
+        name = "CarRegistrationServlet",
+        urlPatterns = "/carRegistration"
+)
 public class CarRegistrationServlet extends HttpServlet {
     private final CarService carService = ComponentsContainer.getInstance().getCarService();
     private static final Logger LOGGER = LogManager.getLogger(CarRegistrationServlet.class);
@@ -36,7 +39,6 @@ public class CarRegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<String> errors = new ArrayList<>();
-        req.setCharacterEncoding("UTF-8");//TODO: filter add to all servlets
         String carName = req.getParameter(FormFields.CAR_NAME);
         String carCategory = req.getParameter(FormFields.CAR_CATEGORY).toUpperCase();
         String carCapacity = req.getParameter(FormFields.CAR_CAPACITY);

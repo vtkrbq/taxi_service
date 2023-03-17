@@ -1,5 +1,5 @@
 <%@ page isELIgnored="false"%>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <c:if test="${empty lang}">
@@ -11,11 +11,13 @@
 <head>
     <title><fmt:message key="site.name" /></title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/header.css" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body>
-<h2><fmt:message key="the.one.label" /></h2>
+<fmt:requestEncoding value="UTF-8" />
+<h2 style="text-align: center; padding-top: 5%;"><a href="${pageContext.request.contextPath}"><fmt:message key="the.one.label" /></a></h2>
 </body>
 </html>

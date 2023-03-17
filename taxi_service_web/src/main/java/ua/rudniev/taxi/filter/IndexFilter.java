@@ -10,8 +10,7 @@ import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
 @WebFilter(
         urlPatterns = "/index.jsp",
-        filterName = "IndexFilter",
-        servletNames = "RegistrationServlet"
+        filterName = "IndexFilter"
 )
 public class IndexFilter implements Filter {
 

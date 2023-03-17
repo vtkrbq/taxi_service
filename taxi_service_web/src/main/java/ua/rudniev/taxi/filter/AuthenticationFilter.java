@@ -6,12 +6,14 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(
         filterName = "AuthenticationFilter",
-        servletNames = "OrderingServlet"
+        servletNames = {"OrderingServlet", "CarRegistrationServlet", "CarServlet",
+                "ChangePasswordServlet", "DriverStatisticsServlet", "EditUserServlet",
+                "LogoutServlet", "NewTripInfoServlet", "OrderStatisticsServlet",
+                "ProfileServlet", "ProfileViewServlet", "UserStatisticsServlet"}
 )
 public class AuthenticationFilter implements Filter {
 
@@ -29,7 +31,7 @@ public class AuthenticationFilter implements Filter {
         } else {
             httpResponse.setStatus(401);
             RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    "jsp/unauthorized.jsp");
+                    "/jsp/unathorized.jsp");
             dispatcher.forward(request, response);
         }
     }

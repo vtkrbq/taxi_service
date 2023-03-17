@@ -21,7 +21,10 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
-@WebServlet("/registration")
+@WebServlet(
+        name = "RegistrationServlet",
+        urlPatterns = "/registration"
+)
 public class RegistrationServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
     private static final Logger LOGGER = LogManager.getLogger(RegistrationServlet.class);
@@ -34,7 +37,6 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         List<String> errors = new ArrayList<>();
         String login = req.getParameter(FormFields.LOGIN);
         String password = req.getParameter(FormFields.PASSWORD);
