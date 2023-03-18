@@ -4,6 +4,9 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
+/**
+ * This class is an implementation of interface Filter
+ */
 @WebFilter(
         filterName = "EncodingFilter",
         urlPatterns = "/*"

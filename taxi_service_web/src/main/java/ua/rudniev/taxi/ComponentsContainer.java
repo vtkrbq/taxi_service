@@ -21,6 +21,9 @@ import ua.rudniev.taxi.service.price.PythagorasPriceStrategy;
 import ua.rudniev.taxi.transaction.HikariTransactionManager;
 import ua.rudniev.taxi.transaction.TransactionManager;
 
+/**
+ * This class has fields and methods that creates instances of another classes
+ */
 public class ComponentsContainer {
     private static ComponentsContainer instance;
 

@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-
+/**
+ * This class has fields and methods that responds to the http request from /profileView url
+ */
 @WebServlet(
         name = "ProfileViewServlet",
         urlPatterns = "/profileView"

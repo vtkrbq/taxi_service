@@ -1,11 +1,14 @@
 package ua.rudniev.taxi.model.user;
 
+/**
+ * This enum has fields and methods that are indicating roles of a user
+ */
 public enum Role {
     USER("User"),
     DRIVER("Driver"),
     ADMIN("Admin");
 
-    private String value;
+    private final String value;
 
     Role(String value) {
         this.value = value;

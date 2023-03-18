@@ -1,7 +1,5 @@
 package ua.rudniev.taxi.servlet;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.service.CarService;
@@ -14,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class has fields and methods that responds to the http request from /car url
+ */
 @WebServlet(
         name = "CarServlet",
         urlPatterns = "/car"

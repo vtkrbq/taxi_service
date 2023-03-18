@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class has fields and methods that responds to the http request from /newTripInfo.do url
+ */
 @WebServlet(
         name = "NewTripInfoServlet",
         urlPatterns = "/newTripInfo.do"

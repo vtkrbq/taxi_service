@@ -9,6 +9,9 @@ import ua.rudniev.taxi.model.user.User;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+/**
+ * This class has fields and methods that describes TripOrder object
+ */
 @Data
 @NoArgsConstructor
 public class TripOrder {

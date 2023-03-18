@@ -6,6 +6,9 @@ import ua.rudniev.taxi.dao.jdbc.user.UserSqlConstants;
 import static ua.rudniev.taxi.dao.jdbc.car.CarSqlConstants.CAR_TABLE_NAME;
 import static ua.rudniev.taxi.dao.jdbc.user.UserSqlConstants.USER_TABLE_NAME;
 
+/**
+ * This class has fields with names of fields in database table 'trip_order' and queries
+ */
 public class TripOrderSqlConstants {
 
     private static final String TO_TABLE_NAME = "trip_order";
@@ -67,6 +70,7 @@ public class TripOrderSqlConstants {
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.PHONE + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.PHONE + ", " +
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.EMAIL + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.EMAIL + ", " +
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.DISCOUNT + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.DISCOUNT + ", " +
+            CLIENT_ALIAS + "." + UserSqlConstants.UserFields.ROLES + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.ROLES + ", " +
             CAR_TABLE_NAME + "." + CarSqlConstants.CarFields.ID + " as " + CAR_PREFIX + CarSqlConstants.CarFields.ID + ", " +
             CAR_TABLE_NAME + "." + CarSqlConstants.CarFields.NAME + " as " + CAR_PREFIX + CarSqlConstants.CarFields.NAME + ", " +
             CAR_TABLE_NAME + "." + CarSqlConstants.CarFields.CATEGORY + " as " + CAR_PREFIX + CarSqlConstants.CarFields.CATEGORY + ", " +
@@ -81,6 +85,7 @@ public class TripOrderSqlConstants {
             DRIVER_ALIAS + "." + UserSqlConstants.UserFields.PHONE + " as " + DRIVER_PREFIX + UserSqlConstants.UserFields.PHONE + ", " +
             DRIVER_ALIAS + "." + UserSqlConstants.UserFields.EMAIL + " as " + DRIVER_PREFIX + UserSqlConstants.UserFields.EMAIL + ", " +
             DRIVER_ALIAS + "." + UserSqlConstants.UserFields.DISCOUNT + " as " + DRIVER_PREFIX + UserSqlConstants.UserFields.DISCOUNT + ", " +
+            DRIVER_ALIAS + "." + UserSqlConstants.UserFields.ROLES + " as " + DRIVER_PREFIX + UserSqlConstants.UserFields.ROLES + ", " +
             TO_TABLE_NAME + "." + TripOrderFields.PRICE + ", " +
             TO_TABLE_NAME + "." + TripOrderFields.CREATED + ", " +
             TO_TABLE_NAME + "." + TripOrderFields.END_OF_TRIP +

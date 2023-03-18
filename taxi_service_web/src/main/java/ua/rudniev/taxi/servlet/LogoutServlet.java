@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class has fields and methods that responds to the http request from /logout url
+ */
 @WebServlet(
         name = "LogoutServlet",
         urlPatterns = "/logout"

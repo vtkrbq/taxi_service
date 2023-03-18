@@ -20,6 +20,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is implementation class of TripOrderDao interface that has fields and methods for working with jdbc
+ */
 public class TripOrderDaoImpl implements TripOrderDao {
 
     private final TripOrderFieldMapper tripOrderFieldMapper;
@@ -108,8 +111,8 @@ public class TripOrderDaoImpl implements TripOrderDao {
         );
         Category category =  Category.valueOf(rs.getString(TripOrderSqlConstants.TripOrderFields.CATEGORY));
         int capacity = rs.getInt(TripOrderSqlConstants.TripOrderFields.CAPACITY);
-        User client = userJdbcHelper.fillUser(rs, false, TripOrderSqlConstants.CLIENT_PREFIX);
-        User driver = userJdbcHelper.fillUser(rs, false, TripOrderSqlConstants.DRIVER_PREFIX);
+        User client = userJdbcHelper.fillUser(rs, TripOrderSqlConstants.CLIENT_PREFIX);
+        User driver = userJdbcHelper.fillUser(rs, TripOrderSqlConstants.DRIVER_PREFIX);
         Car car = carJdbcHelper.fillCar(rs, driver, TripOrderSqlConstants.CAR_PREFIX);
         BigDecimal price = rs.getBigDecimal(TripOrderSqlConstants.TripOrderFields.PRICE);
         Instant created = rs.getTimestamp(TripOrderSqlConstants.TripOrderFields.CREATED).toInstant();

@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class has fields and methods that responds to the http request from /ordering url
+ */
 @WebServlet(
         name = "OrderingServlet",
         urlPatterns = "/ordering"

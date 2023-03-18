@@ -1,5 +1,8 @@
 package ua.rudniev.taxi.model.trip;
 
+/**
+ * This class has fields and methods for coordinates (x, y)
+ */
 public class Point {
     private final double x;
     private final double y;

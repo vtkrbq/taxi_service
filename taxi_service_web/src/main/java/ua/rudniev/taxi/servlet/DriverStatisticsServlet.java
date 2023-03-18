@@ -24,6 +24,10 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+
+/**
+ * This class has fields and methods that responds to the http request from /driverStatistics url
+ */
 @WebServlet(
         name = "DriverStatisticsServlet",
         urlPatterns = "/driverStatistics"

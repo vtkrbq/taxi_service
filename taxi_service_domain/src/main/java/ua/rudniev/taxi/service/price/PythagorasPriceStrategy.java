@@ -6,6 +6,9 @@ import ua.rudniev.taxi.model.trip.Point;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * This class is implementation of PriceStrategy interface
+ */
 public class PythagorasPriceStrategy implements PriceStrategy {
 
     public static final double PRICE_FACTOR = 13;

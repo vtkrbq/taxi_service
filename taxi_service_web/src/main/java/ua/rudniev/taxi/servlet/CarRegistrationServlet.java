@@ -22,6 +22,9 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+/**
+ * This class has fields and methods that responds to the http request from /carRegistration url
+ */
 @WebServlet(
         name = "CarRegistrationServlet",
         urlPatterns = "/carRegistration"

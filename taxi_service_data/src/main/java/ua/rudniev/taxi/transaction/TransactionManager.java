@@ -1,5 +1,8 @@
 package ua.rudniev.taxi.transaction;
 
+/**
+ * //TODO
+ */
 public interface TransactionManager {
     default <T> T doInTransaction(Execution<T> execution) {
         return doInTransaction(execution, true);

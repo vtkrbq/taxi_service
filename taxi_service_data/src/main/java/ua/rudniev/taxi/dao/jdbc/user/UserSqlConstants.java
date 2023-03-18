@@ -1,5 +1,8 @@
 package ua.rudniev.taxi.dao.jdbc.user;
 
+/**
+ * This class has fields with names of fields in database table 'app_user' and queries
+ */
 public class UserSqlConstants {
 
     public static final String USER_TABLE_NAME = "app_user";

@@ -8,12 +8,30 @@ import ua.rudniev.taxi.model.user.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class has methods that filling object car with data from database
+ */
 public class CarJdbcHelper {
 
+    /**
+     * This method calling another method in this class with empty prefix
+     * @param rs This parameter has data of an object from database
+     * @param driver This parameter has data of an object from database
+     * @return filled object of a class Car
+     * @throws SQLException throws if something went wrong in database
+     */
     public Car fillCar(ResultSet rs, User driver) throws SQLException {
         return fillCar(rs, driver, "");
     }
 
+    /**
+     * This method filling object car with data from database
+     * @param rs This parameter has data of an object from database
+     * @param driver This parameter has data of an object from database
+     * @param prefix This parameter has string needed for database query
+     * @return filled object of a class Car
+     * @throws SQLException throws if something went wrong in database
+     */
     public Car fillCar(ResultSet rs, User driver, String prefix) throws SQLException {
         Car car = new Car();
         car.setId(rs.getInt(prefix + CarSqlConstants.CarFields.ID));

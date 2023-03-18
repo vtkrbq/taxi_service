@@ -31,6 +31,9 @@ import java.util.List;
 import static ua.rudniev.taxi.dao.common.field.FieldType.*;
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+/**
+ * This class has fields and methods that responds to the http request from /orderStatistics url
+ */
 @WebServlet(
         name = "OrderStatisticsServlet",
         urlPatterns = "/orderStatistics"

@@ -8,6 +8,9 @@ import java.io.IOException;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+/**
+ * This class is an implementation of interface Filter
+ */
 @WebFilter(
         urlPatterns = "/index.jsp",
         filterName = "IndexFilter"

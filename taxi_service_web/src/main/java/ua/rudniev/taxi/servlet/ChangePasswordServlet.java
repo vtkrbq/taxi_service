@@ -21,6 +21,9 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+/**
+ * This class has fields and methods that responds to the http request from /changePassword url
+ */
 @WebServlet(
         name = "ChangePasswordServlet",
         urlPatterns = "/changePassword"

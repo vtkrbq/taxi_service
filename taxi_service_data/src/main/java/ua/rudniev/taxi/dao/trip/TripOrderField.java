@@ -3,6 +3,9 @@ package ua.rudniev.taxi.dao.trip;
 import ua.rudniev.taxi.dao.common.field.Field;
 import ua.rudniev.taxi.dao.common.field.FieldType;
 
+/**
+ * Enum class that has fields and methods for simplification of work with repository
+ */
 public enum TripOrderField implements Field {
     DEPARTURE_ADDRESS(FieldType.STRING),
     DESTINATION_ADDRESS(FieldType.STRING),

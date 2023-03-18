@@ -10,6 +10,9 @@ import java.time.Instant;
 import static ua.rudniev.taxi.dao.common.field.FieldType.*;
 import static ua.rudniev.taxi.dao.common.field.FieldType.INSTANT;
 
+/**
+ * This class has method that implementing wrapping of simple type objects
+ */
 public class ValueProvider {
 
     public static Value getValueByField(String value, Field field) {

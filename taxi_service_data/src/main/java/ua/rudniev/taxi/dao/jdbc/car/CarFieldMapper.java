@@ -7,6 +7,9 @@ import ua.rudniev.taxi.dao.trip.TripOrderField;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This is implementation class of FieldMapper interface that has fields and methods for working with jdbc
+ */
 public class CarFieldMapper implements FieldMapper<CarField> {
 
     private final Map<CarField, String> carFieldMap;

@@ -4,6 +4,9 @@ import ua.rudniev.taxi.model.car.Car;
 
 import java.math.BigDecimal;
 
+/**
+ * This class has fields and methods that building information about trip order including car, price and estimated time arrival
+ */
 public class NewTripInfo {
     private final Car car;
 

@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import ua.rudniev.taxi.model.trip.AddressPoint;
 import ua.rudniev.taxi.model.user.User;
 
+/**
+ * This class has fields and methods that describes Car object
+ */
 @Data
 @NoArgsConstructor
 public class Car {
@@ -24,10 +27,6 @@ public class Car {
         this.status = status;
         this.carCapacity = carCapacity;
         this.licensePlate = licensePlate;
-        this.currentAddress = new AddressPoint(
-                49.991981,
-                36.328126,
-                "Харків, вул. Гвардійців-Широнінців, 5");
     }
     public Car(int id, User driver, String carName, Category carCategory, int carCapacity, String licensePlate) {
         this.id = id;
@@ -36,10 +35,6 @@ public class Car {
         this.carCategory = carCategory;
         this.carCapacity = carCapacity;
         this.licensePlate = licensePlate;
-        this.currentAddress = new AddressPoint(
-                49.991981,
-                36.328126,
-                "Харків, вул. Гвардійців-Широнінців, 5");
     }
 
     public String toString() {

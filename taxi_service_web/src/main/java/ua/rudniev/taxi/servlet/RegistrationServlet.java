@@ -21,6 +21,9 @@ import java.util.List;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+/**
+ * This class has fields and methods that responds to the http request from /registration url
+ */
 @WebServlet(
         name = "RegistrationServlet",
         urlPatterns = "/registration"
@@ -31,6 +34,7 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        throw new RuntimeException("aasdddqweqweq");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/registration.jsp");
         dispatcher.forward(req, resp);
     }

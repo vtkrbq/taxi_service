@@ -3,6 +3,9 @@ package ua.rudniev.taxi.dao.jdbc.car;
 import ua.rudniev.taxi.dao.jdbc.trip.TripOrderSqlConstants;
 import ua.rudniev.taxi.dao.jdbc.user.UserSqlConstants;
 
+/**
+ * This class has fields with names of fields in database table 'car' and queries
+ */
 public class CarSqlConstants {
 
     public static final String CAR_TABLE_NAME = "car";
@@ -76,7 +79,8 @@ public class CarSqlConstants {
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.LASTNAME + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.PHONE + ", " +
             UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.EMAIL + ", " +
-            UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.DISCOUNT + " " +
+            UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.DISCOUNT + ", " +
+            UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.ROLES + " " +
             "from " + CAR_TABLE_NAME +
             " inner join " + UserSqlConstants.USER_TABLE_NAME +
             " on " + CAR_TABLE_NAME + "." + CarFields.DRIVER_LOGIN + " = " + UserSqlConstants.USER_TABLE_NAME + "." + UserSqlConstants.UserFields.LOGIN +

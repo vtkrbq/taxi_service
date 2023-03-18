@@ -5,6 +5,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class is an implementation of interface Filter
+ */
 @WebFilter(
         urlPatterns = "/jsp/*",
         filterName = "JspFilter"

@@ -22,6 +22,9 @@ import java.util.Optional;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+/**
+ * This class has fields and methods that responds to the http request from /editUser url
+ */
 @WebServlet(
         name = "EditUserServlet",
         urlPatterns = "/editUser"

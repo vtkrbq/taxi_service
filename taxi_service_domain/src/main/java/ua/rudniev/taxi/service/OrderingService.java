@@ -23,6 +23,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class provides the flow between servlets and Dao implementation classes
+ */
 public class OrderingService {
     private final CarDao carDao;
 
@@ -46,9 +49,17 @@ public class OrderingService {
         this.tripOrderDao = tripOrderDao;
     }
 
+    /**
+     * This method find list of available cars, creating trip order via dao and creating info object for servlet
+     * @param tripOrder This parameter provides data of trip order
+     * @param distance This parameter provides distance of trip
+     * @param departureAddress This parameter provides client location for eta
+     * @param filters This parameter provides filters for trip order
+     * @return Optional of NewTripInfo that contains full information of trip order
+     */
     public Optional<NewTripInfo> findAndOrder(TripOrder tripOrder, double distance, AddressPoint departureAddress, List<Filter<CarField>> filters) {
         return transactionManager.doInTransaction(() -> {
-            List<Car> cars = carDao.findAvailableCars(filters);//TODO rollback doesnt work?
+            List<Car> cars = carDao.findAvailableCars(filters);
             Optional<NewTripInfo> newTripInfoOptional = cars
                     .stream()
                     .map(car -> new NewTripInfo(
@@ -95,6 +106,12 @@ public class OrderingService {
         }, false);
     }
 
+    /**
+     * This method calculate estimated time arrival of a car
+     * @param client This parameter provides user of a trip order
+     * @param driver This parameter provides driver of a trip order
+     * @return int estimated time arrival in minutes
+     */
     private int calculateEta(AddressPoint client, AddressPoint driver) {//TODO tyt??
         double t = ((Math.sqrt(
                 Math.pow(driver.getX() - client.getX(), 2)

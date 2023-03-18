@@ -1,6 +1,5 @@
 package ua.rudniev.taxi.transaction;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.connection.ConnectionProvider;
@@ -9,7 +8,9 @@ import ua.rudniev.taxi.exception.DbException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@Slf4j
+/**
+ * //TODO
+ */
 public class HikariTransactionManager implements TransactionManager {
 
     private static final ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();

@@ -47,7 +47,7 @@ public class CarDaoImpl implements CarDao {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                User driver = userJdbcHelper.fillUser(rs, false);
+                User driver = userJdbcHelper.fillUser(rs);
                 car = carJdbcHelper.fillCar(rs, driver);
             }
             return Optional.ofNullable(car);
@@ -62,7 +62,7 @@ public class CarDaoImpl implements CarDao {
             ResultSet rs = preparedStatement.executeQuery();
             List<Car> cars = new ArrayList<>();
             while (rs.next()) {
-                User driver = userJdbcHelper.fillUser(rs, false);
+                User driver = userJdbcHelper.fillUser(rs);
                 Car car = carJdbcHelper.fillCar(rs, driver);
                 cars.add(car);
             }

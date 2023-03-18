@@ -20,6 +20,9 @@ import java.util.Optional;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
+/**
+ * This class has fields and methods that responds to the http request from /login url
+ */
 @WebServlet(
         name = "LoginServlet",
         urlPatterns = "/login"

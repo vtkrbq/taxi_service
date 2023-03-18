@@ -10,6 +10,9 @@ import ua.rudniev.taxi.model.user.User;
 import java.sql.ResultSet;
 import java.util.*;
 
+/**
+ * This is implementation class of UserDao interface that has fields and methods for working with jdbc
+ */
 public class UserDaoImpl implements UserDao {
 
     private final UserJdbcHelper userJdbcHelper;

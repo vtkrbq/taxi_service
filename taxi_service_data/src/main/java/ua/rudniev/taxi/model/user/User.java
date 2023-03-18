@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class has fields and methods that describes User object
+ */
 @Data
 @NoArgsConstructor
 public class User {
@@ -27,6 +30,11 @@ public class User {
         this.discount = discount;
     }
 
+
+    /**
+     * This method builds a string with user's roles
+     * @return String with roles list
+     */
     public String rolesToString() {
         StringBuilder stringBuilder = new StringBuilder();
         roles.forEach(r -> stringBuilder.append(r.name()).append(","));
@@ -34,6 +42,10 @@ public class User {
         return stringBuilder.toString();
     }
 
+    /**
+     * This method add role to user's roles list
+     * @param role This parameter indicates role that will be added to the list
+     */
     public void addRole(Role role) {
         roles.add(role);
     }

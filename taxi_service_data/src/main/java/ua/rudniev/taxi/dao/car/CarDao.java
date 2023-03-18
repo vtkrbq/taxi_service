@@ -14,7 +14,7 @@ public interface CarDao {
      * This method searching all available cars in repository
      *
      * @param filters This parameter filters cars in repository
-     * @return List of objects Car that are fit to filters parameter
+     * @return List of objects Car that are fit to filters parameter from database
      */
     List<Car> findAvailableCars(List<Filter<CarField>> filters);
 

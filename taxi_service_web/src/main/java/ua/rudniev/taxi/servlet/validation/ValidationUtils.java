@@ -7,6 +7,9 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class has fields and methods that provides validation of data entered by user
+ */
 public class ValidationUtils {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^(.+)@(.+)$");
 
@@ -43,17 +46,14 @@ public class ValidationUtils {
                 && !password.equals(confirmedPassword)) {
             errors.add("Passwords not match");
         }
-        //TODO: maybe some additional validation
     }
 
     public static void validateName(List<String> errors, String value) {
         ValidationUtils.validateMandatory(errors, value, "Name");
-        //TODO: maybe some additional validation
     }
 
     public static void validateLastName(List<String> errors, String value) {
         ValidationUtils.validateMandatory(errors, value, "Lastname");
-        //TODO: maybe some additional validation
     }
 
     public static void validateMandatory(List<String> errors, String value, String fieldName) {
