@@ -15,10 +15,10 @@ public class ConnectionProvider {
 
     static {
         config.setDriverClassName("org.postgresql.Driver"); //TODO: Пирог: вынести в проперти. Это вроде нужно было в условиях
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres?currentSchema=public");
+        config.setJdbcUrl(System.getenv("TAXI_SERVICE_DB_URL"));
         config.setAutoCommit(false);
-        config.setUsername("postgres");
-        config.setPassword("PolotencE123");
+        config.setUsername(System.getenv("TAXI_SERVICE_DB_LOGIN"));
+        config.setPassword(System.getenv("TAXI_SERVICE_DB_PASSWORD"));
         ds = new HikariDataSource(config);
     }
     public static Connection getConnection() throws SQLException {
