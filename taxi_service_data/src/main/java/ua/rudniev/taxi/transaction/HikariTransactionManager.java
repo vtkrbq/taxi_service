@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * //TODO
+ * This class has fields and methods that are enable execute code in one transaction in jdbc via Hikari Connection Pool
  */
 public class HikariTransactionManager implements TransactionManager {
 

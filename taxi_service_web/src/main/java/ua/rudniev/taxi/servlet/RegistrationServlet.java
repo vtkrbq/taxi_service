@@ -34,7 +34,6 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        throw new RuntimeException("aasdddqweqweq");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/registration.jsp");
         dispatcher.forward(req, resp);
     }

@@ -31,4 +31,6 @@ public class PasswordEncryptionService {
             throw new RuntimeException("An error occurred while encrypting password.", e);
         }
     }
+
+
 }

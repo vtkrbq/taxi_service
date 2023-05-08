@@ -1,7 +1,7 @@
 <%@ page isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" isErrorPage="true"%>
 <c:if test="${empty lang}">
     <c:set var="lang" scope="session" value="en"/>
 </c:if>
@@ -17,7 +17,9 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body>
-<fmt:requestEncoding value="UTF-8" />
-<h2 style="text-align: center; padding-top: 5%;"><a href="${pageContext.request.contextPath}"><fmt:message key="the.one.label" /></a></h2>
+<h2 style="text-align: center; padding-top: 5%;">
+    <font color="red"><fmt:message key="error.label" />
+    Please go to <a href="${pageContext.request.contextPath}">home page</a>
+</h2>
 </body>
 </html>

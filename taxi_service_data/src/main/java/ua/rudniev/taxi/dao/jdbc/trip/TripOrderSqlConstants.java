@@ -11,7 +11,7 @@ import static ua.rudniev.taxi.dao.jdbc.user.UserSqlConstants.USER_TABLE_NAME;
  */
 public class TripOrderSqlConstants {
 
-    private static final String TO_TABLE_NAME = "trip_order";
+    public static final String TO_TABLE_NAME = "trip_order";
 
     public static final String CLIENT_ALIAS = "client";
 

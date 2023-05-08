@@ -41,8 +41,8 @@ public class CarJdbcHelper {
         car.setLicensePlate(rs.getString(prefix + CarSqlConstants.CarFields.LICENSE_PLATE));
         //*
         car.setCurrentAddress(new AddressPoint(
-                Double.parseDouble(rs.getString(prefix + CarSqlConstants.CarFields.CURRENT_POINT_X)),
-                Double.parseDouble(rs.getString(prefix + CarSqlConstants.CarFields.CURRENT_POINT_Y)),
+                rs.getDouble(prefix + CarSqlConstants.CarFields.CURRENT_POINT_X),
+                rs.getDouble(prefix + CarSqlConstants.CarFields.CURRENT_POINT_Y),
                 rs.getString(prefix + CarSqlConstants.CarFields.CURRENT_ADDRESS)
         ));
         car.setDriver(driver);
