@@ -53,14 +53,12 @@ public class OrderingService {
      * This method find list of available cars, creating trip order via dao and creating info object for servlet
      * @param tripOrder This parameter provides data of trip order
      * @param distance This parameter provides distance of trip
-     * @param departureAddress This parameter provides client location for eta
      * @param filters This parameter provides filters for trip order
      * @return Optional of NewTripInfo that contains full information of trip order
      */
     public Optional<NewTripInfo> findAndOrder(
             TripOrder tripOrder,
             double distance, // TODO: Дистанцию лучше добавь в трип ордер
-            AddressPoint departureAddress, // TODO: Пирог: у тебя это поле есть в трип ордере.
             List<Filter<CarField>> filters) {
         return transactionManager.doInTransaction(() -> {
             List<Car> cars = carDao.findAvailableCars(filters);
@@ -72,20 +70,23 @@ public class OrderingService {
                                 distance,
                                 car
                             ),
-                            calculateEta(departureAddress, car.getCurrentAddress())))
+                            calculateEta(tripOrder.getDeparture(), car.getCurrentAddress())))
                     .min(Comparator.comparing(NewTripInfo::getPrice));
             newTripInfoOptional.ifPresent(newTripInfo -> {
                         Car car = newTripInfo.getCar();
                         car.setStatus(Status.ON_ROUTE);
                         carDao.update(car);
                         tripOrder.setCar(car);
-                        // TODO: Пирог: старайся чтоб строка влезала в экран.
-                        BigDecimal discount = newTripInfo.getPrice().multiply(BigDecimal.valueOf(tripOrder.getUser().getDiscount())).divide(BigDecimal.valueOf(100), RoundingMode.DOWN);
-                        // TODO: Пирог: Я думаю что информацию о скидке и о цене со скидкой нужно в NewTripInfo запихнуть тоже (Пользователь же захочит узнать сколько он сэкономил).
-                        // TODO: Пирог: Также можно перенести расчет скидки в priceStrategy, calculatePrice может возвращать Pair<BigDecimal, BigDecimal>(Price и priceWithDiscount)
+                        BigDecimal discount = newTripInfo
+                                .getPrice()
+                                .multiply(BigDecimal.valueOf(tripOrder.getUser().getDiscount()))
+                                .divide(BigDecimal.valueOf(100), RoundingMode.DOWN);
+                        // TODO: Пирог: 1) Мне кажется цена со скидкой должна быть в newTripInfo
+                        // TODO: Пирог: 2) Вынеси расчет скидки в другой класс
                         tripOrder.setPrice(newTripInfo.getPrice().subtract(discount));
                         tripOrderDao.insert(tripOrder);
-                        LOGGER.info("Order " + tripOrder + " has been created" + newTripInfoOptional.get().getCar().getDriver().getLogin());
+                        LOGGER.info("Order " + tripOrder + " has been created" + newTripInfoOptional.get().getCar()
+                                .getDriver().getLogin());
                     }
             );
             return newTripInfoOptional;

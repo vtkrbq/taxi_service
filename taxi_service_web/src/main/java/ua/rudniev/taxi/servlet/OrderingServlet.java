@@ -72,7 +72,6 @@ public class OrderingServlet extends HttpServlet {
         Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(
                 tripOrder,
                 distance,
-                departure,
                 prepareFilters(tripOrder)
         );
         req.getSession().setAttribute("tripOrder", tripOrder);
