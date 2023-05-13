@@ -1,4 +1,4 @@
-package ua.rudniev.taxi.dao.testUtils;
+package ua.rudniev.taxi.dao.testutils;
 
 import ua.rudniev.taxi.dao.jdbc.car.CarSqlConstants;
 import ua.rudniev.taxi.dao.jdbc.trip.TripOrderSqlConstants;
@@ -13,8 +13,6 @@ import ua.rudniev.taxi.model.user.User;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 import static ua.rudniev.taxi.dao.jdbc.car.CarSqlConstants.CAR_TABLE_NAME;
 import static ua.rudniev.taxi.dao.jdbc.trip.TripOrderSqlConstants.*;

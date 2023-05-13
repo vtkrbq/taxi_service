@@ -90,7 +90,7 @@
                 <label style="margin: 5px; text-align: right;"><fmt:message key="sort.label" />:</label>
                 <select name="sortType" class="custom-select" style="margin: 5px; width: 200px; padding-right: 0px;" value="${sortType}">
                   <option value="ASC"><fmt:message key="asc.option" /></option>
-                  <option value="DESC" selected><fmt:message key="desc.option" /></option>
+                  <option value="DESC" selected><fmt:message key="desc.option" /></option>  <!--TODO: Пирог: всегда DESC??? -->
                 </select>
                 <label style="margin: 5px; text-align: right;"><fmt:message key="sort.by.label" />:</label>
                 <select name="sortBy" class="custom-select" style="margin: 5px; width: 200px;">
@@ -122,7 +122,7 @@
             </div>
         </div>
     <form>
-    <table class="table table-striped table-class" style="width: 100% text-align: center;">
+    <table class="table table-striped table-class" style="width: 100%; text-align: center;">
         <thead>
         <tr>
             <th><fmt:message key="depart.address.field" /></th>
@@ -144,10 +144,10 @@
                 <td>${tripOrder.category}</td>
                 <td>${tripOrder.capacity}</td>
                 <td>
-                    <a style="color: black;" href="${pageContext.request.contextPath}/profileView?login=${tripOrder.user.login}">${tripOrder.user.lastname} ${tripOrder.user.firstname}</p>
+                    <a style="color: black;" href="${pageContext.request.contextPath}/profileView?login=${tripOrder.user.login}">${tripOrder.user.lastname} ${tripOrder.user.firstname}</a>
                 </td>
                 <td>
-                    <a style="color: black;" href="${pageContext.request.contextPath}/car?id=${tripOrder.car.id}">${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</p>
+                    <a style="color: black;" href="${pageContext.request.contextPath}/car?id=${tripOrder.car.id}">${tripOrder.car.carName}, ${tripOrder.car.licensePlate}</a>
                 </td>
                 <td>${tripOrder.price} <fmt:message key="money.label" />.</td>
                 <td>

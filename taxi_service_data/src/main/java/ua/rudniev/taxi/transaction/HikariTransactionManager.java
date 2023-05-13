@@ -21,22 +21,21 @@ public class HikariTransactionManager implements TransactionManager {
     public <T> T doInTransaction(Execution<T> execution, boolean readOnly) {
         Connection conn = getConnection();
         connectionHolder.set(conn);
-        try(conn) {
+        try (conn) {
             conn.setReadOnly(readOnly);
-            T result = execution.execute();
-            conn.commit();
-            return result;
-        } catch (Exception e) {
+            T result;
             try {
+                result = execution.execute();
+            } catch (RuntimeException e) {
                 LOGGER.error("An error occurred in transaction", e);
                 conn.rollback();
-                if (e instanceof RuntimeException) throw (RuntimeException) e;
-                LOGGER.error("An error occurred with DB", e);
-                throw new DbException("An error occurred with DB", e);
-            } catch (SQLException ex) {
-                LOGGER.error("An error occurred while trying to rollback", ex);
-                throw new DbException("An error occurred while trying to rollback", ex);
+                throw e;
             }
+            conn.commit();
+            return result;
+        } catch (SQLException e) {
+            LOGGER.error("An DB error occurred", e);
+            throw new DbException("An DB error occurred", e);
         } finally {
             connectionHolder.remove();
         }
@@ -51,7 +50,7 @@ public class HikariTransactionManager implements TransactionManager {
         }
     }
 
-    public static Connection getCurrentConnection()  {
+    public static Connection getCurrentConnection() {
         return connectionHolder.get();
     }
 

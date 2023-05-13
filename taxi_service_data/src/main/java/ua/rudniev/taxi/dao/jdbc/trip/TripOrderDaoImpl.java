@@ -6,8 +6,8 @@ import ua.rudniev.taxi.dao.jdbc.car.CarJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.user.UserJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.utils.PrepareStatementProvider;
 import ua.rudniev.taxi.dao.jdbc.utils.QueryBuilder;
-import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.dao.trip.TripOrderDao;
+import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Category;
 import ua.rudniev.taxi.model.trip.AddressPoint;
@@ -15,7 +15,9 @@ import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.model.user.User;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +128,7 @@ public class TripOrderDaoImpl implements TripOrderDao {
     @Override
     public void completeTripOrder(int id) {
         prepareStatementProvider.withPrepareStatement(TripOrderSqlConstants.COMPLETE_TRIP_VIA_TO, (stmt) -> {
-            stmt.setTimestamp(1, Timestamp.from(Instant.now()));
+            stmt.setTimestamp(1, Timestamp.from(Instant.now())); //TODO: Пирог: Эту логику нужно в сервис вынести
             stmt.setInt(2, id);
             stmt.executeUpdate();
             return null;

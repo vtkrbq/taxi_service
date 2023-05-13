@@ -22,9 +22,4 @@ public class ProfileServlet extends HttpServlet {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/profile.jsp");
         dispatcher.forward(req, resp);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect(req.getContextPath() + "/editUser");
-    }
 }

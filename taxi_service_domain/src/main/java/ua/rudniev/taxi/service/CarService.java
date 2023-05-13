@@ -6,9 +6,7 @@ import ua.rudniev.taxi.dao.car.CarDao;
 import ua.rudniev.taxi.dao.car.CarField;
 import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.model.car.Car;
-import ua.rudniev.taxi.model.car.Category;
 import ua.rudniev.taxi.model.trip.AddressPoint;
-import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.transaction.TransactionManager;
 
 import java.util.List;
@@ -33,7 +31,7 @@ public class CarService {
         this.transactionManager = transactionManager;
     }
 
-    public List<Car> findAvailableCars(List<Filter<CarField>> filters) {
+    public List<Car> findAvailableCars(List<Filter<CarField>> filters) { //TODO: Пирог: не используется, удали.
         return transactionManager.doInTransaction(() -> carDao.findAvailableCars(filters));
     }
 
@@ -44,7 +42,7 @@ public class CarService {
     public void createCar(Car car) {
         transactionManager.doInTransaction(() -> {
             car.setCurrentAddress(new AddressPoint(
-                    49.991981,
+                    49.991981, //TODO: Пирог: Магические числа лучше вынеси в константы (можно в этом же классе)
                     36.328126,
                     "Харків, вул. Гвардійців-Широнінців, 5"));
             carDao.createCar(car);

@@ -25,7 +25,7 @@ public class CarServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        Car car = carService.findCarById(id).orElse(new Car());//TODO Пирог: Должна быть страничка not found я думаю
+        Car car = carService.findCarById(id).orElseThrow();//TODO Пирог: Должна быть страничка not found
         req.setAttribute("car", car);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/car.jsp");
         dispatcher.forward(req, resp);

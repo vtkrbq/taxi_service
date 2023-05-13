@@ -1,7 +1,7 @@
 package ua.rudniev.taxi.transaction;
 
 /**
- * This class has fields and methods that are enable execute code in one transaction
+ * This class enables code execution in one transaction
  */
 public interface TransactionManager {
     default <T> T doInTransaction(Execution<T> execution) {

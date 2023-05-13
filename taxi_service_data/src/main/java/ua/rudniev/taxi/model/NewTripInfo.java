@@ -12,7 +12,8 @@ public class NewTripInfo {
 
     private final BigDecimal price;
 
-    private final int eta;
+    private final int eta; //TODO: Пирог: интуитивно не понятно что это за параметр https://dictionary.cambridge.org/dictionary/english/eta
+    //В нембридже пишут что это "№"the seventh letter of the Greek alphabet"
 
     public NewTripInfo(Car car, BigDecimal price, int eta) {
         this.car = car;
@@ -28,7 +29,7 @@ public class NewTripInfo {
         return price;
     }
 
-    public int getEta() {
+    public int getEta() { //TODO: Пирог: проверь где используется
         return eta;
     }
 }

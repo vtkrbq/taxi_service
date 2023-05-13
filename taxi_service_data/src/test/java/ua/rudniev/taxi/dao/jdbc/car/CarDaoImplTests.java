@@ -13,7 +13,7 @@ import ua.rudniev.taxi.dao.common.filter.Value;
 import ua.rudniev.taxi.dao.jdbc.user.UserJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.utils.PrepareStatementProvider;
 import ua.rudniev.taxi.dao.jdbc.utils.QueryBuilder;
-import ua.rudniev.taxi.dao.testUtils.CarDataProvider;
+import ua.rudniev.taxi.dao.testutils.CarDataProvider;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Status;
 import ua.rudniev.taxi.model.user.User;
@@ -21,7 +21,9 @@ import ua.rudniev.taxi.model.user.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -55,7 +57,6 @@ public class CarDaoImplTests {
     @Mock
     private PreparedStatement preparedStatement;
 
-    @SuppressWarnings("unchecked")
     @BeforeEach
     public void beforeEach() {
         Answer<?> answer = invocationOnMock -> {

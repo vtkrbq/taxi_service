@@ -7,8 +7,6 @@ import ua.rudniev.taxi.dao.jdbc.user.UserJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.utils.PrepareStatementProvider;
 import ua.rudniev.taxi.dao.jdbc.utils.QueryBuilder;
 import ua.rudniev.taxi.model.car.Car;
-import ua.rudniev.taxi.model.car.Category;
-import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.model.user.User;
 
 import java.sql.ResultSet;

@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.exception.UserAlreadyExistsException;
-import ua.rudniev.taxi.model.user.Role;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.service.UserService;
 import ua.rudniev.taxi.servlet.validation.ValidationUtils;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
@@ -39,7 +37,7 @@ public class EditUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute(CURRENT_USER);
         oldLogin = user.getLogin();//TODO remake this bs
-        req.getSession().setAttribute(FormFields.FIRSTNAME, user.getFirstname());
+        req.getSession().setAttribute(FormFields.FIRSTNAME, user.getFirstname()); //TODO: Пирог: user и так же в сесии?
         req.getSession().setAttribute(FormFields.LASTNAME, user.getLastname());
         req.getSession().setAttribute(FormFields.PHONE, user.getPhone());
         req.getSession().setAttribute(FormFields.EMAIL, user.getEmail());

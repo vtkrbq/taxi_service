@@ -1,4 +1,4 @@
-package ua.rudniev.taxi.dao.testUtils;
+package ua.rudniev.taxi.dao.testutils;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -14,11 +14,11 @@ public class ConnectionProvider {
     private static final HikariDataSource ds;
 
     static {
-        config.setDriverClassName("org.postgresql.Driver"); //TODO: Пирог: вынести в проперти. Это вроде нужно было в условиях
-        config.setJdbcUrl(System.getenv("TAXI_SERVICE_DB_URL"));
+        config.setDriverClassName("org.postgresql.Driver");
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/taxi_service");
         config.setAutoCommit(false);
-        config.setUsername(System.getenv("TAXI_SERVICE_DB_LOGIN"));
-        config.setPassword(System.getenv("TAXI_SERVICE_DB_PASSWORD"));
+        config.setUsername("vtkrbq");
+        config.setPassword("PolotencE123");
         ds = new HikariDataSource(config);
     }
     public static Connection getConnection() throws SQLException {

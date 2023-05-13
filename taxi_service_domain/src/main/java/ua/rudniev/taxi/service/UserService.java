@@ -2,9 +2,9 @@ package ua.rudniev.taxi.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.rudniev.taxi.dao.user.UserDao;
 import ua.rudniev.taxi.model.user.Role;
 import ua.rudniev.taxi.model.user.User;
-import ua.rudniev.taxi.dao.user.UserDao;
 import ua.rudniev.taxi.transaction.TransactionManager;
 
 import java.util.Optional;
@@ -37,9 +37,12 @@ public class UserService {
             userDao.findUserByLoginAndPassword(login, password), true);
     }
 
-    public void createUser(User user, String password) {
+    public void createUser(User user, String password, boolean isDriver) {
         transactionManager.doInTransaction(() -> {
             user.addRole(Role.USER);
+            if(isDriver) {
+                user.addRole(Role.DRIVER);
+            }
             userDao.createUser(user, password);
             LOGGER.info("New user " + user.getLogin() + " has been registered");
             return null;

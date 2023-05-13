@@ -68,10 +68,10 @@ public class CarRegistrationServlet extends HttpServlet {
             }
         }
         if (errors.isEmpty()) {
-            req.getSession().setAttribute(CURRENT_USER, user);
+            req.getSession().setAttribute(CURRENT_USER, user); //TODO: Пирог: нам не нужно это каждый раз делать. В сессию мы пользователя кладем единожды - после логина
             resp.sendRedirect(req.getContextPath() + "/ordering");
         } else {
-            req.getSession().setAttribute("user", user);
+            req.getSession().setAttribute("user", user); //????
             RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/carRegistration.jsp");
             req.setAttribute("errors", errors);
             dispatcher.forward(req, resp);

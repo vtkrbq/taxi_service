@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * This class has fields and methods that responds to the http request from /ordering url
+ * This servlets serves order requests
  */
 @WebServlet(
         name = "OrderingServlet",
@@ -68,6 +68,31 @@ public class OrderingServlet extends HttpServlet {
                 user,
                 Instant.now()
         );
+
+        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(
+                tripOrder,
+                distance,
+                departure,
+                prepareFilters(tripOrder)
+        );
+        req.getSession().setAttribute("tripOrder", tripOrder);
+        if (newTripInfoOptional.isPresent()) {
+            NewTripInfo newTripInfo = newTripInfoOptional.get();
+            req.getSession().setAttribute("newTripInfo", newTripInfo);
+            LOGGER.info("Order " + tripOrder + " has been created and taken by driver: " + newTripInfo
+                    .getCar().getDriver().getLogin());
+            resp.sendRedirect("newTripInfo.do");
+            //PRG pattern
+        } else {
+            List<String> errors = new ArrayList<>();
+            errors.add("There is no available cars: \nYou can try different category or several cars");//TODO check \n
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/ordering.jsp");
+            req.setAttribute("errors", errors);
+            dispatcher.forward(req, resp);
+        }
+    }
+
+    private List<Filter<CarField>> prepareFilters(TripOrder tripOrder) {
         List<Filter<CarField>> filters = new ArrayList<>();
         Filter<CarField> filterCategory = new Filter<>(
                 CarField.CATEGORY,
@@ -86,21 +111,7 @@ public class OrderingServlet extends HttpServlet {
                 new Value(Status.AVAILABLE.toString())
         );
         filters.add(filterStatus);
-        RequestDispatcher dispatcher;
-        Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(tripOrder, distance, departure, filters);
-        req.getSession().setAttribute("tripOrder", tripOrder);
-        if (newTripInfoOptional.isPresent()) {
-            req.getSession().setAttribute("newTripInfo", newTripInfoOptional.get());
-            LOGGER.info("Order " + tripOrder + " has been created and taken by driver: " + newTripInfoOptional.get().getCar().getDriver().getLogin());
-            resp.sendRedirect("newTripInfo.do");
-            //PRG pattern
-        } else {
-            List<String> errors = new ArrayList<>();
-            errors.add("There is no available cars: \nYou can try different category or several cars");//TODO check \n
-            dispatcher = req.getRequestDispatcher("/jsp/ordering.jsp");
-            req.setAttribute("errors", errors);
-            dispatcher.forward(req, resp);
-        }
+        return filters;
     }
 
     private static class FormFields {

@@ -4,25 +4,28 @@ import ua.rudniev.taxi.dao.car.CarDao;
 import ua.rudniev.taxi.dao.jdbc.car.CarDaoImpl;
 import ua.rudniev.taxi.dao.jdbc.car.CarFieldMapper;
 import ua.rudniev.taxi.dao.jdbc.car.CarJdbcHelper;
+import ua.rudniev.taxi.dao.jdbc.trip.TripOrderDaoImpl;
 import ua.rudniev.taxi.dao.jdbc.trip.TripOrderFieldMapper;
+import ua.rudniev.taxi.dao.jdbc.user.UserDaoImpl;
 import ua.rudniev.taxi.dao.jdbc.user.UserJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.utils.PasswordEncryptionService;
 import ua.rudniev.taxi.dao.jdbc.utils.PrepareStatementProvider;
 import ua.rudniev.taxi.dao.jdbc.utils.QueryBuilder;
 import ua.rudniev.taxi.dao.trip.TripOrderDao;
-import ua.rudniev.taxi.dao.jdbc.trip.TripOrderDaoImpl;
 import ua.rudniev.taxi.dao.user.UserDao;
-import ua.rudniev.taxi.dao.jdbc.user.UserDaoImpl;
 import ua.rudniev.taxi.service.CarService;
 import ua.rudniev.taxi.service.OrderingService;
 import ua.rudniev.taxi.service.UserService;
 import ua.rudniev.taxi.service.price.PriceStrategy;
 import ua.rudniev.taxi.service.price.PythagorasPriceStrategy;
+import ua.rudniev.taxi.servlet.utils.TripOrderServletUtils;
 import ua.rudniev.taxi.transaction.HikariTransactionManager;
 import ua.rudniev.taxi.transaction.TransactionManager;
 
 /**
- * This class has fields and methods that creates instances of another classes
+ * This is implementation of the Dependency-Injection pattern. This container holds instances of application components,
+ * and provide methods to access them.
+ * This class is a singleton.
  */
 public class ComponentsContainer {
     private static ComponentsContainer instance;
@@ -56,6 +59,8 @@ public class ComponentsContainer {
     private CarFieldMapper carFieldMapper;
 
     private QueryBuilder queryBuilder;
+
+    private TripOrderServletUtils tripOrderServletUtils;
 
     private ComponentsContainer() {
     }
@@ -195,5 +200,12 @@ public class ComponentsContainer {
             queryBuilder = new QueryBuilder();
         }
         return queryBuilder;
+    }
+
+    public synchronized TripOrderServletUtils getTripOrderServletUtils() {
+        if (tripOrderServletUtils == null) {
+            tripOrderServletUtils = new TripOrderServletUtils(getOrderingService());
+        }
+        return tripOrderServletUtils;
     }
 }

@@ -7,42 +7,30 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import ua.rudniev.taxi.dao.car.CarField;
 import ua.rudniev.taxi.dao.common.filter.Filter;
-import ua.rudniev.taxi.dao.common.filter.Value;
 import ua.rudniev.taxi.dao.common.order.OrderBy;
-import ua.rudniev.taxi.dao.jdbc.car.CarDaoImpl;
-import ua.rudniev.taxi.dao.jdbc.car.CarFieldMapper;
 import ua.rudniev.taxi.dao.jdbc.car.CarJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.user.UserJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.utils.PrepareStatementProvider;
 import ua.rudniev.taxi.dao.jdbc.utils.QueryBuilder;
-import ua.rudniev.taxi.dao.testUtils.CarDataProvider;
-import ua.rudniev.taxi.dao.testUtils.TripOrderDataProvider;
+import ua.rudniev.taxi.dao.testutils.CarDataProvider;
+import ua.rudniev.taxi.dao.testutils.TripOrderDataProvider;
 import ua.rudniev.taxi.dao.trip.TripOrderField;
 import ua.rudniev.taxi.model.car.Car;
-import ua.rudniev.taxi.model.car.Category;
-import ua.rudniev.taxi.model.car.Status;
-import ua.rudniev.taxi.model.trip.AddressPoint;
 import ua.rudniev.taxi.model.trip.TripOrder;
 import ua.rudniev.taxi.model.user.User;
 
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class TripOrderDaoImplTests {
@@ -73,7 +61,6 @@ public class TripOrderDaoImplTests {
     @Mock
     private PreparedStatement preparedStatement;
 
-    @SuppressWarnings("unchecked")
     @BeforeEach
     public void beforeEach() {
         Answer<?> answer = invocationOnMock -> {

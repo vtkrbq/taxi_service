@@ -45,5 +45,5 @@ public interface CarDao {
      *
      * @param id This parameter indicates which car will complete trip
      */
-    void completeTrip (int id);
+    void completeTrip(int id);
 }

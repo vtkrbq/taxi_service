@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.rudniev.taxi.ComponentsContainer;
 import ua.rudniev.taxi.exception.UserAlreadyExistsException;
-import ua.rudniev.taxi.model.user.Role;
 import ua.rudniev.taxi.model.user.User;
 import ua.rudniev.taxi.service.UserService;
 import ua.rudniev.taxi.servlet.validation.ValidationUtils;
@@ -40,7 +39,7 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<String> errors = new ArrayList<>();
+
         String login = req.getParameter(FormFields.LOGIN);
         String password = req.getParameter(FormFields.PASSWORD);
         String confirmedPassword = req.getParameter(FormFields.CONFIRM_PASSWORD);
@@ -48,45 +47,57 @@ public class RegistrationServlet extends HttpServlet {
         String lastname = req.getParameter(FormFields.LASTNAME);
         String phone = req.getParameter(FormFields.PHONE);
         String email = req.getParameter(FormFields.EMAIL);
-        String[] registerAsDriver = req.getParameterValues(FormFields.REGISTER_AS_DRIVER);
+        boolean registerAsDriver = req.getParameterValues(FormFields.REGISTER_AS_DRIVER) != null;
+
+        List<String> errors = new ArrayList<>();
         ValidationUtils.validateLogin(errors, login);
         ValidationUtils.validatePassword(errors, password, confirmedPassword);
         ValidationUtils.validateName(errors, name);
         ValidationUtils.validateLastName(errors, lastname);
         ValidationUtils.validatePhone(errors, phone);
         ValidationUtils.validateEmail(errors, email);
+
         User user = new User();
         user.setLogin(login);
         user.setFirstname(name);
         user.setLastname(lastname);
         user.setPhone(phone);
         user.setEmail(email);
+
+        createUser(user, password, errors, registerAsDriver);
+        handleUserCreationResult(user, errors, registerAsDriver, req, resp);
+    }
+
+    private void createUser(User user, String password, List<String> errors, boolean registerAsDriver) {
         if (errors.isEmpty()) {
             try {
-                userService.createUser(user, password);
+                userService.createUser(user, password, registerAsDriver);
                 LOGGER.info("New user " + user.getLogin() + " has been registered");
             } catch (UserAlreadyExistsException e) {
                 LOGGER.error("An error has occurred while creating a user that already been created", e);
-                errors.add("User with login " + login + " is already exist");
+                errors.add("User with login " + user.getLogin() + " is already exist");
             } catch (Exception e) {
                 LOGGER.error("An error has occurred while creating a user", e);
                 errors.add("Technical error has occurred");
             }
         }
+    }
+
+    private void handleUserCreationResult(
+            User user,
+            List<String> errors,
+            boolean registerAsDriver,
+            HttpServletRequest req,
+            HttpServletResponse resp
+    ) throws IOException, ServletException {
         if (errors.isEmpty()) {
-            if (registerAsDriver != null) {
-                user.addRole(Role.DRIVER);
-                LOGGER.info("New user " + user.getLogin() + " has been registered as driver");
-                userService.updateUser(user, login);
-                LOGGER.info("User " + user.getLogin() + " role has been updated");
-                req.getSession().setAttribute(CURRENT_USER, user);
+            if (registerAsDriver) {
                 resp.sendRedirect(req.getContextPath() + "/carRegistration");
             } else {
-                req.getSession().setAttribute(CURRENT_USER, user);
                 resp.sendRedirect(req.getContextPath() + "/ordering");
             }
+            req.getSession().setAttribute(CURRENT_USER, user);
         } else {
-            req.getSession().setAttribute("user", user);
             RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/registration.jsp");
             req.setAttribute("errors", errors);
             dispatcher.forward(req, resp);

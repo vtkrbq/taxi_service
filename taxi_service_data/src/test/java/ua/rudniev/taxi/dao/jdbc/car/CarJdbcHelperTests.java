@@ -5,14 +5,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ua.rudniev.taxi.dao.testUtils.CarDataProvider;
+import ua.rudniev.taxi.dao.testutils.CarDataProvider;
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.user.User;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CarJdbcHelperTests {
