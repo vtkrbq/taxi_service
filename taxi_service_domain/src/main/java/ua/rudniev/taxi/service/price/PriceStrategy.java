@@ -1,8 +1,9 @@
 package ua.rudniev.taxi.service.price;
 
 
+import ua.rudniev.taxi.model.NewTripInfo;
 import ua.rudniev.taxi.model.car.Car;
-import ua.rudniev.taxi.model.trip.Point;
+import ua.rudniev.taxi.model.user.User;
 
 import java.math.BigDecimal;
 
@@ -17,4 +18,6 @@ public interface PriceStrategy {
      * @return BigDecimal price of trip
      */
     BigDecimal calculatePrice(double distance, Car car);
+
+    BigDecimal calculateDiscountVolume(User user, NewTripInfo newTripInfo);
 }

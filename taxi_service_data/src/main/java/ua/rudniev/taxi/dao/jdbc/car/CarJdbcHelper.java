@@ -2,6 +2,7 @@ package ua.rudniev.taxi.dao.jdbc.car;
 
 import ua.rudniev.taxi.model.car.Car;
 import ua.rudniev.taxi.model.car.Category;
+import ua.rudniev.taxi.model.car.Status;
 import ua.rudniev.taxi.model.trip.AddressPoint;
 import ua.rudniev.taxi.model.user.User;
 
@@ -38,6 +39,7 @@ public class CarJdbcHelper {
         car.setCarName(rs.getString(prefix + CarSqlConstants.CarFields.NAME));
         car.setCarCategory(Category.valueOf(rs.getString(prefix + CarSqlConstants.CarFields.CATEGORY)));
         car.setCarCapacity(rs.getInt(prefix + CarSqlConstants.CarFields.CAPACITY));
+        car.setStatus(Status.valueOf(rs.getString(prefix + CarSqlConstants.CarFields.STATUS)));
         car.setLicensePlate(rs.getString(prefix + CarSqlConstants.CarFields.LICENSE_PLATE));
         //*
         car.setCurrentAddress(new AddressPoint(

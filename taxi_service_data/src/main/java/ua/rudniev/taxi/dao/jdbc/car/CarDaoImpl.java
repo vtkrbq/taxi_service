@@ -53,7 +53,7 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public List<Car> findAvailableCars(List<Filter<CarField>> filters) {
+    public List<Car> findCars(List<Filter<CarField>> filters) {
         String query = CarSqlConstants.FIND_AVAILABLE_CARS + queryBuilder.getFilterPart(filters, carFieldMapper);
         return prepareStatementProvider.withPrepareStatement(query, (preparedStatement) -> {
             queryBuilder.fillParams(preparedStatement, filters);
@@ -98,15 +98,6 @@ public class CarDaoImpl implements CarDao {
             stmt.setString(7, car.getCurrentAddress().getAddress());
             stmt.setDouble(8, car.getCurrentAddress().getX());
             stmt.setDouble(9, car.getCurrentAddress().getY());
-            stmt.executeUpdate();
-            return null;
-        });
-    }
-
-    @Override
-    public void completeTrip(int id) {
-        prepareStatementProvider.withPrepareStatement(CarSqlConstants.COMPLETE_TRIP_VIA_CAR, stmt -> {
-            stmt.setInt(1, id);
             stmt.executeUpdate();
             return null;
         });

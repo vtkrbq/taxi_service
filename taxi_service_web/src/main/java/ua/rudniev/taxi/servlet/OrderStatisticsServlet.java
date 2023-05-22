@@ -49,12 +49,12 @@ public class OrderStatisticsServlet extends HttpServlet {
         addFilter(filterKey, filterBy, filters);
         addFilterDate(filterDate, filters);
 
-        req.getSession().setAttribute("filterBy", filterBy); //TODO: Пирог: нам нежелательно тут сессию использовать, почему нельзя req.setAttribute?
-        req.getSession().setAttribute("filterKey", filterKey);
-        req.getSession().setAttribute("sortType", orderByField.name());
-        req.getSession().setAttribute("sortBy", orderByType.name());
-        req.getSession().setAttribute("created", filterDate);
-        req.getSession().setAttribute("quantity", recordsPerPage);
+        req.setAttribute("filterBy", filterBy);
+        req.setAttribute("filterKey", filterKey);
+        req.setAttribute("sortType", orderByType.name());
+        req.setAttribute("sortBy", orderByField.name());
+        req.setAttribute("created", filterDate);
+        req.setAttribute("quantity", recordsPerPage);
         tripOrderServletUtils.getTripOrdersAndFillRequestAttributes(currentPage, recordsPerPage, orderBy, filters, req);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/orderStatistics.jsp");
         dispatcher.forward(req, resp);

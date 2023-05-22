@@ -38,7 +38,7 @@ public class User {
     public String rolesToString() {
         StringBuilder stringBuilder = new StringBuilder();
         roles.forEach(r -> stringBuilder.append(r.name()).append(","));
-        stringBuilder.setLength(stringBuilder.length() - 1);
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         return stringBuilder.toString();
     }
 

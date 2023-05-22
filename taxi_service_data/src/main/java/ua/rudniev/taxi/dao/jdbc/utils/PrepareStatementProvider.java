@@ -17,13 +17,13 @@ public class PrepareStatementProvider {
     /**
      * This method executes given query in prepared statement
      * @param sql This parameter indicates query
-     * @param execution //TODO
-     * @param <T> //TODO
+     * @param execution block of code which will be executed
+     * @param <T> class which will be returned after execution
      * @return result of prepared statement execution
      */
     public <T> T withPrepareStatement(String sql, Execution<T> execution) {
         try (PreparedStatement preparedStatement = HikariTransactionManager.getCurrentConnection().prepareStatement(sql)) {
-            return execution.execute(preparedStatement);
+             return execution.execute(preparedStatement);
         } catch (SQLException e) {
             LOGGER.error("Error while executing sql: " + sql, e);
             throw new DbException(e);
@@ -31,8 +31,8 @@ public class PrepareStatementProvider {
     }
 
     /**
-     * //TODO
-     * @param <T>
+     * This interface is a implementation of Command Pattern
+     * @param <T> class which will be returned after execution
      */
     public interface Execution<T> {
         T execute(PreparedStatement preparedStatement) throws SQLException;

@@ -18,6 +18,7 @@ import ua.rudniev.taxi.service.OrderingService;
 import ua.rudniev.taxi.service.UserService;
 import ua.rudniev.taxi.service.price.PriceStrategy;
 import ua.rudniev.taxi.service.price.PythagorasPriceStrategy;
+import ua.rudniev.taxi.service.time.TimeStrategy;
 import ua.rudniev.taxi.servlet.utils.TripOrderServletUtils;
 import ua.rudniev.taxi.transaction.HikariTransactionManager;
 import ua.rudniev.taxi.transaction.TransactionManager;
@@ -61,6 +62,8 @@ public class ComponentsContainer {
     private QueryBuilder queryBuilder;
 
     private TripOrderServletUtils tripOrderServletUtils;
+
+    private TimeStrategy timeStrategy;
 
     private ComponentsContainer() {
     }
@@ -133,6 +136,7 @@ public class ComponentsContainer {
             orderingService = new OrderingService(
                     getCarDao(),
                     getPriceStrategy(),
+                    getTimeStrategy(),
                     getTransactionManager(),
                     getTripOrderDao()
             );
@@ -207,5 +211,12 @@ public class ComponentsContainer {
             tripOrderServletUtils = new TripOrderServletUtils(getOrderingService());
         }
         return tripOrderServletUtils;
+    }
+
+    public synchronized TimeStrategy getTimeStrategy() {
+        if (timeStrategy == null) {
+            timeStrategy = new TimeStrategy();
+        }
+        return timeStrategy;
     }
 }

@@ -33,7 +33,7 @@ public interface UserDao {
 
     /**
      * This method updates user in repository
-     * @param user This parameter contains data about created user
+     * @param user This parameter contains data about updated user
      * @param login This parameter contains login of user which has to be updated
      */
     void updateUser(User user, String login);

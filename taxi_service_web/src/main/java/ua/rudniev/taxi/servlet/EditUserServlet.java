@@ -29,24 +29,18 @@ import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 )
 public class EditUserServlet extends HttpServlet {
     private final UserService userService = ComponentsContainer.getInstance().getUserService();
-    private String oldLogin;
     private static final Logger LOGGER = LogManager.getLogger(EditUserServlet.class);
 
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute(CURRENT_USER);
-        oldLogin = user.getLogin();//TODO remake this bs
-        req.getSession().setAttribute(FormFields.FIRSTNAME, user.getFirstname()); //TODO: Пирог: user и так же в сесии?
-        req.getSession().setAttribute(FormFields.LASTNAME, user.getLastname());
-        req.getSession().setAttribute(FormFields.PHONE, user.getPhone());
-        req.getSession().setAttribute(FormFields.EMAIL, user.getEmail());
         RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/editUser.jsp");
         dispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User oldUser = userService.findUser(((User) req.getSession().getAttribute(CURRENT_USER)).getLogin()).orElseThrow();
         List<String> errors = new ArrayList<>();
         String newLogin = req.getParameter(FormFields.LOGIN);
         String name = req.getParameter(FormFields.FIRSTNAME);
@@ -64,9 +58,11 @@ public class EditUserServlet extends HttpServlet {
         user.setLastname(lastname);
         user.setPhone(phone);
         user.setEmail(email);
+        oldUser.getRoles().forEach(user::addRole);
+        user.setDiscount(oldUser.getDiscount());
         if (errors.isEmpty()) {
             try {
-                userService.updateUser(user, oldLogin);
+                userService.updateUser(user, oldUser.getLogin());
                 LOGGER.info("User " + user.getLogin() + " has been updated");
             } catch (UserAlreadyExistsException e) {
                 errors.add("User with login " + newLogin + " is already exist");

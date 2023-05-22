@@ -78,7 +78,16 @@
                 </tr>
                 <tr>
                     <td><fmt:message key="price.field" />:</td>
-                    <td>${newTripInfo.price} ₴</td>
+                    <c:if test="${tripOrder.user.discount == 0}">
+                        <td>${newTripInfo.priceWithoutDiscount} ₴</td>
+                    </c:if>
+                    <c:if test="${tripOrder.user.discount ne 0}">
+                        <td><s style="font-size: 12px;">${newTripInfo.priceWithoutDiscount} ₴</s> ${newTripInfo.priceWithDiscount} ₴</td>
+                    </c:if>
+                </tr>
+                <tr>
+                    <td><fmt:message key="discount.field" />:</td>
+                    <td>${tripOrder.user.discount} %</td>
                 </tr>
             </table>
         </div>

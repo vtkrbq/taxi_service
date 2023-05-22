@@ -89,8 +89,8 @@
                 </select>
                 <label style="margin: 5px; text-align: right;"><fmt:message key="sort.label" />:</label>
                 <select name="sortType" class="custom-select" style="margin: 5px; width: 200px; padding-right: 0px;" value="${sortType}">
-                  <option value="ASC"><fmt:message key="asc.option" /></option>
-                  <option value="DESC" selected><fmt:message key="desc.option" /></option>  <!--TODO: Пирог: всегда DESC??? -->
+                  <option value="ASC" ${'ASC' == sortType ? 'selected' : ''}><fmt:message key="asc.option" /></option>
+                  <option value="DESC" ${'DESC' == sortType ? 'selected' : ''}><fmt:message key="desc.option" /></option>  <!--TODO: Пирог: всегда DESC??? -->
                 </select>
                 <label style="margin: 5px; text-align: right;"><fmt:message key="sort.by.label" />:</label>
                 <select name="sortBy" class="custom-select" style="margin: 5px; width: 200px;">

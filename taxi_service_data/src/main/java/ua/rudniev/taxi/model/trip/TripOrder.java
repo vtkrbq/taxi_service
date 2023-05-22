@@ -23,14 +23,16 @@ public class TripOrder {
     private User user;
     private Instant timestampCreated;
     private Instant timestampEnd;
+    private double distance;
 
     private Car car;
 
     private BigDecimal price;
 
-    public TripOrder(AddressPoint departure, AddressPoint destination, Category category, int capacity, User user, Instant timestampCreated) {
+    public TripOrder(AddressPoint departure, AddressPoint destination, double distance, Category category, int capacity, User user, Instant timestampCreated) {
         this.departure = departure;
         this.destination = destination;
+        this.distance = distance;
         this.category = category;
         this.capacity = capacity;
         this.user = user;

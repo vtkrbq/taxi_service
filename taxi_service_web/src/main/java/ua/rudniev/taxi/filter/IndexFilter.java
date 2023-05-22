@@ -9,7 +9,7 @@ import java.io.IOException;
 import static ua.rudniev.taxi.web.SessionAttributes.CURRENT_USER;
 
 /**
- * This class is an implementation of interface Filter
+ * This filter is used for restraining access from login page if user already logged in
  */
 @WebFilter(
         urlPatterns = "/index.jsp",

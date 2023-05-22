@@ -71,4 +71,6 @@ public class UserSqlConstants {
 
     public static final String FIND_ALL_LOGINS = "select " + UserFields.LOGIN +
             " from " + USER_TABLE_NAME;
+    public static final String CHECK_EXISTING_LOGIN = "select * from " + USER_TABLE_NAME +
+            " where " + UserFields.LOGIN + " = ?";
 }

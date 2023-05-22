@@ -10,7 +10,7 @@ import ua.rudniev.taxi.transaction.TransactionManager;
 import java.util.Optional;
 
 /**
- * This class provides the flow between servlets and Dao implementation classes
+ * This class realize business logic related to users
  */
 public class UserService {
     private final UserDao userDao;

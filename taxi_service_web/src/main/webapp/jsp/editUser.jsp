@@ -89,7 +89,7 @@
                     </caption>
                     <tr>
                         <td style="width: 150px;"><fmt:message key="login.label" />:</td>
-                        <td><input type="text" name="login" class="form-control" value="${currentUser.login}"></td>
+                        <td><input type="text" name="login" class="form-control" value="${currentUser.login}" disabled></td>
                     </tr>
                     <tr>
                         <td style="width: 150px;"><fmt:message key="password.label" />:</td>

@@ -11,12 +11,12 @@ import java.util.Optional;
  */
 public interface CarDao {
     /**
-     * This method searching all available cars in repository
+     * This method searching all cars in repository with filters
      *
      * @param filters This parameter filters cars in repository
      * @return List of objects Car that are fit to filters parameter from database
      */
-    List<Car> findAvailableCars(List<Filter<CarField>> filters);
+    List<Car> findCars(List<Filter<CarField>> filters);
 
     /**
      * This method searching for car in repository with indicated id
@@ -39,11 +39,4 @@ public interface CarDao {
      * @param car This parameter contains data about created car
      */
     void createCar(Car car);
-
-    /**
-     * This method will complete trip for indicated car
-     *
-     * @param id This parameter indicates which car will complete trip
-     */
-    void completeTrip(int id);
 }

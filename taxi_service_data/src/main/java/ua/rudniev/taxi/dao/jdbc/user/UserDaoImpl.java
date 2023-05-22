@@ -58,7 +58,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void createUser(User user, String password) {
         prepareStatementProvider.withPrepareStatement(UserSqlConstants.CREATE_USER, stmt -> {
-            if (checkForExistingLogin(user.getLogin())) throw new UserAlreadyExistsException(user.getLogin());//check
+
+
+            if (checkForExistingLogin(user.getLogin())) throw new UserAlreadyExistsException(user.getLogin());
+
+
             String encryptedPassword = new String(Base64.getEncoder().encode(passwordEncryptionService.getEncryptedPassword(password)));
             stmt.setString(1, user.getLogin());
             stmt.setString(2, encryptedPassword);
@@ -102,16 +106,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     //check
-    private boolean checkForExistingLogin(String login) { // TODO: пирог: удали этот метод (БД по идее сама должна кидать ошибку,
-        // если  мы попытеамся добавить пользователя с таким же логином) Тем более тут мы перебираем все записи - так делать не стоит
-        // , если мы хотим проверить пользователя запросом, можем написать что-то типа SELECT * FROM USERS where login = ?.
-        // И если будет хоть одна запись, значит пользователь существует
-        return prepareStatementProvider.withPrepareStatement(UserSqlConstants.FIND_ALL_LOGINS, stmt -> {
+    private boolean checkForExistingLogin(String login) {
+        return prepareStatementProvider.withPrepareStatement(UserSqlConstants.CHECK_EXISTING_LOGIN, stmt -> {
+            stmt.setString(1, login);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                if (rs.getString(UserSqlConstants.UserFields.LOGIN).equals(login)) return true;
-            }
-            return false;
+            return rs.next();
         });
     }
 

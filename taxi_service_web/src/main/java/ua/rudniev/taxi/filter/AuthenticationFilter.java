@@ -10,9 +10,7 @@ import java.io.IOException;
 
 
 /**
- * This class is an implementation of interface Filter
- * TODO: Пирог: Ненене, нужно написать что-то типа: этот фильтр нужен для имплементации процесса аутентификации.
- * Также опиши суть других фильтров.
+ * This filter is used for implementation of authentication process
  */
 @WebFilter(
         filterName = "AuthenticationFilter",

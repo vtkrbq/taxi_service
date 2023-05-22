@@ -5,7 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
 /**
- * This class is an implementation of interface Filter
+ * This filter is used for encoding of .jsp pages
  */
 @WebFilter(
         filterName = "EncodingFilter",

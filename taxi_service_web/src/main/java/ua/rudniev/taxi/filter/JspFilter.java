@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * This class is an implementation of interface Filter
+ * This filter is used for restraining manual access from jsp pages in "jsp" folder
  */
 @WebFilter(
         urlPatterns = "/jsp/*",

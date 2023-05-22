@@ -1,5 +1,6 @@
 package ua.rudniev.taxi.servlet.utils;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.common.order.OrderBy;
 import ua.rudniev.taxi.dao.common.order.OrderByType;
@@ -32,15 +33,14 @@ public class TripOrderServletUtils {
             List<Filter<TripOrderField>> filters,
             HttpServletRequest req
     ) {
-        List<TripOrder> tripOrders = orderingService.findAllTripOrders(
+        ImmutablePair<List<TripOrder>, Integer> tripOrders = orderingService.findAllTripOrders(
                 (currentPage - 1) * recordsPerPage,
                 recordsPerPage,
                 List.of(orderBy),
                 filters);
-        int totalRecords = orderingService.getCountOfRecords(filters);
-        int pagesQuantity = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
-        req.setAttribute("toCompare", Instant.MIN); //TODO: Пирог: Переделать на null
-        req.setAttribute("tripOrders", tripOrders);
+        int pagesQuantity = (int) Math.ceil(tripOrders.getValue() * 1.0 / recordsPerPage);
+        req.setAttribute("toCompare", null);
+        req.setAttribute("tripOrders", tripOrders.getKey());
         req.setAttribute("pagesQuantity", pagesQuantity);
         req.setAttribute("recordsPerPage", recordsPerPage);
         req.setAttribute("currentPage", currentPage);

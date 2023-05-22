@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * This class provides the flow between servlets and Dao implementation classes
+ * This class realize business logic related to cars
  */
 public class CarService {
     private final CarDao carDao;
@@ -22,6 +22,9 @@ public class CarService {
 
     private static final Logger LOGGER = LogManager.getLogger(CarService.class);
 
+    private final double STARTING_POINT_X = 49.991981;
+    private final double STARTING_POINT_Y = 36.328126;
+    private final String STARTING_POINT_ADDRESS = "Харків, вул. Гвардійців-Широнінців, 5";
 
     public CarService(
             CarDao carDao,
@@ -31,10 +34,6 @@ public class CarService {
         this.transactionManager = transactionManager;
     }
 
-    public List<Car> findAvailableCars(List<Filter<CarField>> filters) { //TODO: Пирог: не используется, удали.
-        return transactionManager.doInTransaction(() -> carDao.findAvailableCars(filters));
-    }
-
     /**
      * This method sets starting AddressPoint of a car and call method from CarDaoImplementation for creating car
      * @param car This parameter provides data for created car
@@ -42,9 +41,9 @@ public class CarService {
     public void createCar(Car car) {
         transactionManager.doInTransaction(() -> {
             car.setCurrentAddress(new AddressPoint(
-                    49.991981, //TODO: Пирог: Магические числа лучше вынеси в константы (можно в этом же классе)
-                    36.328126,
-                    "Харків, вул. Гвардійців-Широнінців, 5"));
+                    STARTING_POINT_X,
+                    STARTING_POINT_Y,
+                    STARTING_POINT_ADDRESS));
             carDao.createCar(car);
             LOGGER.info("New car " + car + " has been registered");
             return null;

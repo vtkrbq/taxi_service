@@ -4,6 +4,7 @@ import ua.rudniev.taxi.dao.common.filter.Filter;
 import ua.rudniev.taxi.dao.common.order.OrderBy;
 import ua.rudniev.taxi.dao.jdbc.car.CarJdbcHelper;
 import ua.rudniev.taxi.dao.jdbc.user.UserJdbcHelper;
+import ua.rudniev.taxi.dao.jdbc.user.UserSqlConstants;
 import ua.rudniev.taxi.dao.jdbc.utils.PrepareStatementProvider;
 import ua.rudniev.taxi.dao.jdbc.utils.QueryBuilder;
 import ua.rudniev.taxi.dao.trip.TripOrderDao;
@@ -21,6 +22,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This is implementation class of TripOrderDao interface that has fields and methods for working with jdbc
@@ -46,6 +48,19 @@ public class TripOrderDaoImpl implements TripOrderDao {
     }
 
     @Override
+    public Optional<TripOrder> findTripOrderById(int id) {
+        return prepareStatementProvider.withPrepareStatement(TripOrderSqlConstants.FIND_TRIP_ORDER, stmt -> {
+            TripOrder tripOrder = null;
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                tripOrder = convertRowToTripOrder(rs);
+            }
+            return Optional.ofNullable(tripOrder);
+        });
+    }
+
+    @Override
     public List<TripOrder> findAllTripOrders(
             int pageIndex,
             int pageSize,
@@ -61,6 +76,28 @@ public class TripOrderDaoImpl implements TripOrderDao {
                 tripOrders.add(convertRowToTripOrder(rs));
             }
             return tripOrders;
+        });
+    }
+
+    @Override
+    public void updateTripOrder(TripOrder tripOrder, int id) {
+        prepareStatementProvider.withPrepareStatement(TripOrderSqlConstants.UPDATE_TRIP_ORDER, stmt -> {
+            stmt.setString(1, tripOrder.getDeparture().getAddress());
+            stmt.setDouble(2, tripOrder.getDeparture().getX());
+            stmt.setDouble(3, tripOrder.getDeparture().getY());
+            stmt.setString(4, tripOrder.getDestination().getAddress());
+            stmt.setDouble(5, tripOrder.getDestination().getX());
+            stmt.setDouble(6, tripOrder.getDestination().getY());
+            stmt.setString(7, tripOrder.getUser().getLogin());
+            stmt.setInt(8, tripOrder.getCar().getId());
+            stmt.setString(9, tripOrder.getCategory().toString());
+            stmt.setInt(10, tripOrder.getCapacity());
+            stmt.setBigDecimal(11, tripOrder.getPrice());
+            stmt.setTimestamp(12, Timestamp.from(tripOrder.getTimestampCreated()));
+            stmt.setTimestamp(13, Timestamp.from(tripOrder.getTimestampEnd()));
+            stmt.setInt(14, id);
+            stmt.executeUpdate();
+            return null;
         });
     }
 
@@ -90,15 +127,15 @@ public class TripOrderDaoImpl implements TripOrderDao {
             stmt.setInt(10, tripOrder.getCapacity());
             stmt.setBigDecimal(11, tripOrder.getPrice());
             stmt.setTimestamp(12, Timestamp.from(tripOrder.getTimestampCreated()));
+            stmt.setTimestamp(13, null);
             stmt.executeUpdate();
             return null;
         });
     }
 
     private TripOrder convertRowToTripOrder(ResultSet rs) throws SQLException {
-
         Instant timestampEnd;
-        if (rs.getTimestamp(TripOrderSqlConstants.TripOrderFields.END_OF_TRIP) == null) timestampEnd = Instant.MIN;
+        if (rs.getTimestamp(TripOrderSqlConstants.TripOrderFields.END_OF_TRIP) == null) timestampEnd = null;
         else timestampEnd = rs.getTimestamp(TripOrderSqlConstants.TripOrderFields.END_OF_TRIP).toInstant();
 
         AddressPoint departureAddressPoint = new AddressPoint(
@@ -123,16 +160,6 @@ public class TripOrderDaoImpl implements TripOrderDao {
         tripOrder.setId(rs.getInt(TripOrderSqlConstants.TripOrderFields.ID));
 
         return tripOrder;
-    }
-
-    @Override
-    public void completeTripOrder(int id) {
-        prepareStatementProvider.withPrepareStatement(TripOrderSqlConstants.COMPLETE_TRIP_VIA_TO, (stmt) -> {
-            stmt.setTimestamp(1, Timestamp.from(Instant.now())); //TODO: Пирог: Эту логику нужно в сервис вынести
-            stmt.setInt(2, id);
-            stmt.executeUpdate();
-            return null;
-        });
     }
 }
 

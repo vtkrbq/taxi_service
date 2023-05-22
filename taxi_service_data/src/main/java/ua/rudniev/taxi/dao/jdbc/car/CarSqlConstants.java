@@ -71,6 +71,7 @@ public class CarSqlConstants {
             CAR_TABLE_NAME + "." + CarFields.CATEGORY + ", " +
             CAR_TABLE_NAME + "." + CarFields.CAPACITY + ", " +
             CAR_TABLE_NAME + "." + CarFields.LICENSE_PLATE + ", " +
+            CAR_TABLE_NAME + "." + CarFields.STATUS + ", " +
             CAR_TABLE_NAME + "." + CarFields.CURRENT_ADDRESS + ", " +
             CAR_TABLE_NAME + "." + CarFields.CURRENT_POINT_X + ", " +
             CAR_TABLE_NAME + "." + CarFields.CURRENT_POINT_Y + ", " +
@@ -97,8 +98,4 @@ public class CarSqlConstants {
             CarFields.CURRENT_POINT_X + " = " + "?, " +
             CarFields.CURRENT_POINT_Y + " = " + "? " +
             "where " + CarFields.ID + "=?";
-
-    public static final String COMPLETE_TRIP_VIA_CAR = "update " + CAR_TABLE_NAME +
-                    " set " + CarFields.STATUS + " = 'AVAILABLE' " +
-                    "where " + CarFields.ID + "=?";
 }

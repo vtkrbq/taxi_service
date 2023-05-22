@@ -49,7 +49,7 @@ public class TripOrderDataProvider {
             TO_TABLE_NAME + "." + TripOrderSqlConstants.TripOrderFields.DESTINATION_Y + ", " +
             TO_TABLE_NAME + "." + TripOrderSqlConstants.TripOrderFields.CATEGORY + ", " +
             TO_TABLE_NAME + "." + TripOrderSqlConstants.TripOrderFields.CAPACITY + ", " +
-            CLIENT_ALIAS + "." + UserSqlConstants.UserFields.LOGIN + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.LOGIN + ", " + //TODO: подумать, может можно сдлелать лучше
+            CLIENT_ALIAS + "." + UserSqlConstants.UserFields.LOGIN + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.LOGIN + ", " +
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.FIRSTNAME + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.FIRSTNAME + ", " +
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.LASTNAME + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.LASTNAME + ", " +
             CLIENT_ALIAS + "." + UserSqlConstants.UserFields.PHONE + " as " + CLIENT_PREFIX + UserSqlConstants.UserFields.PHONE + ", " +

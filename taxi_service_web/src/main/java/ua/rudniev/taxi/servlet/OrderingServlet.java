@@ -53,7 +53,6 @@ public class OrderingServlet extends HttpServlet {
         double departureX = Double.parseDouble(req.getParameter(FormFields.DEPARTURE_X));
         double departureY = Double.parseDouble(req.getParameter(FormFields.DEPARTURE_Y));
         String departureAddress = req.getParameter(FormFields.DEPARTURE_ADDRESS);
-        AddressPoint departure = new AddressPoint(departureX, departureY, departureAddress);
         double destinationX = Double.parseDouble(req.getParameter(FormFields.DESTINATION_X));
         double destinationY = Double.parseDouble(req.getParameter(FormFields.DESTINATION_Y));
         String destinationAddress = req.getParameter(FormFields.DESTINATION_ADDRESS);
@@ -63,6 +62,7 @@ public class OrderingServlet extends HttpServlet {
         TripOrder tripOrder = new TripOrder(
                 new AddressPoint(departureX, departureY, departureAddress),
                 new AddressPoint(destinationX, destinationY, destinationAddress),
+                distance,
                 category,
                 capacity,
                 user,
@@ -71,7 +71,6 @@ public class OrderingServlet extends HttpServlet {
 
         Optional<NewTripInfo> newTripInfoOptional = orderingService.findAndOrder(
                 tripOrder,
-                distance,
                 prepareFilters(tripOrder)
         );
         req.getSession().setAttribute("tripOrder", tripOrder);
@@ -84,7 +83,7 @@ public class OrderingServlet extends HttpServlet {
             //PRG pattern
         } else {
             List<String> errors = new ArrayList<>();
-            errors.add("There is no available cars: \nYou can try different category or several cars");//TODO check \n
+            errors.add("There is no available cars: \nYou can try different category or several cars");
             RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/ordering.jsp");
             req.setAttribute("errors", errors);
             dispatcher.forward(req, resp);
