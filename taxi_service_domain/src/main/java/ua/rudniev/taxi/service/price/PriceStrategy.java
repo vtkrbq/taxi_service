@@ -20,4 +20,6 @@ public interface PriceStrategy {
     BigDecimal calculatePrice(double distance, Car car);
 
     BigDecimal calculateDiscountVolume(User user, NewTripInfo newTripInfo);
+
+    BigDecimal testMethod ();
 }
